@@ -22,4 +22,6 @@ public interface UserDao {
             "(#{userName},#{password},#{tel},#{address},#{sex},#{createTime},#{state},#{del})")
     @Options(useGeneratedKeys = true,keyProperty = "userId",keyColumn = "user_id")
     void insertUser(User user);
+
+
 }

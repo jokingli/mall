@@ -5,4 +5,5 @@ import com.second.mall.modules.account.entity.User;
 
 public interface RoleDao {
     void insertRole(Role role);
+
 }
