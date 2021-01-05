@@ -29,7 +29,7 @@ public interface IndentDao {
     Indent selectIndexByCode(String indentCode);
 
     //真删除订单
-    @Delete("DELETE FROM `indent` WHERE indent_id = #{indent_id}")
+    @Delete("DELETE FROM `indent` WHERE indent_id = #{indentId}")
     void deleteIndexById(int indentId);
 
     //通过订单对象修改订单

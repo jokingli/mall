@@ -15,10 +15,6 @@ public class UserLoginController {
     @RequestMapping(value = "/userLogin")
     public String login(ModelMap modelMap){
         modelMap.put("template","account/userLogin");
-//        return "managerIndexSimple";
-            return "managerIndex";
-
-
-
+        return "managerIndexSimple";
     }
 }

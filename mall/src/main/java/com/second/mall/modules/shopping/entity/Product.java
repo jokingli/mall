@@ -25,7 +25,7 @@ public class Product {
     private int productNum;//商品数量
     private int discount;
     private int shopId;
-    private String describe;//描述
+    private String describe_info;//描述
     private LocalDateTime createTime;
 
 }
