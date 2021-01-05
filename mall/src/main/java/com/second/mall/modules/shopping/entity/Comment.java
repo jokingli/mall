@@ -24,6 +24,7 @@ public class Comment {
     private int productId;//评论商品id
     private int userId;//评论人id
     private int shopId;//商品店铺id
+    private int parentId;//评论父id 0:为最终路径
     private String comment;//评论内容
     private LocalDateTime createTime;//评论创建时间
 
