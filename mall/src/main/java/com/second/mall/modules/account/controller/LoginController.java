@@ -18,5 +18,8 @@ public class LoginController {
     public String login(ModelMap modelMap){
         modelMap.put("template","account/login");
         return "managerIndexSimple";
+
+
+
     }
 }
