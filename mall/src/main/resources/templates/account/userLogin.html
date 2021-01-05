@@ -10,7 +10,7 @@
                     <input type="password" class="form-control" placeholder="Password" required="" />
                 </div>
                 <div>
-                    <a class="btn btn-default submit" href="javascript:void(0);">登录</a>
+                    <a class="btn btn-default submit" href="/userLogin/pwdLogin">登录</a>
                     <a class="reset_pass" href="#">   忘记密码?</a>
                 </div>
 
@@ -43,7 +43,7 @@
         //用户密码提交
         form.on('submit(Login)', function(data){
             $.ajax({
-                url:"/account/login",
+                url:"/userLogin/pwdLogin",
                 type:"post",
                 data:data.field,
                 dataType:"json", //返回类型
@@ -52,7 +52,7 @@
                     layer.alert(data.info);
                     if(data.info=="登录成功"){
                         //访问主页面
-                        location.href="/account/index"
+                        location.href="/userLogin/userIndex"
                     }
                 }
             })

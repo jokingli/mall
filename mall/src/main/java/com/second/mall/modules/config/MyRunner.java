@@ -1,4 +1,4 @@
-package com.second.mall.modules.account.config;
+package com.second.mall.modules.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -28,7 +28,7 @@ public class MyRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if(isOpen){
             //跳转到控制层的方法中
-            String cmd = googleExcutePath +" http://"+ myurl+":"+port+"/account/userLogin";
+            String cmd = googleExcutePath +" http://"+ myurl+":"+port+"/adminLogin/adminLogin";
             Runtime run = Runtime.getRuntime();
             try{
                 run.exec(cmd);

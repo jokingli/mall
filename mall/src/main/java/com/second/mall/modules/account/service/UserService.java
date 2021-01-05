@@ -3,6 +3,8 @@ package com.second.mall.modules.account.service;
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.common.entity.ResultEntity;
 
+import java.util.HashMap;
+
 /**
  * @ClassName UserService
  * @Author icy
@@ -11,4 +13,7 @@ import com.second.mall.modules.common.entity.ResultEntity;
  **/
 public interface UserService {
     ResultEntity<User> insertUser(User user);
+
+    //管理员密码登录
+    HashMap<String, Object> pwdLogin(User user);
 }
