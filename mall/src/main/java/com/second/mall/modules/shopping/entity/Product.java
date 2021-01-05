@@ -15,10 +15,11 @@ import java.util.List;
 @Entity
 @Table(name = "product")
 @Data
-public class product {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
+    private int pictureId;
     private String productName;
     private double productPrice;
     private int productNum;//商品数量

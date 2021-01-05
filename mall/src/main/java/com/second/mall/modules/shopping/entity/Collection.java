@@ -18,8 +18,7 @@ public class Collection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int collectionId;
-    private String userName;
-    private String productName;
-    private String productionUrl;
+    private String userId;
+    private String productId;
     private LocalDateTime createTime;
 }
