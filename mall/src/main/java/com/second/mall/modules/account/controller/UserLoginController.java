@@ -18,5 +18,7 @@ public class UserLoginController {
 //        return "managerIndexSimple";
             return "managerIndex";
 
+
+
     }
 }
