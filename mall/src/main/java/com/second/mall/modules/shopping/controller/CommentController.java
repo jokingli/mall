@@ -1,6 +1,8 @@
 package com.second.mall.modules.shopping.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.second.mall.modules.common.entity.ResultEntity;
+import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Comment;
 import com.second.mall.modules.shopping.entity.Indent;
 import com.second.mall.modules.shopping.service.CommentService;
@@ -57,5 +59,15 @@ public class CommentController {
     @PutMapping(value = "/comment",consumes = "application/json")
     private ResultEntity<Object> updateIndent(@RequestBody Comment comment){
         return commentService.updateComment(comment);
+    }
+
+    /**
+     * 127.0.0.1/api/comments ---- post
+     * {"currentPage":1, "pageSize":5, "order":"create_time", "direction":"desc", "keyWord":""}
+     */
+    @PostMapping(value = "/comments", consumes = "application/json")
+    public PageInfo<Comment> getCategoriesBySearchBean(
+            @RequestBody SearchBean searchBean) {
+        return commentService.getCommentBySearchBean(searchBean);
     }
 }

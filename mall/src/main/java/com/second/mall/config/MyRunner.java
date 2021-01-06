@@ -1,4 +1,4 @@
-package com.second.mall.modules.config;
+package com.second.mall.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;

@@ -13,7 +13,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface ShoppingCarDao extends JpaRepository<ShoppingCar,Integer> {
+@Mapper
+public interface ShoppingCarDao{
 
     @Insert("INSERT INTO `indent` " +
             "(indent_code,user_id,address_id,indent_price,create_time,state) " +

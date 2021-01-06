@@ -1,6 +1,9 @@
 package com.second.mall.modules.shopping.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.second.mall.modules.common.entity.ResultEntity;
+import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.dao.CommentDao;
 import com.second.mall.modules.shopping.entity.Comment;
 import com.second.mall.modules.shopping.entity.Indent;
@@ -58,5 +61,14 @@ public class CommentServiceImpl implements CommentService {
         }
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "这不是你的评论");
+    }
+
+    @Override
+    public PageInfo<Comment> getCommentBySearchBean(SearchBean searchBean) {
+        searchBean.initSearchBean();
+        PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
+        return new PageInfo<Comment>(Optional
+                .ofNullable(commentDao.getCommentBySearchBean(searchBean))
+                .orElse(Collections.emptyList()));
     }
 }

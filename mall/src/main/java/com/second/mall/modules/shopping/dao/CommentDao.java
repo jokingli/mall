@@ -1,5 +1,6 @@
 package com.second.mall.modules.shopping.dao;
 
+import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Collection;
 import com.second.mall.modules.shopping.entity.Comment;
 import com.second.mall.modules.shopping.entity.Indent;
@@ -19,9 +20,9 @@ import java.util.List;
 public interface CommentDao {
     //新增评论
     @Insert("INSERT INTO `comment`" +
-            "(product_id,user_id,shop_id,parent_id,`comment`,create_time)" +
+            "(indent_id,product_id,user_id,shop_id,parent_id,`comment`,create_time)" +
             "VALUES" +
-            "(#{productId},#{userId},#{shopId},#{parentId},#{comment},#{createTime})")
+            "(#{indentId},#{productId},#{userId},#{shopId},#{parentId},#{comment},#{createTime})")
     void insertComment(Comment comment);
 
     //删除评论
@@ -39,4 +40,30 @@ public interface CommentDao {
     //查询评论通过id
     @Select("SELECT *FROM `comment` WHERE comment_id = #{commentId}")
     Comment selectCommentById(int commentId);
+
+    //通过userId查询
+    @Select("SELECT *FROM `comment` WHERE user_id = #{userId}")
+    Comment selectCommentByUserId(int userId);
+
+    //通过userId查询
+    @Select("SELECT *FROM `comment` WHERE product_id = #{productId}")
+    Comment selectCommentByProductId(int productId);
+
+    @Select("<script>" +
+            "select * from comment "
+            + "<where> "
+            + "<if test='keyWord != \"\" and keyWord != null'>"
+            + " and (`comment` like '%${keyWord}%') "
+            + "</if>"
+            + "</where>"
+            + "<choose>"
+            + "<when test='order != \"\" and order != null'>"
+            + " order by ${order} ${direction}"
+            + "</when>"
+            + "<otherwise>"
+            + " order by create_time desc"
+            + "</otherwise>"
+            + "</choose>"
+            + "</script>")
+    List<Comment> getCommentBySearchBean(SearchBean searchBean);
 }

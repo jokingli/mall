@@ -52,7 +52,7 @@ public interface IndentDao {
             + " order by ${order} ${direction}"
             + "</when>"
             + "<otherwise>"
-            + " order by id desc"
+            + " order by indent_id desc"
             + "</otherwise>"
             + "</choose>"
             + "</script>")

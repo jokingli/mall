@@ -1,10 +1,11 @@
-package com.second.mall.modules.account.controller;
+package com.second.mall.modules.shopping.controller;
 
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.account.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,26 +17,26 @@ import java.util.HashMap;
  * @Date 2021/1/5 14:33
  **/
 @Controller
-@RequestMapping(value = "/userLogin")
+@RequestMapping(value = "/shopping")
 public class UserLoginController {
 
     @Autowired(required = false)
     UserService userService;
 
     //进入用户登录页面
-    @RequestMapping(value = "/userLogin")
+    @RequestMapping(value = "/login")
     public String userLogin(ModelMap modelMap){
         System.err.println("进入用户登录页面");
         modelMap.put("template","account/userLogin");
-        return "managerIndexSimple";
+        return "mallIndexSimple";
     }
 
     //进入用户主页面
-    @RequestMapping("/userIndex")
+    @RequestMapping("/index")
     //登录成功跳转到主页面
-    public String userIndex(){
-        System.err.println("开始跳转用户主页面");
-        return "/account/userIndex";
+    public String userIndex(ModelMap modelMap){
+        modelMap.put("template","account/userIndex");
+        return "mallIndex";
     }
 
     //用户密码登录

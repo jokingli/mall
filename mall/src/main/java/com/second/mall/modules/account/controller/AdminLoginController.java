@@ -18,7 +18,7 @@ import java.util.HashMap;
  * @Version v1.0
  **/
 @Controller
-@RequestMapping(value = "/adminLogin")
+@RequestMapping(value = "/account")
 public class AdminLoginController {
 
 //    @Autowired
@@ -34,7 +34,7 @@ public class AdminLoginController {
 //    MdFive mdFive;
 
     //进入管理员登录页面
-    @RequestMapping(value = "/adminLogin")
+    @RequestMapping(value = "/login")
     public String adminLogin(ModelMap modelMap){
         System.err.println("进入管理员登录页面");
         modelMap.put("template","account/adminLogin");
@@ -42,7 +42,7 @@ public class AdminLoginController {
     }
 
     //进入管理员主页面
-    @RequestMapping("/adminIndex")
+    @RequestMapping("/index")
     //登录成功跳转到主页面
     public String adminIndex(){
         System.err.println("开始跳转主页面");

@@ -1,6 +1,8 @@
 package com.second.mall.modules.shopping.service;
 
+import com.github.pagehelper.PageInfo;
 import com.second.mall.modules.common.entity.ResultEntity;
+import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Comment;
 import com.second.mall.modules.shopping.entity.Indent;
 
@@ -24,4 +26,7 @@ public interface CommentService {
 
     //修改评论
     ResultEntity<Object> updateComment(Comment comment);
+
+    //分页
+    PageInfo<Comment> getCommentBySearchBean(SearchBean searchBean);
 }
