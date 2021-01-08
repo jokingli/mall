@@ -14,10 +14,9 @@ public class ShoppingCar {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int shoppingCarId;   //购物车id
-        private int userId;    //用户id
-        private int productId; //产品id
-        private int productNum; //产品数量
+        private Integer shoppingCarId;   //购物车id
+        private Integer userId;    //用户id
+        private Integer productId; //产品id
         private LocalDateTime createTime;   //购物车创建时间
 
 

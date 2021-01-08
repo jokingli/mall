@@ -19,12 +19,12 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
-    private int pictureId;
+    private Integer pictureId;
     private String productName;
     private double productPrice;
-    private int productNum;//商品数量
-    private int discount;
-    private int shopId;
+    private Integer productNum;//商品数量
+    private Integer discount;
+    private Integer shopId;
     private String describe_info;//描述
     private LocalDateTime createTime;
 
