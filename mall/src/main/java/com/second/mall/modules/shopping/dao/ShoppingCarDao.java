@@ -7,6 +7,7 @@ import com.second.mall.modules.shopping.entity.ShoppingCar;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,8 +34,8 @@ public interface ShoppingCarDao extends JpaRepository<ShoppingCar, Integer> {
     /*删除购物车某件商品*/
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "DELETE FROM shopping_car where user_id=:userId and product_id=:poductId;", nativeQuery = true)
-    int deletOneProduct(int userId, int poductId);
+    @Query(value = "DELETE FROM shopping_car where user_id=:userId and product_id=:poductId", nativeQuery = true)
+    int deletOneProduct(@Param("userId") int userId, @Param("poductId") int poductId);
 
 
 }
