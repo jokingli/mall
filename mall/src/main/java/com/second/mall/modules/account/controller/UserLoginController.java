@@ -1,4 +1,4 @@
-package com.second.mall.modules.shopping.controller;
+package com.second.mall.modules.account.controller;
 
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.account.service.UserService;

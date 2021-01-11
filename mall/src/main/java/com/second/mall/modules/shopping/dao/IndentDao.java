@@ -18,9 +18,9 @@ import java.util.List;
 public interface IndentDao {
     //通过订单对象增加订单
     @Insert("INSERT INTO `indent` " +
-            "(indent_code,user_id,address_id,indent_price,create_time,state) " +
+            "(indent_code,user_id,address_id,post,post_price,indent_price,user_message,create_time,state) " +
             "VALUES " +
-            "(#{indentCode},#{userId},#{addressId},#{indentPrice},#{createTime},#{state})")
+            "(#{indentCode},#{userId},#{addressId},#{post},#{postPrice},#{indentPrice},#{userMessage},#{createTime},#{state})")
     @Options(useGeneratedKeys = true,keyProperty = "indentId",keyColumn = "indent_id")
     void insertIndex(Indent indent);
 
@@ -41,7 +41,10 @@ public interface IndentDao {
     List<Indent> selectIndent();
 
     @Select("<script>" +
-            "select * from indent "
+            "SELECT indent.*, address.address, address.linkman, address.tel\n" +
+            "FROM indent\n" +
+            "LEFT JOIN address\n" +
+            "ON indent.address_id = address.address_id "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
             + " and (indent_code like '%${keyWord}%') "
@@ -57,4 +60,8 @@ public interface IndentDao {
             + "</choose>"
             + "</script>")
     List<Indent> getIndentBySearchBean(SearchBean searchBean);
+
+
+    @Select("SELECT *FROM `indent` WHERE indent_id = #{indentId}")
+    Indent selectIndexById(int indentId);
 }

@@ -18,14 +18,23 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
-    private Integer pictureId;
-    private String productName;
-    private double productPrice;
-    private Integer productNum;//商品数量
-    private Integer discount;
-    private Integer shopId;
+    private int productId;  //商品id
+    private int categoryId; // 种类id
+    private int pictureId;  //商品图片id
+    private String productName; //商品名字
+    private double productPrice;    //商品价格
+    private int stockCount; // 进货数量
+    private int productNum;//商品数量
+    private int saleCount; // 销量
+    private int discount;   //商品折扣
+    private int shopId; //商店id
     private String describe_info;//描述
-    private LocalDateTime createTime;
+    private int reviewCount; // 评论数量
+    private LocalDateTime createTime;   //商品创建时间
+
+    @Transient
+    private String shopName; // 卖家商铺
+    @Transient
+    private List<Comment> comments; //商品评价集合
 
 }

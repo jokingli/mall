@@ -1,13 +1,21 @@
 package com.second.mall;
 
+import com.second.mall.modules.shopping.dao.IndentItemDao;
+import com.second.mall.modules.shopping.entity.IndentItem;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
 class MallApplicationTests {
+
+    @Autowired
+    private IndentItemDao indentItemDao;
 
     @Test
     void contextLoads() {
@@ -32,4 +40,21 @@ class MallApplicationTests {
         Date date=new Date();
         return machineId + String.format("%015d", hashCodeV)+date.getTime();
     }
+
+    @Test
+    void item() {
+//        IndentItem indentItem = new IndentItem();
+//        indentItem.setProductId(2);
+//        indentItem.setProductNum(12);
+//        indentItem.setIndentId(1);
+//        indentItem.setShopId(1);
+//        indentItem.setCreateTime(LocalDateTime.now());
+//        indentItem.setPostage(12);
+//        indentItemDao.insertIndexItem(indentItem);
+        List<IndentItem> indentItems = indentItemDao.selectIndexItemByIndentId(1);
+        for (IndentItem indentItem : indentItems) {
+            System.err.println(indentItem);
+        }
+    }
+
 }

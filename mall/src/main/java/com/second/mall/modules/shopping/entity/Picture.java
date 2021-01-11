@@ -19,10 +19,4 @@ public class Picture {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
-
-
-
-
-
-
 }

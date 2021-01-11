@@ -29,4 +29,7 @@ public interface CommentService {
 
     //分页
     PageInfo<Comment> getCommentBySearchBean(SearchBean searchBean);
+
+    //通过id查询
+    ResultEntity<Comment> selectCommentById(int commentId);
 }

@@ -1,14 +1,226 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>订单</title>
-</head>
-<body>
-    <table>
-        <tr>
-            <td></td>
-        </tr>
-    </table>
-</body>
-</html>
+<!-- jquery dataTable -->
+<link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<!-- Datatables -->
+<link href="/plugin/datatables.net-bs/css/dataTables.bootstrap.min.css"
+      rel="stylesheet">
+<link href="/plugin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+      rel="stylesheet">
+<link href="/plugin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
+      rel="stylesheet">
+<link href="/plugin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+      rel="stylesheet">
+<link href="/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
+      rel="stylesheet">
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>订单列表 <small>indent</small></h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 ">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-box table-responsive">
+                                    <table id="datatable" class="table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>订单编号</th>
+                                            <th>收货人</th>
+                                            <th>联系方式</th>
+                                            <th>收货地址</th>
+                                            <th>总价</th>
+                                            <th>创建时间</th>
+                                            <th>付款时间</th>
+                                            <th>收货时间</th>
+                                            <th>操作列</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+<!-- Datatables -->
+<script src="/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/plugin/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/plugin/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/plugin/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="/plugin/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="/plugin/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="/plugin/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="/plugin/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="/plugin/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="/plugin/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/plugin/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="/plugin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+<script >
+    var DEFAULT_PAFE_SIZE = 5;
+    $(function(){
+        // 初始化表格数据
+        initTable(DEFAULT_PAFE_SIZE);
+    })
+
+    // 初始化表格数据
+    function initTable(pageSize) {
+        $('#datatable').DataTable({
+            'paging': true, //分页
+            "serverSide": true, //开启后端分页
+            "pagingType": "full_numbers", //分页样式的类型simple/simple_numbers/full/full_numbers
+            "pageLength": pageSize, //定义初始的页长
+            "processing": true,
+            "destroy": true, //允许销毁替换，在表格重新查询时，可以自动销毁以前的data
+            'lengthChange': true, //控制是否能够调整每页的条数
+            'searching': true,
+            'data-show-refresh': true,
+            'ordering': true,
+            'autoWidth': false,
+            "ajax": function (data, callback, settings) {
+                // 从data获取查询数据
+                var columIndex = data.order[0].column;
+                var direction = data.order[0].dir;
+                var order = data.columns[columIndex].name;
+                pageSize = data.length == undefined  ? pageSize : data.length;
+
+                var searchBean = {};
+                searchBean.currentPage = (data.start / pageSize) + 1;
+                searchBean.pageSize = pageSize;
+                searchBean.order = order;
+                searchBean.direction = direction;
+                searchBean.keyWord = data.search.value;
+
+                $.ajax({
+                    url : "/api/indents",
+                    type : "post",
+                    contentType: "application/json",
+                    data : JSON.stringify(searchBean),
+                    success : function (rs) {
+                        var tableData = {
+                            draw :0,
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: []
+                        };
+                        if (!rs) {
+                            layer.alert("请求出错，请稍后重试" + rs.errmsg, {icon: 2});
+                            callback(tableData);
+                            return;
+                        };
+                        if (rs.list == null) {
+                            $('#datatable tbody tr').remove();
+                            $('#loading').remove();
+                            callback(tableData);
+                            return;
+                        }
+                        $('#loading').remove();
+                        var rowsData = [];
+                        for (var i = 0; i < rs.list.length; i++) {
+                            //包装行数据
+                            var rowData = new RowData(rs.list[i].indentId, rs.list[i].indentCode, rs.list[i].userId
+                            , rs.list[i].addressId, rs.list[i].post, rs.list[i].postPrice, rs.list[i].indentPrice
+                            , rs.list[i].userMessage, rs.list[i].createTime, rs.list[i].payTime, rs.list[i].deliveryTime
+                            , rs.list[i].confirmTime, rs.list[i].state, rs.list[i].address, rs.list[i].linkman, rs.list[i].tel);
+                            // 将行数据放到数组里
+                            rowsData.push(rowData);
+                        }
+                        tableData.data = rowsData;
+                        tableData.recordsTotal = rs.total;
+                        tableData.recordsFiltered = rs.total;
+                        callback(tableData);
+                    },
+                    error : function (data) {
+                        layer.alert(data.responseText, {icon: 0});
+                    }
+                });
+            },
+            "columns": [ //定义行数据字段
+                {data: 'indentCode', name: "indent_code", sortable: true},
+                {data: 'linkman', name: "linkman", sortable: true},
+                {data: 'tel', name: "tel", sortable: true},
+                {data: 'address', name: "address", sortable: true},
+                {data: 'indentPrice', name: "indent_price", sortable: true},
+                {data: 'createTime', name: "create_time", sortable: true},
+                {data: 'payTime', name: "pay_time", sortable: true},
+                {data: 'deliveryTime', name: "delivery_time", sortable: true},
+                {data: 'operate', width: '80px', sortable: false}
+            ]
+        });
+    }
+
+    //行数据结构
+    function RowData(indentId, indentCode,userId,addressId,post,postPrice,indentPrice,userMessage,createTime,payTime,deliveryTime,confirmTime,state,address,linkman,tel) {
+        this.indentId = indentId;
+        this.indentCode = indentCode;
+        this.userId = userId;
+        this.addressId = addressId;
+        this.post = post;
+        this.postPrice = postPrice;
+        this.indentPrice = indentPrice;
+        this.userMessage = userMessage;
+        this.createTime = createTime;
+        if (payTime==null){
+            this.payTime = "未付款";
+        }else {
+            this.payTime = payTime;
+        }
+        if (deliveryTime==null){
+            this.deliveryTime = "未收货";
+        }else {
+            this.deliveryTime = deliveryTime;
+        }
+        if (confirmTime==null){
+            this.confirmTime = "未评论";
+        }else {
+            this.confirmTime = payTime;
+        }
+        this.state = state;
+        this.address = address;
+        this.linkman = linkman;
+        this.tel = tel;
+        this.operate = function () {
+            return " <a href='javascript:void(0);' onclick='deleteModal(\"" + indentId + "\")' " +
+                "class='btn_editcolor'>删除</a>";
+        }
+    }
+
+    function deleteModal(indentId) {
+        bootbox.confirm("确认要删除订单?", function(result) {
+            if(result) {
+                $.ajax({
+                    url : "/api/indent/" + indentId,
+                    type : "delete",
+                    //contentType: "application/json",
+                    //data : JSON.stringify(category),
+                    success : function (rs) {
+                        if (rs.state == 200) {
+                            initTable(DEFAULT_PAFE_SIZE);
+                        } else {
+                            layer.alert(rs.message, {icon: 0});
+                        }
+                    },
+                    error : function (data) {
+                        layer.alert(data.responseText, {icon: 0});
+                    }
+                });
+            }
+        });
+    }
+</script>

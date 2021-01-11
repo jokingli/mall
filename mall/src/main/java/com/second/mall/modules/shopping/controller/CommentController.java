@@ -51,6 +51,8 @@ public class CommentController {
         return commentService.selectComment();
     }
 
+
+
     /**
      * 127.0.0.1/api/comment ---- put
      * {"commentId":"3","productId":"1","userId":"1","shopId":"1","parentId":"0","comment":"aa"}
@@ -69,5 +71,10 @@ public class CommentController {
     public PageInfo<Comment> getCategoriesBySearchBean(
             @RequestBody SearchBean searchBean) {
         return commentService.getCommentBySearchBean(searchBean);
+    }
+
+    @GetMapping(value = "/comment/{commentId}")
+    public ResultEntity<Comment> selectCommentById(@PathVariable int commentId){
+        return commentService.selectCommentById(commentId);
     }
 }

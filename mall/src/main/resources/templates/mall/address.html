@@ -1,0 +1,91 @@
+<!-- jquery dataTable -->
+<link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<!-- Datatables -->
+<link href="/plugin/datatables.net-bs/css/dataTables.bootstrap.min.css"
+      rel="stylesheet">
+<link href="/plugin/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+      rel="stylesheet">
+<link href="/plugin/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
+      rel="stylesheet">
+<link href="/plugin/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+      rel="stylesheet">
+<link href="/plugin/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
+      rel="stylesheet">
+
+<!-- page content -->
+<div class="container" role="main">
+    <div class="page-title">
+        <div class="title_left">
+            <h4>收货地址: <small></small></h4>
+        </div>
+    </div>
+    <ul id="address" class="list-unstyled" >
+
+    </ul>
+</div>
+<!-- /page content -->
+
+<!--<div th:replace="shopping/categoryAdd"></div>-->
+<!--<div th:replace="shopping/categoryEdit"></div>-->
+
+<!-- Datatables -->
+<script src="/plugin/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/plugin/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/plugin/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/plugin/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="/plugin/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="/plugin/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="/plugin/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="/plugin/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="/plugin/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="/plugin/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/plugin/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="/plugin/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+<script >
+    $(function(){
+        // 初始化表格数据
+        init();
+
+    })
+
+    // 初始化表格数据
+    function init() {
+        var userId = 1;
+        $.ajax({
+            url : "/api/addresses/"+userId,
+            type : "get",
+            // contentType: "application/json",
+            // data : JSON.stringify(searchBean),
+            success : function (rs) {
+                console.log(rs)
+                for (var i = 0; i < rs.object.length; i++) {
+                    var flag = false;
+                    if (rs.object[i].state==1){
+                        flag = true;
+                    }
+                    document.getElementById("address").innerHTML+="<li class=\"media\">" +
+                        "<span><input type='radio' name='addressChoice' checked='"+flag+"' value='"+rs.object[i].addressId+"'></span>"+
+                        "<span>"+"收件人:"+rs.object[i].linkman+"<\/span>" +"&nbsp;&nbsp;"+
+                        "<span>"+"地址:"+rs.object[i].address+"<\/span>" +"&nbsp;&nbsp;"+
+                        "<span>"+"电话"+rs.object[i].tel+"<\/span>" +"&nbsp;&nbsp;"+
+                        "<span>" +
+                        "<input type=\"button\" value=\"删除\" onclick=\"removeAddress("+rs.object[i].addressId+")\" \/>" +
+                        "<\/span><\/li>";
+                }
+                document.getElementById("address").innerHTML+="<li class=\"media\"><input type=\"button\" value=\"新增地址\" onclick=\"addAddressModal()\" \/></li>"
+            },
+            error : function (data) {
+                layer.alert(data.responseText, {icon: 0});
+            }
+        });
+
+    }
+
+    function removeAddress(addressId) {
+
+    }
+    function addAddressModal() {
+
+    }
+</script >
