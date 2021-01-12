@@ -1,7 +1,6 @@
 package com.second.mall.modules.shopping.entity;
 
 import lombok.Data;
-import sun.awt.SunHints;
 
 import javax.persistence.*;
 

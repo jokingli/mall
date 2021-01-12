@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  *             * 启动服务打开浏览器
  * @Date 2020/12/30 19:06
  **/
-@Configuration
+//@Configuration
 public class MyRunner implements CommandLineRunner {
     @Value("${myurl}")
     private String myurl;
