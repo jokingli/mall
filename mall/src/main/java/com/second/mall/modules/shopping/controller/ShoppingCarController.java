@@ -6,14 +6,12 @@ import com.second.mall.modules.shopping.entity.ShoppingCar;
 import com.second.mall.modules.shopping.entity.ShoppingCarItems;
 import com.second.mall.modules.shopping.service.ProductService;
 import com.second.mall.modules.shopping.service.ShoppingCarService;
-import com.second.mall.modules.shopping.vo.Yyy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
