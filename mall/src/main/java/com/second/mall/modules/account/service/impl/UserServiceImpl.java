@@ -27,9 +27,9 @@ import java.time.LocalDateTime;
  **/
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserDao userDao;
-
     @Autowired
     private UserRoleDao userRoleDao;
 
@@ -62,9 +62,7 @@ public class UserServiceImpl implements UserService {
             Subject subject = SecurityUtils.getSubject();
 
             UsernamePasswordToken usernamePasswordToken =
-                    new UsernamePasswordToken(user.getUserName(),MdFive.getMD5(user.getPassword()));
-            System.err.println("页面拿到的密码加密后："+usernamePasswordToken.getPassword());
-            System.err.println(usernamePasswordToken.getPassword());
+                    new UsernamePasswordToken(user.getUserName(), MdFive.getMD5(user.getPassword()));
 
             subject.login(usernamePasswordToken);
             subject.checkRoles();
