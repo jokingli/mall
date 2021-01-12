@@ -22,7 +22,7 @@ public interface IndentService {
     ResultEntity<Object> deleteIndexById(int indentId);
 
     //修改订单状态
-    ResultEntity<Object> updateIndentState(Indent indent);
+    ResultEntity<Indent> updateIndentState(Indent indent);
 
     //查询所有
     List<Indent> selectIndent();

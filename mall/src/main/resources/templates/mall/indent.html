@@ -1,5 +1,5 @@
 <div class="confirmPayPageDiv">
-    <input type="hidden" id="orderCode" th:value="${indentCode}"/>
+    <input type="hidden" id="indentCode" th:value="${indentCode}"/>
     <div class="confirmPayImageDiv">
         <img class="orderFlow" src="">
         <div class="confirmPayTime1"></div>
@@ -47,8 +47,8 @@
                 <td>
                     <span class="address"></span>
                     <span class="post"></span>
-                    <span class="receiver"></span>
-                    <span class="mobile"></span>
+                    <span class="linkman"></span>
+                    <span class="tel"></span>
                 </td>
             </tr>
             <tr>
@@ -60,7 +60,7 @@
 
     <div class="confirmPayButtonDiv waitPay">
         <div class="confirmPayWarning">该订单还未支付！</div>
-        <a th:href="@{'/tmall/pay/' + ${indentCode}}"><button class="confirmPayButton">支付</button></a>
+        <a th:href="@{'/mall/pay/' + ${indentCode}}"><button class="confirmPayButton">支付</button></a>
     </div>
     <div class="confirmPayButtonDiv confirmPay">
         <div class="confirmPayWarning">请收到货后，再确认支付宝支付！否则您可能钱货两空！</div>
@@ -68,6 +68,7 @@
     </div>
     <div class="confirmPayButtonDiv confirmedPay">
         <div class="confirmPayWarning">该订单已经确认收到！</div>
+        <a th:href="@{'/mall/pay/' + ${indentCode}}"><button class="confirmPayButton">评价</button></a>
     </div>
     <div class="confirmPayButtonDiv orderComplete">
         <div class="confirmPayWarning">该订单已经完成！</div>
@@ -79,24 +80,24 @@
 
         // 绑定“确认支付”按钮
         $(".confirmPayBtn").bind("click", function() {
-            // changeOrderStatus($("#orderCode").val(), "待评价", "/mall/orderConfirmed");
+            changeOrderStatus($("#indentCode").val(), 3, "/mall/indentConfirmed/"+$("#indentCode").val());
         });
     });
 
     //初始化订单信息
     function initOder() {
-        // var indentCode = $("#indentCode").val();
-        var indentCode = '8531552151610348684631';
+        var indentCode = $("#indentCode").val();
+        console.log(indentCode)
         $.ajax({
             url : "/api/indent/" + indentCode ,
             type : "get",
             contentType: "application/json",
             //data : JSON.stringify(cartItem),
-            success : function (data) {
-                console.log(data)
+            success : function (rs) {
+                console.log(rs)
                 $(".confirmPayOrderItemTable tbody").html("");
                 var temp = "";
-                $.each(data.object.indentItems, function(i, item) {
+                $.each(rs.object.indentItems, function(i, item) {
                     temp += "<tr>"
                     temp += "<td><a href='#" + item.productId +
                         "'><img width='50px' src='" + item.pictureUrl + "'></a></td>"
@@ -107,63 +108,63 @@
                     temp += "<td>" + item.productNum + "</td>"
                     temp += "<td><span class='conformPayProductPrice'>" + formatMoney(item.productPrice) + "</span></td>"
                     if (i == 0) {
-                        temp += "<td rowspan='" + data.object.indentItems.length +
+                        temp += "<td rowspan='" + rs.object.indentItems.length +
                             "' class='orderItemOrderInfoPartTD'><span>" + item.delivery + ": " +
                             formatMoney(item.postage) + "</span></td>"
                     }
                     temp += "</tr>"
                 });
                 $(".confirmPayOrderItemTable tbody").append(temp);
-                $(".confirmPayOrderItemSumPrice").html(formatMoney(data.total));
-                $(".orderCode").html(data.indentCode);
-                $(".address").html(data.address);
-                $(".post").html(data.post);
-                $(".receiver").html(data.receiver);
-                $(".mobile").html(data.mobile);
-                $(".payDate").html(data.payTime);
+                $(".confirmPayOrderItemSumPrice").html(formatMoney(rs.object.indentPrice));
+                $(".orderCode").html(rs.object.indentCode);
+                $(".address").html(rs.object.address);
+                $(".post").html(rs.object.post);
+                $(".linkman").html(rs.object.linkman);
+                $(".tel").html(rs.object.tel);
+                $(".payDate").html(rs.object.payTime);
 
-                if (data.object.state == 0) {
+                if (rs.object.state == 0) {
                     $(".orderFlow").attr("src", "/img/site/flow_1.png");
                     $(".waitPay").css("display", "block");
                     $(".confirmPay").css("display", "none");
                     $(".confirmedPay").css("display", "none");
                     $(".orderComplete").css("display", "none");
-                } else if (data.object.state == 1) {
+                } else if (rs.object.state == 1) {
                     $(".orderFlow").attr("src", "/img/site/flow_3.png");
-                    $(".confirmPayTime2").html(data.createTime);
-                    $(".confirmPayTime3").html(data.payTime);
+                    $(".confirmPayTime2").html(rs.object.createTime);
+                    $(".confirmPayTime3").html(rs.object.payTime);
                     $(".waitPay").css("display", "none");
                     $(".confirmPay").css("display", "block");
                     $(".confirmedPay").css("display", "none");
                     $(".orderComplete").css("display", "none");
-                } else if (data.object.state == 3) {
+                } else if (rs.object.state == 2) {
                     $(".orderFlow").attr("src", "/img/site/flow_3.png");
-                    $(".confirmPayTime2").html(data.createTime);
-                    $(".confirmPayTime3").html(data.payTime);
+                    $(".confirmPayTime2").html(rs.object.createTime);
+                    $(".confirmPayTime3").html(rs.object.payTime);
                     $(".waitPay").css("display", "none");
                     $(".confirmPay").css("display", "block");
                     $(".confirmedPay").css("display", "none");
                     $(".orderComplete").css("display", "none");
-                } else if (data.object.state == 4) {
+                } else if (rs.object.state == 3) {
                     $(".orderFlow").attr("src", "/img/site/flow_4.png");
-                    $(".confirmPayTime2").html(data.createTime);
-                    $(".confirmPayTime3").html(data.payTime);
-                    $(".confirmPayTime4").html(data.confirmTime);
+                    $(".confirmPayTime2").html(rs.object.createTime);
+                    $(".confirmPayTime3").html(rs.object.payTime);
+                    $(".confirmPayTime4").html(rs.object.confirmTime);
                     $(".waitPay").css("display", "none");
                     $(".confirmPay").css("display", "none");
                     $(".confirmedPay").css("display", "block");
                     $(".orderComplete").css("display", "none");
-                } else if (data.object.state == 5) {
+                } else if (rs.object.state == 4) {
                     $(".orderFlow").attr("src", "/img/site/flow_5.png");
-                    $(".confirmPayTime2").html(data.createTime);
-                    $(".confirmPayTime3").html(data.payTime);
-                    $(".confirmPayTime4").html(data.confirmTime);
+                    $(".confirmPayTime2").html(rs.object.createTime);
+                    $(".confirmPayTime3").html(rs.object.payTime);
+                    $(".confirmPayTime4").html(rs.object.confirmTime);
                     $(".waitPay").css("display", "none");
                     $(".confirmPay").css("display", "none");
                     $(".confirmedPay").css("display", "none");
                     $(".orderComplete").css("display", "block");
                 }
-                if (data.object.state == 0) {
+                if (rs.object.state == 0) {
                     $(".payed").css("display", "none");
                 } else {
                     $(".pay").css("display", "none");

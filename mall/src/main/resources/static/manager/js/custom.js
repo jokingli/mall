@@ -5052,19 +5052,19 @@ function formatMoney(number, places, symbol, thousand, decimal) {
 }
 
 // 改变 order 状态
-function changeOrderStatus(orderCode, status, redirectUrl) {
-    var order = {};
-    order.orderCode = orderCode;
-    order.status = status;
-    console.log(order);
+function changeOrderStatus(indentCode, state, redirectUrl) {
+    var indent = {};
+    indent.indentCode = indentCode;
+    indent.state = state;
+    console.log(indent);
 
     $.ajax({
-        url : "/api/order/status",
+        url : "/api/indent/state",
         type : "put",
         contentType: "application/json",
-        data : JSON.stringify(order),
+        data : JSON.stringify(indent),
         success : function (rs) {
-            if (rs.status == 200) {
+            if (rs.state == 200) {
                 if (redirectUrl != "") {
                     location.href = redirectUrl;
                 }

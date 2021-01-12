@@ -70,16 +70,19 @@ public class IndentServiceImpl implements IndentService {
     }
 
     //修改订单状态
-
     @Override
-    public ResultEntity<Object> updateIndentState(Indent indent) {
-        if (indent.getIndentCode()!=null){
-            indentDao.updateIndent(indent);
-            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                    "Indent update state success");
+    public ResultEntity<Indent> updateIndentState(Indent indent) {
+        if (indent.getState()==1){
+            indentDao.updateStateForPay(indent.getIndentCode(), indent.getState(), LocalDateTime.now());
+        }else if (indent.getState()==3){
+            indentDao.updateStateForDelivery(indent.getIndentCode(), indent.getState(), LocalDateTime.now());
+        }else if (indent.getState()==4){
+            indentDao.updateStateForConfirm(indent.getIndentCode(), indent.getState(), LocalDateTime.now());
         }
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "Not fond indent");
+                "状态修改成功",indent);
+
+
     }
 
     @Override

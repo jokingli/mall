@@ -2,9 +2,12 @@ package com.second.mall.modules.shopping.dao;
 
 import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Indent;
+
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
-
+import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Update;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -25,7 +28,11 @@ public interface IndentDao {
     void insertIndex(Indent indent);
 
     //通过订单号查询订单
-    @Select("SELECT *FROM `indent` WHERE indent_code = #{indentCode}")
+    @Select("SELECT indent.*, address.address, address.linkman, address.tel " +
+            "FROM indent " +
+            "LEFT JOIN address " +
+            "ON indent.address_id = address.address_id " +
+            "WHERE indent_code = #{indentCode}")
     Indent selectIndexByCode(String indentCode);
 
     //真删除订单
@@ -33,8 +40,17 @@ public interface IndentDao {
     void deleteIndexById(int indentId);
 
     //通过订单对象修改订单
-    @Update("UPDATE `indent` SET state = #{state} WHERE indent_code = #{indentCode}")
-    void updateIndent(Indent indent);
+    @Update("update indent set state = #{state}, pay_time = #{payTime} where indent_code = #{indentCode}")
+    void updateStateForPay(@Param("indentCode") String indentCode
+            ,@Param("state") int state,@Param("payTime") LocalDateTime payTime);
+
+    @Update("update indent set state = #{state}, Delivery_time = #{DeliveryTime} where indent_code = #{indentCode}")
+    void updateStateForDelivery(@Param("indentCode") String indentCode
+            ,@Param("state") int state,@Param("DeliveryTime") LocalDateTime DeliveryTime);
+
+    @Update("update indent set state = #{state}, Confirm_time = #{ConfirmTime} where indent_code = #{indentCode}")
+    void updateStateForConfirm(@Param("indentCode") String indentCode
+            ,@Param("state") int state,@Param("ConfirmTime") LocalDateTime ConfirmTime);
 
     //查询所有
     @Select("SELECT *FROM `indent`")

@@ -54,12 +54,12 @@ public class IndentController {
     }
 
     /**
-     * 127.0.0.1/api/indent ---- put
-     * {"indentId":"5","indentCode":"16743719731609749048723","state":"2"}
+     * 127.0.0.1/api/indent/state ---- put
+     * {"indentId":"5","indentCode":"16743719731609749048723","state":"1"}
      */
     //通过修改订单状态
-    @PutMapping(value = "/indent",consumes = "application/json")
-    private ResultEntity<Object> updateIndent(@RequestBody Indent indent){
+    @PutMapping(value = "/indent/state",consumes = "application/json")
+    private ResultEntity<Indent> updateIndent(@RequestBody Indent indent){
         return indentService.updateIndentState(indent);
     }
 

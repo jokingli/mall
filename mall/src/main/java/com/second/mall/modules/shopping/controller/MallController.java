@@ -1,7 +1,10 @@
 package com.second.mall.modules.shopping.controller;
 
+import com.second.mall.modules.shopping.service.IndentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -31,8 +34,9 @@ public class MallController {
     /**
      * 订单主页
      */
-    @RequestMapping(value = "/indent")
-    public String indent(ModelMap modelMap){
+    @RequestMapping(value = "/indent/{indentCode}")
+    public String indent(@PathVariable String indentCode, ModelMap modelMap){
+        modelMap.put("indentCode",indentCode);
         modelMap.put("template","mall/indent");
         return "mallIndex";
     }
@@ -41,10 +45,31 @@ public class MallController {
     /**
      * 地址显示
      */
-    @RequestMapping(value = "/address")
-    public String address(ModelMap modelMap){
+    @RequestMapping(value = "/address/{userId}")
+    public String address(@PathVariable int userId, ModelMap modelMap){
+        modelMap.put("userId",userId);
         modelMap.put("template","mall/address");
         return "mallIndex";
     }
 
+    /**
+     * 支付
+     */
+    @RequestMapping(value = "/pay/{indentCode}")
+    public String pay(@PathVariable String indentCode,ModelMap modelMap){
+        modelMap.put("indentCode",indentCode);
+        modelMap.put("template","mall/pay");
+        return "mallIndex";
+    }
+
+
+    /**
+     * 确认支付
+     */
+    @RequestMapping(value = "/indentConfirmed/{indentCode}")
+    public String indentConfirmed(@PathVariable String indentCode,ModelMap modelMap){
+        modelMap.put("indentCode",indentCode);
+        modelMap.put("template","mall/indent");
+        return "mallIndex";
+    }
 }
