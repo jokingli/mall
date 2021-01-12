@@ -138,7 +138,7 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
         int i= shoppingCarItemsDao.changeNum(num,productId);
         if (i > 0) {
             return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
-                    "修改");
+                    "修改成功");
         }
         return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.FAILED.status,
                 "修改失败，请稍后重试");

@@ -174,17 +174,15 @@
      * 修改数量
      */
     function changeNum(changeNum) {
-
-
-        var num = $("#num").val();
-        var productId = $(changeNum).attr("productId");
-        alert(productId+""+num);
+        var shoppingCar={};
+        shoppingCar.number=$("#num").val();
+        shoppingCar.productId=$(changeNum).attr("productId");
         $.ajax({
             url: "/shoppingCar/change",
             type: "put",
             contentType: "application/json",
             //dataType: "json",
-            data: {"num": num,"productId": productId},
+            data: JSON.stringify(shoppingCar),
             success: function (data) {
                 if (data.state == 200) {
                     alert(data.message);

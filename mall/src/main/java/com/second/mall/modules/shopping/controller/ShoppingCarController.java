@@ -90,8 +90,8 @@ public class ShoppingCarController {
      */
     @PutMapping(value = "/change",consumes = "application/json")
     @ResponseBody
-    public ResultEntity<ShoppingCar> changeNum(@RequestParam(value="num", required = false) int productId,@RequestParam(value="num", required = false) int num ) {
-        System.out.println(productId + ""+num);
-        return shoppingCarService.changeNum(productId,num);
+    public ResultEntity<ShoppingCar> changeNum(@RequestBody ShoppingCarItems shoppingCarItems) {
+
+        return shoppingCarService.changeNum(shoppingCarItems.getProductId(),shoppingCarItems.getNumber());
     }
 }
