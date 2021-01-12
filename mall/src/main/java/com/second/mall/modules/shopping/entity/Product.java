@@ -20,6 +20,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
     private Integer pictureId;
+    private String pictureUrl;
     private String productName;
     private double productPrice;
     private Integer productNum;//商品库存

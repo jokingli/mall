@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class productServiceImpl implements ProductService
@@ -37,12 +38,14 @@ public class productServiceImpl implements ProductService
 
     //搜索
     @Override
-    public PageInfo<Product> getProductBySearchVo(SearchBean searchVo) {
+    public PageInfo<Product> getProductsByProductSearchVo(SearchBean searchVo) {
         searchVo.initSearchBean();
         PageHelper.startPage(searchVo.getCurrentPage(), searchVo.getPageSize());
-        return new PageInfo<Product>(
-                Optional.ofNullable(productDao.getCategoriesBySearchVo(searchVo))
-                        .orElse(Collections.emptyList()));
+        PageInfo<Product> pageInfo = new PageInfo<Product>(Optional
+                .ofNullable(productDao.getProductBySearchVo(searchVo))
+                .orElse(Collections.emptyList()));
+        pageInfo.setList(pageInfo.getList().stream().map(item -> initProduct(item)).collect(Collectors.toList()));
+        return pageInfo;
     }
 
     @Override
