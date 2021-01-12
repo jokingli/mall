@@ -21,6 +21,7 @@ public class Product {
     private int productId;  //商品id
     private int categoryId; // 种类id
     private int pictureId;  //商品图片id
+    private String pictureUrl; // 图片地址
     private String productName; //商品名字
     private double productPrice;    //商品价格
     private int stockCount; // 进货数量
