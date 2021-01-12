@@ -1,12 +1,12 @@
 <input type="hidden" id="productId" th:value="${productId}"/>
 
 <div class="categoryPictureInProductPageDiv">
-    <input type="hidden" id="categoryId" value="" />
-    <img id="categoryImage" class="categoryPictureInProductPage" src="" />
+    <input type="hidden" id="productIds" value="" />
+    <img id="productUrl" class="productPictureInProductPage" src="" />
 </div>
 
 <div class="productPageDiv">
-    <div th:replace="tmall/product-imgAndInfo.html"></div>
+    <div th:replace="mall/product-imgAndInfo.html"></div>
 
     <div class="productDetailDiv" role="tabpanel" data-example-id="togglable-tabs">
         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -20,12 +20,11 @@
             </li>
         </ul>
         <div id="myTabContent" class="tab-content">
-            <div th:replace="mall/product-comment.html"></div>
+            <div th:replace="mall/product-comments.html"></div>
             <div th:replace="mall/product-detail.html"></div>
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
     $(function(){
         initProductInfo();
@@ -42,17 +41,14 @@
     function initProductInfo() {
         var productId = $("#productId").val();
         $.ajax({
-            url : "/api/product/" + productId,
+            url : "/mall/product/" + productId,
             type : "get",
             contentType: "application/json",
             //data : JSON.stringify(searchVo),
             success : function (data) {
                 // 初始化产品信息
-                $("#categoryId").val(data.categoryId);
-                $(".productTitle").html(data.name);
-                $(".productSubTitle").html(data.subTitle);
-                $(".originalPrice").html(data.originalPrice);
-                $(".promotionPrice").html(data.promotePrice);
+                $(".productTitle").html(data.productName);
+                $(".originalPrice").html(data.promotePrice);
                 $("[name='saleCount']").html(data.saleCount);
                 $("[name='reviewCount']").html(data.reviewCount);
                 $("[name='number']").html(data.number);
@@ -204,3 +200,4 @@
         });
     }
 </script>
+

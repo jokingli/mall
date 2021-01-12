@@ -24,7 +24,7 @@ public class productServiceImpl implements ProductService
         return Optional.ofNullable(productDao.selectProduct()).orElse(Collections.emptyList());
     }
 
-    //搜索
+   //分页
     @Override
     public PageInfo<Product> getProductsBySearchVo(SearchBean searchVo) {
         searchVo.initSearchBean();
@@ -35,6 +35,7 @@ public class productServiceImpl implements ProductService
         return pageInfo;
     }
 
+    //搜索
     @Override
     public PageInfo<Product> getProductBySearchVo(SearchBean searchVo) {
         searchVo.initSearchBean();

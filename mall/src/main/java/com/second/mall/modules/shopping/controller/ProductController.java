@@ -60,11 +60,12 @@ public class ProductController {
     public String getProductById(@PathVariable int productId, ModelMap modelMap) {
         productService.getProductByProductId(productId);
         modelMap.addAttribute("productId", productId);
-        return "managerIndex";
+        modelMap.addAttribute("template", "mall/product");
+        return "mallIndex";
     }
 
-    @GetMapping("/product/{productId}")
+   /* @GetMapping("/product/{productId}")
     public Product getProductById(@PathVariable int productId) {
         return productService.getProductByProductId(productId);
-    }
+    }*/
 }
