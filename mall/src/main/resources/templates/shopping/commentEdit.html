@@ -1,0 +1,46 @@
+<div id="editModal" class="modal fade bs-example-modal-lg"
+     tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Category Edit</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="javascript:void(0);" data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" id="commentIdForEdit" name="commentId" value="">
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="indentId">indentId</label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <input type="text" id="indentIdForEdit" name="indentId" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="userId">userId</label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <input type="text" id="userIdForEdit" name="userId" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="shopId">shopId</label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <input type="text" id="shopIdForEdit" name="shopId" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="comments">comments</label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <textarea id="commentsForEdit" name="comments" class="form-control "></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="editModalSubmit" type="button" class="btn btn-primary">Submit</button>
+            </div>
+
+        </div>
+    </div>
+</div>

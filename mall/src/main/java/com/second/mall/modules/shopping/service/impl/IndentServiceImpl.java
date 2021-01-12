@@ -5,7 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.dao.IndentDao;
+import com.second.mall.modules.shopping.dao.IndentItemDao;
 import com.second.mall.modules.shopping.entity.Indent;
+import com.second.mall.modules.shopping.entity.IndentItem;
 import com.second.mall.modules.shopping.service.IndentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,8 @@ public class IndentServiceImpl implements IndentService {
     //注入订单dao层接口
     @Autowired
     private IndentDao indentDao;
+    @Autowired
+    private IndentItemDao indentItemDao;
 
 
     //订单新增
@@ -48,12 +52,14 @@ public class IndentServiceImpl implements IndentService {
     //通过订单号查询id
     @Override
     public ResultEntity<Indent> selectIndentByCode(String indentCode) {
-        System.out.println(indentCode);
         Indent indent = indentDao.selectIndexByCode(indentCode);
-        System.out.println(indent);
+        //通过订单id查询订单所属订单列
+        List<IndentItem> indentItems = indentItemDao.selectIndexItemByIndentId(indent.getIndentId());
+        indent.setIndentItems(indentItems);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Indent select success", indent);
     }
+
 
     //真删除订单
     @Override
@@ -64,16 +70,19 @@ public class IndentServiceImpl implements IndentService {
     }
 
     //修改订单状态
-
     @Override
-    public ResultEntity<Object> updateIndentState(Indent indent) {
-        if (indent.getIndentCode()!=null){
-            indentDao.updateIndent(indent);
-            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                    "Indent update state success");
+    public ResultEntity<Indent> updateIndentState(Indent indent) {
+        if (indent.getState()==1){
+            indentDao.updateStateForPay(indent.getIndentCode(), indent.getState(), LocalDateTime.now());
+        }else if (indent.getState()==3){
+            indentDao.updateStateForDelivery(indent.getIndentCode(), indent.getState(), LocalDateTime.now());
+        }else if (indent.getState()==4){
+            indentDao.updateStateForConfirm(indent.getIndentCode(), indent.getState(), LocalDateTime.now());
         }
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "Not fond indent");
+                "状态修改成功",indent);
+
+
     }
 
     @Override

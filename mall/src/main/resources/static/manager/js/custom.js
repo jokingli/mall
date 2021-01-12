@@ -5036,4 +5036,59 @@ $(document).ready(function () {
     init_autosize();
     init_autocomplete();
 
-});	
+});
+
+// 格式化金钱
+function formatMoney(number, places, symbol, thousand, decimal) {
+    number = number || 0;
+    places = !isNaN(places = Math.abs(places)) ? places : 2;
+    symbol = symbol !== undefined ? symbol : "￥";
+    thousand = thousand || ",";
+    decimal = decimal || ".";
+    var negative = number < 0 ? "-" : "",
+        i = parseInt(number = Math.abs(+number || 0).toFixed(places), 10) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
+}
+
+// 改变 order 状态
+function changeOrderStatus(indentCode, state, redirectUrl) {
+    var indent = {};
+    indent.indentCode = indentCode;
+    indent.state = state;
+    console.log(indent);
+
+    $.ajax({
+        url : "/api/indent/state",
+        type : "put",
+        contentType: "application/json",
+        data : JSON.stringify(indent),
+        success : function (rs) {
+            if (rs.state == 200) {
+                if (redirectUrl != "") {
+                    location.href = redirectUrl;
+                }
+            } else {
+                layer.msg(rs.message, {icon: 0});
+            }
+        },
+        error : function (rs) {
+            layer.msg(rs.responseText, {icon: 0});
+        }
+    });
+}
+
+// 初始化产品种类信息
+function initCategory() {
+    var categoryId = $("#categoryId").val();
+    $.ajax({
+        url : "/api/category/" + categoryId,
+        type : "get",
+        success : function (data) {
+            $("#categoryImage").attr("src", data.image);
+        },
+        error : function (data) {
+            layer.msg(data.responseText, {icon: 0});
+        }
+    });
+}

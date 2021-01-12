@@ -6,6 +6,7 @@ import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Indent;
 import com.second.mall.modules.shopping.service.IndentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,10 +28,11 @@ public class IndentController {
     /**
      * 新增订单insertIndex --post
      * 127.0.0.1/api/indent
-     * {"userId":"1","addressId":"1","indentPrice":"12"}
+     * {"userId":"1","addressId":"1","post":"圆通","postPrice":"12","indentPrice":"123","userMessage":"多方唐"}
      */
     @PostMapping(value = "/indent", consumes = "application/json")
-    private ResultEntity<Indent> insertIndent(@RequestBody Indent indent){
+    private ResultEntity<Indent> insertIndent(@RequestBody Indent indent, ModelMap modelMap){
+        modelMap.put("indentCode",indent.getIndentCode());
         return indentService.insertIndent(indent);
     }
 
@@ -52,12 +54,12 @@ public class IndentController {
     }
 
     /**
-     * 127.0.0.1/api/indent ---- put
-     * {"indentId":"5","indentCode":"16743719731609749048723","state":"2"}
+     * 127.0.0.1/api/indent/state ---- put
+     * {"indentId":"5","indentCode":"16743719731609749048723","state":"1"}
      */
     //通过修改订单状态
-    @PutMapping(value = "/indent",consumes = "application/json")
-    private ResultEntity<Object> updateIndent(@RequestBody Indent indent){
+    @PutMapping(value = "/indent/state",consumes = "application/json")
+    private ResultEntity<Indent> updateIndent(@RequestBody Indent indent){
         return indentService.updateIndentState(indent);
     }
 

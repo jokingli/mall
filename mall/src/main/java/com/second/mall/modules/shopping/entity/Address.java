@@ -1,5 +1,7 @@
 package com.second.mall.modules.shopping.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "address")
+@Data
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

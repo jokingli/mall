@@ -1,7 +1,10 @@
 package com.second.mall.modules.shopping.controller;
 
+import com.second.mall.modules.shopping.service.IndentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -11,19 +14,62 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Version v1.0
  **/
 @Controller
-@RequestMapping(value = "/shopping")
+@RequestMapping(value = "/mall")
 public class MallController {
 
 
     @RequestMapping(value = "/comments")
     public String comments(ModelMap modelMap){
-        modelMap.put("template","shopping/comments");
-        return "mallIndex";
+        modelMap.put("template","shopping/comment");
+        return "managerIndex";
     }
 
     @RequestMapping(value = "/product")
     public String product(ModelMap modelMap){
         modelMap.put("template","shopping/product");
+        return "mallIndex";
+    }
+
+
+    /**
+     * 订单主页
+     */
+    @RequestMapping(value = "/indent/{indentCode}")
+    public String indent(@PathVariable String indentCode, ModelMap modelMap){
+        modelMap.put("indentCode",indentCode);
+        modelMap.put("template","mall/indent");
+        return "mallIndex";
+    }
+
+
+    /**
+     * 地址显示
+     */
+    @RequestMapping(value = "/address/{userId}")
+    public String address(@PathVariable int userId, ModelMap modelMap){
+        modelMap.put("userId",userId);
+        modelMap.put("template","mall/address");
+        return "mallIndex";
+    }
+
+    /**
+     * 支付
+     */
+    @RequestMapping(value = "/pay/{indentCode}")
+    public String pay(@PathVariable String indentCode,ModelMap modelMap){
+        modelMap.put("indentCode",indentCode);
+        modelMap.put("template","mall/pay");
+        return "mallIndex";
+    }
+
+
+    /**
+     * 确认支付
+     */
+    @RequestMapping(value = "/indentConfirmed/{indentCode}")
+    public String indentConfirmed(@PathVariable String indentCode,ModelMap modelMap){
+        modelMap.put("indentCode",indentCode);
+        modelMap.put("template","mall/indent");
         return "mallIndex";
     }
 }

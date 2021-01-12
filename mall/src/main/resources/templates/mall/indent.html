@@ -1,0 +1,180 @@
+<div class="confirmPayPageDiv">
+    <input type="hidden" id="indentCode" th:value="${indentCode}"/>
+    <div class="confirmPayImageDiv">
+        <img class="orderFlow" src="">
+        <div class="confirmPayTime1"></div>
+        <div class="confirmPayTime2"></div>
+        <div class="confirmPayTime3"></div>
+        <div class="confirmPayTime4"></div>
+        <div class="confirmPayTime5"></div>
+    </div>
+
+    <div class="confirmPayOrderItemDiv">
+        <div class="confirmPayOrderItemText">订单信息</div>
+        <table class="confirmPayOrderItemTable">
+            <thead>
+            <th colspan="2">宝贝</th>
+            <th width="120px">单价</th>
+            <th width="120px">数量</th>
+            <th width="120px">商品总价 </th>
+            <th width="120px">运费</th>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="confirmPayOrderItemText pull-right">
+            实付款： <span class="confirmPayOrderItemSumPrice"></span>
+        </div>
+    </div>
+
+    <div class="confirmPayOrderDetailDiv">
+        <table class="confirmPayOrderDetailTable">
+            <tr>
+                <td>订单编号：</td>
+                <td>
+                    <span class="orderCode"></span>
+                    <img width="23px" src="#">
+                </td>
+            </tr>
+            <tr>
+                <td>卖家昵称：</td>
+                <td>
+                    天猫店铺
+                    <span class="confirmPayOrderDetailWangWangGif"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>收货信息： </td>
+                <td>
+                    <span class="address"></span>
+                    <span class="post"></span>
+                    <span class="linkman"></span>
+                    <span class="tel"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>成交时间：</td>
+                <td><span class="payDate"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="confirmPayButtonDiv waitPay">
+        <div class="confirmPayWarning">该订单还未支付！</div>
+        <a th:href="@{'/mall/pay/' + ${indentCode}}"><button class="confirmPayButton">支付</button></a>
+    </div>
+    <div class="confirmPayButtonDiv confirmPay">
+        <div class="confirmPayWarning">请收到货后，再确认支付宝支付！否则您可能钱货两空！</div>
+        <a href="javascript:void(0);"><button class="confirmPayButton confirmPayBtn">确认支付</button></a>
+    </div>
+    <div class="confirmPayButtonDiv confirmedPay">
+        <div class="confirmPayWarning">该订单已经确认收到！</div>
+        <a th:href="@{'/mall/pay/' + ${indentCode}}"><button class="confirmPayButton">评价</button></a>
+    </div>
+    <div class="confirmPayButtonDiv orderComplete">
+        <div class="confirmPayWarning">该订单已经完成！</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        initOder();
+
+        // 绑定“确认支付”按钮
+        $(".confirmPayBtn").bind("click", function() {
+            changeOrderStatus($("#indentCode").val(), 3, "/mall/indentConfirmed/"+$("#indentCode").val());
+        });
+    });
+
+    //初始化订单信息
+    function initOder() {
+        var indentCode = $("#indentCode").val();
+        console.log(indentCode)
+        $.ajax({
+            url : "/api/indent/" + indentCode ,
+            type : "get",
+            contentType: "application/json",
+            //data : JSON.stringify(cartItem),
+            success : function (rs) {
+                console.log(rs)
+                $(".confirmPayOrderItemTable tbody").html("");
+                var temp = "";
+                $.each(rs.object.indentItems, function(i, item) {
+                    temp += "<tr>"
+                    temp += "<td><a href='#" + item.productId +
+                        "'><img width='50px' src='" + item.pictureUrl + "'></a></td>"
+                    temp += "<td class='confirmPayOrderItemProductLink'>"
+                    temp += "<a href='#" + item.productId + "'>" + item.productName + "</a>"
+                    temp += "</td>"
+                    temp += "<td>" + formatMoney(item.productPrice) + "</td>"
+                    temp += "<td>" + item.productNum + "</td>"
+                    temp += "<td><span class='conformPayProductPrice'>" + formatMoney(item.productPrice) + "</span></td>"
+                    if (i == 0) {
+                        temp += "<td rowspan='" + rs.object.indentItems.length +
+                            "' class='orderItemOrderInfoPartTD'><span>" + item.delivery + ": " +
+                            formatMoney(item.postage) + "</span></td>"
+                    }
+                    temp += "</tr>"
+                });
+                $(".confirmPayOrderItemTable tbody").append(temp);
+                $(".confirmPayOrderItemSumPrice").html(formatMoney(rs.object.indentPrice));
+                $(".orderCode").html(rs.object.indentCode);
+                $(".address").html(rs.object.address);
+                $(".post").html(rs.object.post);
+                $(".linkman").html(rs.object.linkman);
+                $(".tel").html(rs.object.tel);
+                $(".payDate").html(rs.object.payTime);
+
+                if (rs.object.state == 0) {
+                    $(".orderFlow").attr("src", "/img/site/flow_1.png");
+                    $(".waitPay").css("display", "block");
+                    $(".confirmPay").css("display", "none");
+                    $(".confirmedPay").css("display", "none");
+                    $(".orderComplete").css("display", "none");
+                } else if (rs.object.state == 1) {
+                    $(".orderFlow").attr("src", "/img/site/flow_3.png");
+                    $(".confirmPayTime2").html(rs.object.createTime);
+                    $(".confirmPayTime3").html(rs.object.payTime);
+                    $(".waitPay").css("display", "none");
+                    $(".confirmPay").css("display", "block");
+                    $(".confirmedPay").css("display", "none");
+                    $(".orderComplete").css("display", "none");
+                } else if (rs.object.state == 2) {
+                    $(".orderFlow").attr("src", "/img/site/flow_3.png");
+                    $(".confirmPayTime2").html(rs.object.createTime);
+                    $(".confirmPayTime3").html(rs.object.payTime);
+                    $(".waitPay").css("display", "none");
+                    $(".confirmPay").css("display", "block");
+                    $(".confirmedPay").css("display", "none");
+                    $(".orderComplete").css("display", "none");
+                } else if (rs.object.state == 3) {
+                    $(".orderFlow").attr("src", "/img/site/flow_4.png");
+                    $(".confirmPayTime2").html(rs.object.createTime);
+                    $(".confirmPayTime3").html(rs.object.payTime);
+                    $(".confirmPayTime4").html(rs.object.confirmTime);
+                    $(".waitPay").css("display", "none");
+                    $(".confirmPay").css("display", "none");
+                    $(".confirmedPay").css("display", "block");
+                    $(".orderComplete").css("display", "none");
+                } else if (rs.object.state == 4) {
+                    $(".orderFlow").attr("src", "/img/site/flow_5.png");
+                    $(".confirmPayTime2").html(rs.object.createTime);
+                    $(".confirmPayTime3").html(rs.object.payTime);
+                    $(".confirmPayTime4").html(rs.object.confirmTime);
+                    $(".waitPay").css("display", "none");
+                    $(".confirmPay").css("display", "none");
+                    $(".confirmedPay").css("display", "none");
+                    $(".orderComplete").css("display", "block");
+                }
+                if (rs.object.state == 0) {
+                    $(".payed").css("display", "none");
+                } else {
+                    $(".pay").css("display", "none");
+                    $(".payed").css("display", "block");
+                }
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        });
+    }
+
+</script>

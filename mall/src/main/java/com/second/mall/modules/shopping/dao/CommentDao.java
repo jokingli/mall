@@ -20,9 +20,9 @@ import java.util.List;
 public interface CommentDao {
     //新增评论
     @Insert("INSERT INTO `comment`" +
-            "(indent_id,product_id,user_id,shop_id,parent_id,`comment`,create_time)" +
+            "(indent_id,product_id,user_id,shop_id,parent_id,`comments`,create_time)" +
             "VALUES" +
-            "(#{indentId},#{productId},#{userId},#{shopId},#{parentId},#{comment},#{createTime})")
+            "(#{indentId},#{productId},#{userId},#{shopId},#{parentId},#{comments},#{createTime})")
     void insertComment(Comment comment);
 
     //删除评论
@@ -34,7 +34,7 @@ public interface CommentDao {
     List<Comment> selectComment();
 
     //修改评论
-    @Update("UPDATE `comment` SET comment = #{comment} WHERE comment_id = #{commentId}")
+    @Update("UPDATE `comment` SET comments = #{comments} WHERE comment_id = #{commentId}")
     void updateComment(Comment comment);
 
     //查询评论通过id
@@ -49,8 +49,8 @@ public interface CommentDao {
     @Select("SELECT *FROM `comment` WHERE product_id = #{productId}")
     Comment selectCommentByProductId(int productId);
 
-    @Select("<script>" +
-            "select * from comment "
+    @Select("<script>"
+            +"SELECT * FROM `comment`"
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
             + " and (`comment` like '%${keyWord}%') "
