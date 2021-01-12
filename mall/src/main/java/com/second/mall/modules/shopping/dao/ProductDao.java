@@ -30,24 +30,7 @@ public interface ProductDao {
     Product getProductById(int productId);
 
 
-    @Select("<script>" +
-            "select *, c.name as categoryName from product p left join category c on p.category_id = c.id"
-            + "<where> "
-            + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (p.name like '%${keyWord}%' or "
-            + " p.sub_title like '%${keyWord}%') "
-            + "</if>"
-            + "</where>"
-            + "<choose>"
-            + "<when test='orderBy != \"\" and orderBy != null'>"
-            + " order by p.${orderBy} ${sort}"
-            + "</when>"
-            + "<otherwise>"
-            + " order by p.id desc"
-            + "</otherwise>"
-            + "</choose>"
-            + "</script>")
-    List<Product> getProductsBySearchVo(SearchBean searchVo);
+
 
     @Select("<script>" +
             "select * from product "
@@ -65,5 +48,5 @@ public interface ProductDao {
             + "</otherwise>"
             + "</choose>"
             + "</script>")
-    List<Product> getCategoriesBySearchVo(SearchBean searchVo);
+    List<Product> getProductBySearchVo(SearchBean searchVo);
 }
