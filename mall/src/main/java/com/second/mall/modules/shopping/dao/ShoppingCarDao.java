@@ -20,7 +20,7 @@ import java.util.List;
 public interface ShoppingCarDao extends JpaRepository<ShoppingCar, Integer> {
 
     /* 通过userId查询购物车*/
-    List<ShoppingCar> findAllByUserId(int userId);
+    ShoppingCar findByUserId(int userId);
 
     /*通过商品id删除购物车*/
     @Transactional

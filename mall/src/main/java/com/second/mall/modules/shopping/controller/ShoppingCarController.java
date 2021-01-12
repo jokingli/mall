@@ -3,6 +3,7 @@ package com.second.mall.modules.shopping.controller;
 import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.modules.shopping.entity.Product;
 import com.second.mall.modules.shopping.entity.ShoppingCar;
+import com.second.mall.modules.shopping.entity.ShoppingCarItems;
 import com.second.mall.modules.shopping.service.ProductService;
 import com.second.mall.modules.shopping.service.ShoppingCarService;
 import com.second.mall.modules.shopping.vo.Yyy;
@@ -30,10 +31,10 @@ public class ShoppingCarController {
     @GetMapping(value = "/show/{userId}")
     public String show(@PathVariable int userId, HttpServletRequest request) {
 
-        //通过用户id得到用户购物车中商品id和商品数量，通过商品id得到商品数据，在页面上展示出来
-        List<Product> productList=shoppingCarService.selectShopingCar(userId);
-        request.setAttribute("productList",productList);
+        //通过用户id得到用户购物车中商品和商品数量在页面上展示出来
+        List<ShoppingCarItems> shoppingCarItemsList=shoppingCarService.selectShopingCar(userId);
 
+        request.setAttribute("productList",shoppingCarItemsList);
         return "/shopping/shoppingCar";
     }
 
@@ -43,9 +44,11 @@ public class ShoppingCarController {
      * {"userId":"1","productId":"2"}
      */
     @PostMapping(value = "/add",consumes = "application/json")
-    public ResultEntity<ShoppingCar> userAddShoppingCar(@RequestBody ShoppingCar shoppingCar) {
-        return  shoppingCarService.userAddShoppingCar(shoppingCar);
+    public ResultEntity<ShoppingCar> userAddShoppingCar(@RequestBody ShoppingCarItems shoppingCarItems) {
+
+        return  shoppingCarService.userAddShoppingCar(shoppingCarItems);
     }
+
 
     /**
      * 批量删除购物车对应商品
@@ -64,6 +67,7 @@ public class ShoppingCarController {
      * 127.0.0.1/shoppingCar/clear/1
      */
     @DeleteMapping(value = "/clear")
+    @ResponseBody
     public ResultEntity<ShoppingCar> clearShoppingCar() {
         int userId=1;
         return shoppingCarService.clearShopingCarByUserId(userId);
@@ -81,4 +85,13 @@ public class ShoppingCarController {
         return shoppingCarService.deletOneProduct(userId,productId);
     }
 
+    /**
+     * 修改商品数量
+     */
+    @PutMapping(value = "/change",consumes = "application/json")
+    @ResponseBody
+    public ResultEntity<ShoppingCar> changeNum(@RequestParam(value="num", required = false) int productId,@RequestParam(value="num", required = false) int num ) {
+        System.out.println(productId + ""+num);
+        return shoppingCarService.changeNum(productId,num);
+    }
 }

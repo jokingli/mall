@@ -22,10 +22,11 @@ public class Product {
     private Integer pictureId;
     private String productName;
     private double productPrice;
-    private Integer productNum;//商品数量
+    private Integer productNum;//商品库存
+    private Integer num;//购买数量
     private Integer discount;
     private Integer shopId;
-    private String describe_info;//描述
+    private String describeInfo;//描述
     private LocalDateTime createTime;
 
 }
