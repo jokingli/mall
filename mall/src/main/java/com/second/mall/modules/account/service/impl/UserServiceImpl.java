@@ -2,6 +2,7 @@ package com.second.mall.modules.account.service.impl;
 
 import com.second.mall.modules.account.dao.UserDao;
 import com.second.mall.modules.account.dao.UserRoleDao;
+import com.second.mall.modules.account.entity.Role;
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.account.service.UserService;
 import com.second.mall.modules.common.entity.ResultEntity;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @ClassName UserServiceImpl
@@ -29,9 +31,9 @@ import java.time.LocalDateTime;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDao userDao;
+     UserDao userDao;
     @Autowired
-    private UserRoleDao userRoleDao;
+     UserRoleDao userRoleDao;
 
 //    @Autowired
 //    private ResourceConfigBean resourceConfigBean;
@@ -51,13 +53,9 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
-
     // 密码验证登录
     @Override
-    public ResultEntity<User> login(User user ) {
+    public ResultEntity<User> login(User user) {
         try {
             Subject subject = SecurityUtils.getSubject();
 
@@ -89,39 +87,44 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResultEntity<User> register(User user) {
-        User userTemp = getUserByUserName(user.getUserName());
-		if (userTemp != null && userTemp.getUserId() != user.getUserId()) {
-        return new ResultEntity<User>(ResultEntity.ResultStatus.FAILED.status, "账号名重复");
-    }
+        System.err.println(user.getUserName());
+        System.err.println(user.getPassword());
+        if (user.getUserName() == "" || user.getPassword() == "" ){
+            return new ResultEntity<User>(ResultEntity.ResultStatus.FAILED.status, "账号名或密码不能为空！");
+        }
 
-		user.setPassword(MdFive.getMD5(user.getPassword()));
+        User userTemp = getUserByUserName(user.getUserName());
+        if (userTemp != null && userTemp.getUserId() != user.getUserId()) {
+            return new ResultEntity<User>(ResultEntity.ResultStatus.FAILED.status, "账号名重复！");
+        }
+
+        user.setPassword(MdFive.getMD5(user.getPassword()));
         user.setCreateTime(LocalDateTime.now());
         user.setState(1);
         user.setDel(1);
-        System.err.println(user);
-        userDao.insertUser(user);
 
-        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "Insert success", user);
+        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "注册账号成功，返回登录页！");
+
+////         管理员编辑用户信息时，只修改用户角色
+//        if (user.getUserId() > 0) {
+////            return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status, "注册失败", user);
+////			userDao.updateUser(user);
+//            userRoleDao.deletUserRoleByUserId(user.getUserId());
+//        } else {
+//            userDao.insertUser(user);
+//            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status, "注册成功", user);
+//        }
+//
+//        List<Role> roles = user.getRoleList();
+//        if (roles != null && roles.size() > 0) {
+//            for (Role role : roles) {
+//                userRoleDao.addUserRole(user.getUserId(), role.getRoleId());
+//            }
+//        }
+//        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "注册账号成功，返回登录页！",user);
+
     }
 
-//         管理员编辑用户信息时，只修改用户角色
-//		if (user.getUserId() > 0) {
-////			userDao.updateUser(user);
-//        userRoleDao.deletUserRoleByUserId(user.getUserId());
-//    } else {
-//        userDao.insertUser(user);
-//        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status, "注册成功", user);
-//    }
-//
-//    List<Role> roles = user.getRoleList();
-//		if (roles != null && roles.size() > 0) {
-//        for (Role role : roles) {
-//            userRoleDao.addUserRole(user.getUserId(), role.getRoleId());
-//        }
-//    }
-//		return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "Edit success.", user);
-//}
 
     @Override
     public void logout() {

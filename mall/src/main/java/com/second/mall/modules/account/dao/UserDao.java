@@ -62,4 +62,8 @@ public interface UserDao {
 
     @Select("select * from user where user_name = #{userName}")
     User queryByName(String userName);
+
+
+    @Delete("delete from user where user_id = #{userId}")
+    void deleteUserBy(int userId);
 }

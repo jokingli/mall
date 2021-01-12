@@ -54,22 +54,16 @@ public class AdminLoginController {
 
     //进入管理员注册页面
     @GetMapping(value = "/register")
-    @ResponseBody
     public String register(ModelMap modelMap) {
         System.err.println("进入管理员密码注册页面");
         modelMap.put("template","account/adminRegister");
-        return "managerIndex";
+        return "managerIndexSimple";
     }
 
     //开始进行管理员注册
     @ResponseBody
-    @GetMapping(value = "/account/user")
+    @PostMapping(value = "/user")
     public ResultEntity<User> user(@RequestBody User user){
-        System.err.println("开始进行用户密码注册");
-        System.err.println(user.getUserName());
-        System.err.println(user.getPassword());
-        System.err.println(user);
-
         return userService.register(user);
     }
 

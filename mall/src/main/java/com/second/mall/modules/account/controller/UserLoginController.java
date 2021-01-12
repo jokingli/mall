@@ -6,10 +6,7 @@ import com.second.mall.modules.common.entity.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -35,8 +32,7 @@ public class UserLoginController {
     //商城用户密码登录
     //添加以后变成接口，返回字符串类型
     @ResponseBody
-
-    @RequestMapping(value = "/pwdLogin")
+    @RequestMapping(value = "/pwdLogin", consumes="application/json")
     public ResultEntity<User> pwdLogin(@RequestBody User user){
         System.err.println("开始进行用户密码登录");
         System.err.println(user.getUserName());
@@ -65,18 +61,10 @@ public class UserLoginController {
 
     //开始进行用户密码注册
     @ResponseBody
-    @RequestMapping(value = "/user")
+    @RequestMapping(value = "/user", consumes = "application/json")
     public ResultEntity<User> user(@RequestBody User user){
-        System.err.println("开始进行用户密码注册");
-        System.err.println(user.getUserName());
-        System.err.println(user.getPassword());
-        System.err.println(user);
-
         return userService.register(user);
     }
-
-
-
 
     @RequestMapping("/logout")
     public String logout(ModelMap modelMap) {
