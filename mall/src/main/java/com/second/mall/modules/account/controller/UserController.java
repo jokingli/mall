@@ -2,6 +2,7 @@ package com.second.mall.modules.account.controller;
 
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.account.service.UserService;
+
 import com.second.mall.modules.common.entity.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,10 +27,14 @@ public class UserController {
     /**
      * 127.0.0.1/api/user
      * {"name":"冰雨","password":"123456","tel":"12345678999","address":"china","sex":"男"}
+     * @return
      */
     @PostMapping(value = "/user", consumes = "application/json")
     @ResponseBody
     public ResultEntity<User> insertUser(@RequestBody User user){
         return userService.insertUser(user);
     }
+
+
+
 }

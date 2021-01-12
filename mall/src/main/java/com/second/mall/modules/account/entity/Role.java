@@ -21,9 +21,29 @@ public class Role {
     private LocalDateTime createTime;
     private int state;
     private int del;
+    private String remark;
 
     @Transient
     private List<User> userList;
+
+    @Transient
+    private List<Resource> resourceList;
+
+    public List<Resource> getResourceList() {
+        return resourceList;
+    }
+
+    public void setResourceList(List<Resource> resourceList) {
+        this.resourceList = resourceList;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public int getRoleId() {
         return roleId;
@@ -73,4 +93,6 @@ public class Role {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
+
+
 }

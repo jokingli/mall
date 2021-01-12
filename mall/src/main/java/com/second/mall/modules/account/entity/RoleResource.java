@@ -19,4 +19,28 @@ public class RoleResource {
     private int roleResourceId;
     private int roleId;
     private int resourceId;
+
+    public int getRoleResourceId() {
+        return roleResourceId;
+    }
+
+    public void setRoleResourceId(int roleResourceId) {
+        this.roleResourceId = roleResourceId;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public int getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(int resourceId) {
+        this.resourceId = resourceId;
+    }
 }

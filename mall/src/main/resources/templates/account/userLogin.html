@@ -1,62 +1,79 @@
-<div class="login_wrapper">
-    <div class="animate form login_form">
-        <section class="login_content">
-            <form>
-                <h1>商城用户登录</h1>
-                <div>
-                    <input type="text" class="form-control" placeholder="Username" required="" />
-                </div>
-                <div>
-                    <input type="password" class="form-control" placeholder="Password" required="" />
-                </div>
-                <div>
-                    <a class="btn btn-default submit" href="/userLogin/pwdLogin">登录</a>
-                    <a class="reset_pass" href="#">   忘记密码?</a>
-                </div>
+<div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
 
-                <div class="clearfix"></div>
-
-                <div class="separator">
-                    <p class="change_link">没有账号?
-                        <a href="/manager/register" class="to_register"> 创建账号 </a>
-                    </p>
-
-                    <div class="clearfix"></div>
-                    <br />
+    <div class="login_wrapper">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <form>
+                    <h1>淘宝贝商城用户登录</h1>
+                    <div>
+                        <input name="userName" type="text" class="form-control" placeholder="Username" required="" />
+                    </div>
+                    <div>
+                        <input name="password" type="password" class="form-control" placeholder="Password" required="" />
+                    </div>
 
                     <div>
-                        <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-                        <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                        <a id="loginButton" class="btn btn-default submit" href="javascript:void(0);">登 录</a>
                     </div>
-                </div>
-            </form>
-        </section>
+
+                    <div class="clearfix"></div>
+
+                    <div class="separator">
+                        <p class="change_link">没有账号?
+                            <a href="/shopping/register" class="to_register"> 注册账号 </a>
+<!--                            <a href="/manager/register" class="to_register"> 注 册 </a>-->
+                        </p>
+
+                        <div class="clearfix"></div>
+                        <br />
+                        <div>
+                            <h1><i class="fa fa-paw"></i> 淘宝贝商城!</h1>
+                            <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
     </div>
 </div>
 
-<script>
-    layui.use(['form'], function() {
-        $ = layui.jquery;
-        var form = layui.form(),
-            layer = layui.layer;
 
-        //用户密码提交
-        form.on('submit(Login)', function(data){
-            $.ajax({
-                url:"/userLogin/pwdLogin",
-                type:"post",
-                data:data.field,
-                dataType:"json", //返回类型
-                success:function(data){
 
-                    layer.alert(data.info);
-                    if(data.info=="登录成功"){
-                        //访问主页面
-                        location.href="/userLogin/userIndex"
-                    }
-                }
-            })
-            return false;
+<script type="text/javascript">
+    // var show_num = [];
+    $(document).ready(function() {
+        // draw(show_num);
+        // $("#canvas").on('click',function(){
+        //     draw(show_num);
+        // })
+
+        $("#loginButton").bind("click", function() {
+            login();
         });
     });
+
+    //密码登录
+    function login() {
+        var user = {};
+        user.userName = $("[name='userName']").val();
+        user.password = $("[name='password']").val();
+        $.ajax({
+            url : "/shopping/pwdLogin",
+            type : "post",
+            contentType: "application/json",
+            data : JSON.stringify(user),
+            success : function (data) {
+                if (data.status == 200) {
+                    location.href = "/shopping/index";
+                } else {
+                    layer.msg(data.message, {icon: 0});
+                }
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        });
+    }
 </script>

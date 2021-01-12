@@ -1,20 +1,23 @@
 package com.second.mall.modules.account.service.impl;
 
 import com.second.mall.modules.account.dao.UserDao;
+import com.second.mall.modules.account.dao.UserRoleDao;
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.account.service.UserService;
 import com.second.mall.modules.common.entity.ResultEntity;
+
+//import com.second.mall.utils.MD5Util;
+import com.second.mall.utils.MdFive;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
+
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
 /**
  * @ClassName UserServiceImpl
@@ -27,38 +30,106 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private UserRoleDao userRoleDao;
+
+//    @Autowired
+//    private ResourceConfigBean resourceConfigBean;
+
     @Override
     @Transactional
     public ResultEntity<User> insertUser(User user) {
         user.setCreateTime(LocalDateTime.now());
         user.setState(1);
         user.setDel(1);
-        System.out.println(user);
+        //将输入的密码进行MD5加密后放入数据库
+        user.setPassword(MdFive.getMD5(user.getPassword()));
+        System.err.println(user);
         userDao.insertUser(user);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Insert success", user);
     }
 
+
+
+
+
+
+    // 密码验证登录
     @Override
-    public HashMap<String, Object> pwdLogin(User user) {
-        System.err.println("进行密码匹配登录");
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        try{
-            //1 创建用户token
-            UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
-            //2 创建一个shiro用户
+    public ResultEntity<User> login(User user ) {
+        try {
             Subject subject = SecurityUtils.getSubject();
-            //3 登录
-            subject.login(token);
-            System.err.println("密码正确，登录成功");
-            map.put("info","登录成功");
-        }catch (UnknownAccountException e){
+
+            UsernamePasswordToken usernamePasswordToken =
+                    new UsernamePasswordToken(user.getUserName(),MdFive.getMD5(user.getPassword()));
+            System.err.println("页面拿到的密码加密后："+usernamePasswordToken.getPassword());
+            System.err.println(usernamePasswordToken.getPassword());
+
+            subject.login(usernamePasswordToken);
+            subject.checkRoles();
+
+            Session session = subject.getSession();
+            User userTemp = (User) subject.getPrincipal();
+            session.setAttribute("userId", userTemp.getUserId());
+            session.setAttribute("userName", userTemp.getUserName());
+
+        } catch (Exception e) {
             e.printStackTrace();
-            map.put("info","用户名输入错误");
-        }catch (IncorrectCredentialsException e){
-            e.printStackTrace();
-            map.put("info","密码输入错误");
+            return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status, "用户名或者密码错误");
         }
-        return map;
+        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "登录成功", user);
+    }
+
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return userDao.getUserByUserName(userName);
+    }
+
+    //账号注册
+    @Override
+    @Transactional
+    public ResultEntity<User> register(User user) {
+        User userTemp = getUserByUserName(user.getUserName());
+		if (userTemp != null && userTemp.getUserId() != user.getUserId()) {
+        return new ResultEntity<User>(ResultEntity.ResultStatus.FAILED.status, "账号名重复");
+    }
+
+		user.setPassword(MdFive.getMD5(user.getPassword()));
+        user.setCreateTime(LocalDateTime.now());
+        user.setState(1);
+        user.setDel(1);
+        System.err.println(user);
+        userDao.insertUser(user);
+
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "Insert success", user);
+    }
+
+//         管理员编辑用户信息时，只修改用户角色
+//		if (user.getUserId() > 0) {
+////			userDao.updateUser(user);
+//        userRoleDao.deletUserRoleByUserId(user.getUserId());
+//    } else {
+//        userDao.insertUser(user);
+//        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status, "注册成功", user);
+//    }
+//
+//    List<Role> roles = user.getRoleList();
+//		if (roles != null && roles.size() > 0) {
+//        for (Role role : roles) {
+//            userRoleDao.addUserRole(user.getUserId(), role.getRoleId());
+//        }
+//    }
+//		return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "Edit success.", user);
+//}
+
+    @Override
+    public void logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        Session session = subject.getSession();
+        session.removeAttribute("userId");
     }
 }

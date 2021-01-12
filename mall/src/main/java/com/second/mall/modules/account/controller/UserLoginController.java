@@ -2,6 +2,7 @@ package com.second.mall.modules.account.controller;
 
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.account.service.UserService;
+import com.second.mall.modules.common.entity.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -42,12 +43,12 @@ public class UserLoginController {
     //用户密码登录
     @ResponseBody
     @RequestMapping(value = "/pwdLogin")
-    public HashMap<String,Object> pwdLogin(User user){
+    public ResultEntity<User> pwdLogin(User user){
         System.err.println("开始进行用户密码登录");
         System.err.println(user.getUserName());
         System.err.println(user.getPassword());
         System.err.println(user);
 
-        return userService.pwdLogin(user);
+        return userService.login(user);
     }
 }

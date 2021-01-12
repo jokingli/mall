@@ -34,14 +34,6 @@ public class User {
     @Transient
     private List<Address> addressList;
 
-    public List<Address> getAddressList() {
-        return addressList;
-    }
-
-    public void setAddressList(List<Address> addressList) {
-        this.addressList = addressList;
-    }
-
     public int getUserId() {
         return userId;
     }
@@ -98,7 +90,6 @@ public class User {
         this.createTime = createTime;
     }
 
-
     public int getState() {
         return state;
     }
@@ -123,20 +114,11 @@ public class User {
         this.roleList = roleList;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", tel='" + tel + '\'' +
-                ", address='" + address + '\'' +
-                ", sex='" + sex + '\'' +
-                ", createTime=" + createTime +
-                ", state=" + state +
-                ", del=" + del +
-                ", roleList=" + roleList +
-                ", addressList=" + addressList +
-                '}';
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
     }
 }
