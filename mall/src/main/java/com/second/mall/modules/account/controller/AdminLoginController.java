@@ -7,6 +7,8 @@ import com.second.mall.modules.common.entity.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -52,13 +54,8 @@ public class AdminLoginController {
 
     //管理员密码登录
     @ResponseBody
-    @RequestMapping(value = "/pwdLogin")
-    public ResultEntity<User> pwdLogin(User user){
-        System.err.println("开始进行密码登录");
-        System.err.println(user.getUserName());
-        System.err.println(user.getPassword());
-        System.err.println(user);
-
+    @PostMapping(value = "/pwdLogin",consumes = "application/json")
+    public ResultEntity<User> pwdLogin(@RequestBody User user){
         return userService.login(user);
     }
 
