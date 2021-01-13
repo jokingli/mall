@@ -32,21 +32,27 @@ public class AuthorRealm extends AuthorizingRealm {
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        //获取登陆的用户名
-        User user = (User) principals.getPrimaryPrincipal();
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 
-        List<Role> roles = roleService.getRolesByUserId(user.getUserId());
-        List<String> list = new ArrayList<>();
-        for (Role r : roles) {
-            //获取角色表里的角色
-            list.add(r.getRemark());
+        User user = (User) principals.getPrimaryPrincipal();
+        if (user == null) {
+            throw new UnknownAccountException("用户名不存在");
+        }
+        System.err.println("后授权");
+        List<Role> roles = new ArrayList<Role>();
+        if (user.getUserName().equals("admin")) {
+            roles = roleService.getRoles();
+            if (roles.isEmpty()) {
+                simpleAuthorizationInfo.addRole("admin");
+            }
+        } else {
+            roles = roleService.getRolesByUserId(user.getUserId());
+        }
+        for (Role role :roles) {
+            simpleAuthorizationInfo.addRole(role.getRemark());
         }
 
-        SimpleAuthorizationInfo auth = new SimpleAuthorizationInfo();
-        //创建权限凭证，添加角色的方法addRoles
-        //添加权限的方法 addStringPermissions
-        auth.addRoles(list);
-        return auth;
+        return simpleAuthorizationInfo;
     }
 
     //先认证
@@ -61,6 +67,7 @@ public class AuthorRealm extends AuthorizingRealm {
         if (user == null) {
             throw new UnknownAccountException("这个用户不存在！");
         }
+        System.err.println("认证成功");
 
         // 身份验证器，包装用户名和密码
         return new SimpleAuthenticationInfo(user, user.getPassword(), user.getUserName());

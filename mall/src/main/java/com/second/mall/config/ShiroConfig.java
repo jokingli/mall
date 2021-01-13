@@ -5,6 +5,8 @@ import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.apache.shiro.web.filter.authc.UserFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author yqs
@@ -37,33 +42,30 @@ public class ShiroConfig {
     //配置权限
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(){
-        ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
-        bean.setSecurityManager(getSecurity());
-        //配置权限的map
-        HashMap<String,String> map = new HashMap<>();
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(getSecurity());
+        shiroFilterFactoryBean.setLoginUrl("/account/login");
+        shiroFilterFactoryBean.setSuccessUrl("/account/index");
 
-        //        1 配置用户访问某个页面必须登录认证访问
-//        bean.setLoginUrl("/account/adminLogin");
-//        //2 配置过滤器
-//        //        过滤器最先运行，必须先过滤才能进入主页面  authc
-//        map.put("/account/adminIndex","authc");
-        //配置角色过滤器,访问/day02/manager这个连接需要角色是admin的用才能访问
-        // 角色是 roles[自定义的角色参数] 权限是perms[自定义的权限参数]
-        /*map.put("/day02/manager","roles[admin]");*/
+        // 自定义过滤器
+        FormAuthenticationFilter managerAuthc = new FormAuthenticationFilter();
+        managerAuthc.setLoginUrl("/account/login");
+        managerAuthc.setSuccessUrl("/account/index");
+        UserFilter managerUser = new UserFilter();
+        managerUser.setLoginUrl("/account/login");
 
-//        //配置权限页面
-//        bean.setUnauthorizedUrl("/warehouse/noPower");
+        Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
+        filters.put("managerAuthc", managerAuthc);
+        filters.put("managerUser", managerUser);
+        shiroFilterFactoryBean.setFilters(filters);
 
-//        //设置访问用户管理业页面需要userList权限
-//        map.put("/user/list", "perms[userList]");
-//        //设置访问用户管理新增页面需要userAdd权限
-//        map.put("/user/add", "perms[userAdd]");
-//        ////设置访问用户管理修改页面需要admin角色
-//        map.put("/user/update", "roles[a]");
-//        bean.setFilterChainDefinitionMap(map);
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        map.put("/account/login", "anon");
+        map.put("/account/register", "anon");
+        map.put("/account/logout", "anon");
 
-        bean.setFilterChainDefinitionMap(map);
-        return bean;
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
+        return shiroFilterFactoryBean;
     }
 
     /**

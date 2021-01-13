@@ -2,24 +2,25 @@ package com.second.mall.modules.account.service.impl;
 
 import com.second.mall.modules.account.dao.UserDao;
 import com.second.mall.modules.account.dao.UserRoleDao;
-import com.second.mall.modules.account.entity.Role;
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.account.service.UserService;
 import com.second.mall.modules.common.entity.ResultEntity;
 
-//import com.second.mall.utils.MD5Util;
 import com.second.mall.utils.MdFive;
 import org.apache.shiro.SecurityUtils;
 
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 /**
  * @ClassName UserServiceImpl
@@ -32,11 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
      UserDao userDao;
+
     @Autowired
      UserRoleDao userRoleDao;
-
-//    @Autowired
-//    private ResourceConfigBean resourceConfigBean;
 
     @Override
     @Transactional
@@ -78,6 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    //通过用户名查询用户
     @Override
     public User getUserByUserName(String userName) {
         return userDao.getUserByUserName(userName);
@@ -124,6 +124,7 @@ public class UserServiceImpl implements UserService {
 //        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "注册账号成功，返回登录页！",user);
 
     }
+
 
 
     @Override

@@ -1,5 +1,6 @@
 package com.second.mall.modules.account.dao;
 
+import com.second.mall.modules.account.entity.Role;
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.common.entity.SearchBean;
 import org.apache.ibatis.annotations.*;
@@ -66,4 +67,12 @@ public interface UserDao {
 
     @Delete("delete from user where user_id = #{userId}")
     void deleteUserBy(int userId);
+
+    @Select("select * from user u inner join user_role ur on u.user_id = ur.user_id" +
+            "inner join role r on r.role_id = ur.role_id")
+    User queryRoleByUserName(String userName);
+
+    @Select("select * from user u inner join user_role ur on u.user_id = ur.user_id" +
+            "inner join role r on r.role_id = ur.role_id")
+    List<Role> getRolesByUserId(int userId);
 }
