@@ -6,6 +6,7 @@ import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.dao.ProductDao;
 import com.second.mall.modules.shopping.entity.Product;
 import com.second.mall.modules.shopping.service.ProductService;
+import com.second.mall.modules.vo.ProductSearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +39,11 @@ public class productServiceImpl implements ProductService
 
     //搜索
     @Override
-    public PageInfo<Product> getProductsByProductSearchVo(SearchBean searchVo) {
-        searchVo.initSearchBean();
-        PageHelper.startPage(searchVo.getCurrentPage(), searchVo.getPageSize());
+    public PageInfo<Product> getProductBySearchVo(ProductSearchVo productSearchVo) {
+        productSearchVo.initSearchBean();
+        PageHelper.startPage(productSearchVo.getCurrentPage(), productSearchVo.getPageSize());
         PageInfo<Product> pageInfo = new PageInfo<Product>(Optional
-                .ofNullable(productDao.getProductBySearchVo(searchVo))
+                .ofNullable(productDao.getProductBySearchVo(productSearchVo))
                 .orElse(Collections.emptyList()));
         pageInfo.setList(pageInfo.getList().stream().map(item -> initProduct(item)).collect(Collectors.toList()));
         return pageInfo;

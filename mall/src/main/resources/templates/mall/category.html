@@ -1,0 +1,119 @@
+<!--分页page-->
+<link href="/plugin/jquery.page/paging.css" rel="stylesheet">
+<!--分页page-->
+<script src="/plugin/jquery.page/paging.js"></script>
+
+<div id="category">
+	<input type="hidden" id="categoryId" th:value="${categoryId}" />
+	<div class="categoryPageDiv">
+		<img id="categoryImage" src="">
+		<div th:replace="mall/category-sortBar.html"></div>
+		<div th:replace="mall/category-productsByCategory.html"></div>
+		<div style='clear:both'></div>
+	</div>
+	<div id="page"></div>
+</div>
+<script type="text/javascript">
+	$(function() {
+		initProducts();
+		initCategory();
+		
+		$("[name=prodctSort]").bind("click", function() {
+			productSort($(this));
+		});
+	});
+	
+	// 初始化页面分页变量
+	var currentPage = 1;
+	var pageSize = 5;
+	var pageCount = 1;
+	var orderBy = "id";
+	var direction = "asc";
+	
+	// 排序按钮点击事件
+	function productSort(sortBtn) {
+		orderBy = sortBtn.attr("orderBy");
+		var directionClass = sortBtn.children("span").attr("class");
+		if (directionClass == "glyphicon glyphicon-arrow-down") {
+			directionClass = "glyphicon glyphicon-arrow-up";
+			direction = "asc";
+		} else {
+			directionClass = "glyphicon glyphicon-arrow-down";
+			direction = "desc";
+		}
+		
+		// 复原其余排序按钮
+		$(".glyphicon").removeClass("glyphicon-arrow-down").removeClass("glyphicon-arrow-up")
+		$(".glyphicon").addClass("glyphicon-arrow-down");
+		// 切换点击按钮样式
+		sortBtn.children("span").removeClass("glyphicon-arrow-down").removeClass("glyphicon-arrow-up");
+		sortBtn.children("span").addClass(directionClass);
+		
+		initProducts();
+	}
+	
+	// 分页显示产品集合
+	function initProducts() {
+		var searchVo = {};
+	   	searchVo.currentPage = currentPage;
+	   	searchVo.pageSize = pageSize;
+	   	searchVo.orderBy = orderBy;
+	   	searchVo.sort = direction;
+	   	searchVo.categoryId = $("#categoryId").val();
+	   	
+		$.ajax({
+			url : "/api/" + searchVo.categoryId + "/products",
+			type : "post",
+			contentType: "application/json",
+			data : JSON.stringify(searchVo),
+			success : function (data) {
+				currentPage = data.pageNum;
+				pageCount = data.pages;
+
+				var products = "";
+				$.each(data.list, function(i, item){
+					products += "<div class=\"col-md-55\">";
+					products += "<div class=\"thumbnail\">";
+					products += "<div class=\"image view view-first\">";
+					products += "<img style=\"width: 100%; display: block;\"  src='" + item.pictureUrl + "'  alt=\"image\" />";
+					products += "<div class=\"mask\">";
+					products += "<p>你的美丽远重衣开始</p>";
+					products += "<div class=\"tools tools-bottom\">";
+
+					products += "</div>";
+					products += "</div>";
+					products += "</div>";
+					products += "<div class=\"caption\">";
+					products += "<p>商品名：<a href='/mall/product/" + item.productId + "'>" + item.productName + "</a></p>";
+					products += "<p>价   格：¥<a href='/mall/product/" + item.productId + "'>" + item.productPrice + "</a></p>";
+					products += "</div>";
+					products += "</div>";
+					products += "</div>";
+					products += "</div>";
+				});
+				if (products == "") {
+					$(".categoryProducts").html("未找到该类别产品");
+				} else {
+					products += "<div style='clear:both'></div>";
+					$(".categoryProducts").html(products);
+				}
+				
+				var page =new Paging('page', {
+					nowPage: currentPage, // 当前页码
+					pageNum: pageCount, // 总页码
+					buttonNum: 5, //要展示的页码数量
+					canJump: 1, // 是否能跳转: 0=不显示（默认），1=显示
+					showOne: 1, //只有一页时，是否显示: 0=不显示,1=显示（默认）
+					callback: function (num) { //回调函数
+			            console.log(num);
+			            currentPage = num;
+			            initProducts();
+			        }
+			    })
+			},
+			error : function (data) {
+				layer.msg(data.responseText, {icon: 0});
+			}
+		});
+	}
+</script>

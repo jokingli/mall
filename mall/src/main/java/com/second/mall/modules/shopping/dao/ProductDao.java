@@ -2,6 +2,7 @@ package com.second.mall.modules.shopping.dao;
 
 import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Product;
+import com.second.mall.modules.vo.ProductSearchVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -29,24 +30,21 @@ public interface ProductDao {
     @Select("select * from product where product_id = #{productId}")
     Product getProductById(int productId);
 
-
-
-
     @Select("<script>" +
-            "select * from product "
+            "select *, c.name as categoryName from product p left join category c on p.category_id = c.category_id"
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (product_name like '%${keyWord}%') "
+            + " and (p.product_name like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"
             + "<when test='orderBy != \"\" and orderBy != null'>"
-            + " order by ${orderBy} ${sort}"
+            + " order by p.${orderBy} ${sort}"
             + "</when>"
             + "<otherwise>"
-            + " order by product_id desc"
+            + " order by p.product_id desc"
             + "</otherwise>"
             + "</choose>"
             + "</script>")
-    List<Product> getProductBySearchVo(SearchBean searchVo);
+    List<Product> getProductBySearchVo(ProductSearchVo productSearchVo);
 }

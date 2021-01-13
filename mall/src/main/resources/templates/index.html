@@ -9,7 +9,7 @@
 					<div>
 						<a href="/mall/index"><img id="simpleLogo" class="simpleLogo" ></a>
 						<div class="simpleSearchDiv pull-right">
-							<input type="text" placeholder="请输入搜索内容"  value="" name="searchInput">
+							<input type="text" placeholder="衣服"  value="" name="searchInput">
 							<button class="searchButton" type="submit">搜索</button>
 						</div>
 						<div style="clear:both"></div>
@@ -69,7 +69,39 @@
 
         $(function() {
             initProducts();
+			initCategories();
+
         });
+
+				// 初始化产品种类
+function initCategories() {
+	$.ajax({
+		url : "/api/categories",
+		type : "get",
+		contentType: "application/json",
+		//data : JSON.stringify(category),
+		success : function (data) {
+			var categoryMenu = $("div.categoryMenu");
+			var temp = "";
+			$.each(data, function(i, item){
+				temp += "<div category_id='" + item.categoryId + "' class='eachCategory'>";
+				temp += "<span class='glyphicon glyphicon-link'></span>";
+				temp += "<a href='/mall/category/1' onclick='initProductsByCategoryId(" + item.categoryId + ", \"" + item.categoryName + "\")'>";
+				temp += item.categoryName;
+				temp += "</a></div>";
+			});
+			categoryMenu.html(temp);
+
+			$(".eachCategory").bind("click", function() {
+				location.href = "/mall/category/" + $(this).attr("categoryId");
+			});
+		},
+		error : function (data) {
+			layer.msg(data.responseText, {icon: 0});
+		}
+	});
+				}
+
 
         // 分页显示产品集合
         var currentPage = 1;
@@ -135,4 +167,11 @@
             });
         }
     </script>
+
+
+
+
+
+
+
 
