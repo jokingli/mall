@@ -18,7 +18,7 @@ public class ShoppingCarItems {
     private Integer shoppingCarId;
     private String productName;
     private double productPrice;
-    private Integer discount;//折扣
+    private double discount;//折扣
     private String image;
     private Integer stock;//产品库存
     private Integer number;//购买数量
