@@ -64,15 +64,15 @@ function initOder() {
 
 // 确认支付按钮事件
 function confirmPayEvent() {
-	var order = {};
-	order.indentCode = $("#indentCode").val();
-	order.state = 1;
+	var indent = {};
+	indent.indentCode = $("#indentCode").val();
+	indent.state = 1;
 	
 	$.ajax({
 		url : "/api/indent/state",
 		type : "put",
 		contentType: "application/json",
-		data : JSON.stringify(order),
+		data : JSON.stringify(indent),
 		success : function (data) {
 			console.log(data)
 			if (data.state == 200) {

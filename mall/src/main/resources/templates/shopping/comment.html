@@ -26,11 +26,11 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
-                    <div class="x_title">
-                        <button class="btn btn-primary" type="button" id="addModalBtn"
-                                data-toggle="modal" data-target="#modalAdd">新增</button>
-                        <div class="clearfix"></div>
-                    </div>
+<!--                    <div class="x_title">-->
+<!--                        <button class="btn btn-primary" type="button" id="addModalBtn"-->
+<!--                                data-toggle="modal" data-target="#modalAdd">新增</button>-->
+<!--                        <div class="clearfix"></div>-->
+<!--                    </div>-->
                     <div class="x_content">
                         <div class="row">
                             <div class="col-sm-12">
@@ -39,11 +39,13 @@
                                         <thead>
                                         <tr>
                                             <th>评论id</th>
-                                            <th>订单id</th>
-                                            <th>用户id</th>
-                                            <th>店铺id</th>
+                                            <th>商品名称</th>
+                                            <th>店铺名称</th>
+                                            <th>评论用户</th>
                                             <th>评论内容</th>
                                             <th>评论时间</th>
+                                            <th>浏览次数</th>
+                                            <th>点赞数</th>
                                             <th>操作</th>
                                         </tr>
                                         </thead>
@@ -151,8 +153,9 @@
                         var rowsData = [];
                         for (var i = 0; i < rs.list.length; i++) {
                             //包装行数据
-                            var rowData = new RowData(rs.list[i].commentId, rs.list[i].indentId
-                            ,rs.list[i].userId,rs.list[i].shopId,rs.list[i].comments,rs.list[i].createTime);
+                            var rowData = new RowData(rs.list[i].commentId, rs.list[i].productName
+                                ,rs.list[i].shopName,rs.list[i].userName,rs.list[i].comments
+                                ,rs.list[i].createTime,rs.list[i].browseNum,rs.list[i].thumbsNum);
                             // 将行数据放到数组里
                             rowsData.push(rowData);
                         }
@@ -168,24 +171,28 @@
             },
             "columns": [ //定义行数据字段
                 {data: 'commentId', name: "comment_id", sortable: true},
-                {data: 'indentId', name: "indent_id", sortable: true},
-                {data: 'userId', name: "user_id", sortable: true},
-                {data: 'shopId', name: "shop_id", sortable: true},
+                {data: 'productName', name: "product_name", sortable: true},
+                {data: 'shopName', name: "shop_name", sortable: true},
+                {data: 'userName', name: "user_name", sortable: true},
                 {data: 'comments', name: "comments", sortable: true},
                 {data: 'createTime', name: "create_time", sortable: true},
+                {data: 'browseNum', name: "browse_num", sortable: true},
+                {data: 'thumbsNum', name: "thumbs_num", sortable: true},
                 {data: 'operate', width: '80px', sortable: false}
             ]
         });
     }
 
     //行数据结构
-    function RowData(commentId, indentId,userId,shopId,comments,createTime) {
+    function RowData(commentId, productName,shopName,userName,comments,createTime,browseNum,thumbsNum) {
         this.commentId = commentId;
-        this.indentId = indentId;
-        this.userId = userId;
-        this.shopId = shopId;
+        this.productName = productName;
+        this.shopName = shopName;
+        this.userName = userName;
         this.comments = comments;
         this.createTime = createTime;
+        this.browseNum = browseNum;
+        this.thumbsNum = thumbsNum;
         this.operate = function () {
             return "<a href='javascript:void(0);' class='btn_editcolor' " +
                 "data-toggle='modal' data-target='#editModal' " +
@@ -201,9 +208,7 @@
 
     function addModal() {
         var comment = {};
-        comment.indentId = $("#indentIdForAdd").val();
-        comment.userId = $("#userIdForAdd").val();
-        comment.shopId = $("#shopIdForAdd").val();
+        comment.indentCode = $("#indentCodeForAdd").val();
         comment.comments = $("#commentsForAdd").val();
 
         $.ajax({
@@ -233,9 +238,14 @@
             //data : JSON.stringify(category),
             success : function (rs) {
                 $("#commentIdForEdit").val(rs.object.commentId);
-                $("#indentIdForEdit").val(rs.object.indentId);
+                $("#indentItemIdForEdit").val(rs.object.indentItemId);
+                $("#productIdForEdit").val(rs.object.productId);
                 $("#userIdForEdit").val(rs.object.userId);
                 $("#shopIdForEdit").val(rs.object.shopId);
+                $("#parentIdForEdit").val(rs.object.parentId);
+                $("#productNameForEdit").val(rs.object.productName);
+                $("#userNameForEdit").val(rs.object.userName);
+                $("#shopNameForEdit").val(rs.object.shopName);
                 $("#commentsForEdit").val(rs.object.comments);
             },
             error : function (data) {
@@ -247,9 +257,11 @@
     function editModal() {
         var comment = {};
         comment.commentId = $("#commentIdForEdit").val();
-        comment.indentId = $("#indentIdForAdd").val();
+        comment.indentItemId = $("#indentItemIdForEdit").val();
+        comment.productId = $("#productIdForEdit").val();
         comment.userId = $("#userIdForEdit").val();
         comment.shopId = $("#shopIdForEdit").val();
+        comment.parentId = $("#parentIdForEdit").val();
         comment.comments = $("#commentsForEdit").val();
 
         $.ajax({

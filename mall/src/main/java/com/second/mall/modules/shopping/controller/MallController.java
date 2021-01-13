@@ -17,16 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/mall")
 public class MallController {
 
-
-    @RequestMapping(value = "/comments")
-    public String comments(ModelMap modelMap){
-        modelMap.put("template","shopping/comment");
-        return "managerIndex";
+    @RequestMapping(value = "/user")
+    public String user(ModelMap modelMap){
+        modelMap.put("template","mall/userIndex");
+        return "mallIndex";
     }
 
     @RequestMapping(value = "/product")
     public String product(ModelMap modelMap){
-        modelMap.put("template","shopping/product");
+        modelMap.put("template","mall/product");
         return "mallIndex";
     }
 
@@ -62,7 +61,6 @@ public class MallController {
         return "mallIndex";
     }
 
-
     /**
      * 确认支付
      */
@@ -70,6 +68,13 @@ public class MallController {
     public String indentConfirmed(@PathVariable String indentCode,ModelMap modelMap){
         modelMap.put("indentCode",indentCode);
         modelMap.put("template","mall/indent");
+        return "mallIndex";
+    }
+
+    @RequestMapping(value = "/comment/{indentItemId}")
+    public String comments(@PathVariable String indentItemId,ModelMap modelMap){
+        modelMap.put("indentCode",indentItemId);
+        modelMap.put("template","mall/comment");
         return "mallIndex";
     }
 }

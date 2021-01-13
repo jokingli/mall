@@ -82,4 +82,12 @@ public class IndentController {
         return indentService.getIndentBySearchBean(searchBean);
     }
 
+    /**
+     * 127.0.0.1/api/indentByUserId ---- post
+     *
+     */
+    @PostMapping(value = "/indentByUserId", consumes = "application/json")
+    public List<Indent> indentByUserId(@RequestBody Indent indent) {
+        return indentService.getIndentByUserId(indent);
+    }
 }

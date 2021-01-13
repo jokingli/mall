@@ -63,7 +63,7 @@ public interface IndentDao {
             "ON indent.address_id = address.address_id "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (indent_code like '%${keyWord}%') "
+            + " and (indent_code like '%${keyWord}%' or address.linkman like '%${keyWord}%' or address.address like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"
@@ -80,4 +80,18 @@ public interface IndentDao {
 
     @Select("SELECT *FROM `indent` WHERE indent_id = #{indentId}")
     Indent selectIndexById(int indentId);
+
+    @Select("SELECT indent.*, address.address, address.linkman, address.tel " +
+            "FROM indent " +
+            "LEFT JOIN address " +
+            "ON indent.address_id = address.address_id " +
+            "WHERE indent.user_id = #{userId}")
+    List<Indent> getIndentByUserId(int userId);
+
+    @Select("SELECT indent.*, address.address, address.linkman, address.tel " +
+            "FROM indent " +
+            "LEFT JOIN address " +
+            "ON indent.address_id = address.address_id " +
+            "WHERE indent.user_id = #{userId} and indent.state = #{state}")
+    List<Indent> getIndentByUserIdAndState(@Param("userId") int userId, @Param("state") int state);
 }

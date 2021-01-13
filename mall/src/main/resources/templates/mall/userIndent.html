@@ -1,0 +1,77 @@
+
+<div class="col-md-12">
+
+    <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="all-indent" data-toggle="tab" href="javascript:void(0);" onclick="getIndent(-1)" role="tab" aria-controls="home" aria-selected="true">全部订单</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="unpaid-indent" data-toggle="tab" href="javascript:void(0);" onclick="getIndent(0)" role="tab" aria-controls="profile" aria-selected="false">未付款</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="paid-indent" data-toggle="tab" href="javascript:void(0);" onclick="getIndent(1)" role="tab" aria-controls="contact" aria-selected="false">待发货</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="accept-indent" data-toggle="tab" href="javascript:void(0);" onclick="getIndent(2)" role="tab" aria-controls="contact" aria-selected="false">待收货</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="stay-comment" data-toggle="tab" href="javascript:void(0);" onclick="getIndent(3)" role="tab" aria-controls="contact" aria-selected="false">待评价</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="return-indent" data-toggle="tab" href="javascript:void(0);" onclick="getIndent(6)" role="tab" aria-controls="contact" aria-selected="false">退货</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="indentState" role="tabpanel" aria-labelledby="all-indent">
+
+        </div>
+        <div class="tab-pane fade" id="indentState0" role="tabpanel" aria-labelledby="unpaid-indent">
+            Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo
+            booth letterpress, commodo enim craft beer mlkshk aliquip
+        </div>
+        <div class="tab-pane fade" id="indentState1" role="tabpanel" aria-labelledby="paid-indent">
+            xxFood truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo
+            booth letterpress, commodo enim craft beer mlkshk
+        </div>
+        <div class="tab-pane fade" id="indentState2" role="tabpanel" aria-labelledby="accept-indent">
+            xxFood truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo
+            booth letterpress, commodo enim craft beer mlkshk
+        </div>
+        <div class="tab-pane fade" id="indentState3" role="tabpanel" aria-labelledby="stay-comment">
+            xxFood truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo
+            booth letterpress, commodo enim craft beer mlkshk
+        </div>
+        <div class="tab-pane fade" id="indentState6" role="tabpanel" aria-labelledby="return-indent">
+            xxFood truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo
+            booth letterpress, commodo enim craft beer mlkshk
+        </div>
+    </div>
+
+</div>
+<script>
+    $(function() {
+        getIndent(-1);
+    });
+
+    function getIndent(states) {
+        var indent = {};
+        indent.userId = $("#userId").val();
+        indent.state = states;
+        $.ajax({
+            url : "/api/indentByUserId" ,
+            type : "post",
+            contentType: "application/json",
+            data : JSON.stringify(indent),
+            success : function (date) {
+                console.log(date)
+                var state = "indentState"+states;
+                for (var i = 0; i < date.length; i++){
+
+                }
+            },
+            error : function (date) {
+                layer.msg(date.responseText, {icon: 0});
+            }
+        });
+    }
+</script>

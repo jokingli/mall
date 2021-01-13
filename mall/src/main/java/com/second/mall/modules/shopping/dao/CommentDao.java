@@ -20,9 +20,9 @@ import java.util.List;
 public interface CommentDao {
     //新增评论
     @Insert("INSERT INTO `comment`" +
-            "(indent_id,product_id,user_id,shop_id,parent_id,`comments`,create_time)" +
+            "(indent_item_id,product_id,user_id,shop_id,parent_id,`comments`,browse_num,thumbs_num,state,create_time)" +
             "VALUES" +
-            "(#{indentId},#{productId},#{userId},#{shopId},#{parentId},#{comments},#{createTime})")
+            "(#{indentItemId},#{productId},#{userId},#{shopId},#{parentId},#{comments},#{browseNum},#{thumbsNum},#{state},#{createTime})")
     void insertComment(Comment comment);
 
     //删除评论
@@ -38,7 +38,15 @@ public interface CommentDao {
     void updateComment(Comment comment);
 
     //查询评论通过id
-    @Select("SELECT *FROM `comment` WHERE comment_id = #{commentId}")
+    @Select("SELECT `comment`.*, product.product_name, shop.shop_name, `user`.user_name\n" +
+            "FROM `comment`\n" +
+            "INNER JOIN product\n" +
+            "ON `comment`.product_id = product.product_id\n" +
+            "INNER JOIN shop\n" +
+            "ON `comment`.shop_id = shop.shop_id\n" +
+            "INNER JOIN `user`\n" +
+            "ON `comment`.user_id = `user`.user_id " +
+            "WHERE comment_id = #{commentId}")
     Comment selectCommentById(int commentId);
 
     //通过userId查询
@@ -50,10 +58,18 @@ public interface CommentDao {
     Comment selectCommentByProductId(int productId);
 
     @Select("<script>"
-            +"SELECT * FROM `comment`"
+            +"SELECT `comment`.*, product.product_name, shop.shop_name, `user`.user_name\n" +
+            "FROM `comment`\n" +
+            "INNER JOIN product\n" +
+            "ON `comment`.product_id = product.product_id\n" +
+            "INNER JOIN shop\n" +
+            "ON `comment`.shop_id = shop.shop_id\n" +
+            "INNER JOIN `user`\n" +
+            "ON `comment`.user_id = `user`.user_id"
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (`comment` like '%${keyWord}%') "
+            + " and (`comments` like '%${keyWord}%' or product.product_name like '%${keyWord}%' " +
+            "or shop.shop_name like '%${keyWord}%' or `user`.user_name like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"
