@@ -38,7 +38,6 @@ public class AuthorRealm extends AuthorizingRealm {
         if (user == null) {
             throw new UnknownAccountException("用户名不存在");
         }
-        System.err.println("后授权");
         List<Role> roles = new ArrayList<Role>();
         if (user.getUserName().equals("admin")) {
             roles = roleService.getRoles();
@@ -51,7 +50,6 @@ public class AuthorRealm extends AuthorizingRealm {
         for (Role role :roles) {
             simpleAuthorizationInfo.addRole(role.getRemark());
         }
-
         return simpleAuthorizationInfo;
     }
 
@@ -67,7 +65,6 @@ public class AuthorRealm extends AuthorizingRealm {
         if (user == null) {
             throw new UnknownAccountException("这个用户不存在！");
         }
-        System.err.println("认证成功");
 
         // 身份验证器，包装用户名和密码
         return new SimpleAuthenticationInfo(user, user.getPassword(), user.getUserName());

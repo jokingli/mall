@@ -25,7 +25,6 @@ public class AdminLoginController {
     //进入管理员登录页面
     @GetMapping(value = "/login")
     public String login(ModelMap modelMap){
-        System.err.println("进入管理员登录页面");
         modelMap.put("template","account/adminLogin");
         return "managerIndexSimple";
     }
@@ -34,10 +33,6 @@ public class AdminLoginController {
     @PostMapping(value = "/pwdLogin", consumes = "application/json")
     @ResponseBody
     public ResultEntity<User> pwdLogin(@RequestBody User user) {
-        System.err.println("进行管理员密码登录");
-        System.err.println(user.getUserName());
-        System.err.println(user.getPassword());
-
         return userService.login(user);
     }
 
@@ -46,8 +41,8 @@ public class AdminLoginController {
     @GetMapping(value = "/index")
     //登录成功跳转到主页面
     public String adminIndex(ModelMap modelMap){
-        System.err.println("开始跳转主页面");
-        modelMap.put("template", "account/adminIndex");
+//        modelMap.put("template", "common/dashboard");
+        modelMap.put("template","account/adminIndex");
         return "managerIndexSimple";
     }
 
@@ -55,7 +50,6 @@ public class AdminLoginController {
     //进入管理员注册页面
     @GetMapping(value = "/register")
     public String register(ModelMap modelMap) {
-        System.err.println("进入管理员密码注册页面");
         modelMap.put("template","account/adminRegister");
         return "managerIndexSimple";
     }
