@@ -1,11 +1,16 @@
 package com.second.mall.modules.shopping.dao;
 
 import com.second.mall.modules.common.entity.SearchBean;
+import com.second.mall.modules.shopping.entity.Collection;
 import com.second.mall.modules.shopping.entity.Product;
 import com.second.mall.modules.vo.ProductSearchVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -47,4 +52,18 @@ public interface ProductDao {
             + "</choose>"
             + "</script>")
     List<Product> getProductBySearchVo(ProductSearchVo productSearchVo);
+
+
+    @Select( "<script> "
+            +"select * from product "
+            +"<where> "
+            +"product_id  in "
+            +"<foreach collection='list' index='index' item='item' open='(' separator=',' close=')'> "
+            +"#{item} "
+            +"</foreach>"
+            + "</where> "
+            + "</script>")
+    List<Product> selectCollectionByProductIdList(List<Integer> productIdList);
+
+
 }

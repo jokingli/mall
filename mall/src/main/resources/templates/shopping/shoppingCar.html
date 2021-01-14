@@ -42,7 +42,7 @@
         <span id="total">0</span>件
         <span>合计 (不含运费): </span>
         ￥<span class="cartSumPrice" id="summation">0.00</span>
-        <button class="createOrderButton" disabled="disabled" onclick="buy()" style="background-color: #ac2925">购买
+        <button class="createOrderButton" onclick="buy()" style="background-color: #ac2925">购买
         </button>
     </div>
 </div>
@@ -72,7 +72,7 @@
                     temp += "<tr productId='" + product.productId + "' stock='" + product.stock + "' class='cartProductItemTR'>";
                     temp += "<input type='hidden' id='productId' value='" + product.productId + "'> ";
                     temp += "<td>";
-                    temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "' productPrice='" + product.productPrice + "'  discount='" + product.discount +
+                    temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "' productName='"+product.productName +"' productPrice='" + product.productPrice + "'  discount='" + product.discount +
                         "' onclick='checkone()'  />";temp += "</td>";
                     temp += "<td>";
                     temp += product.productName;
@@ -306,17 +306,32 @@
     function buy() {
         var products=[];
 
-
         $("[name=check]:checked").each(function () {
             var product={};
-            product.productId = $(this).attr("productId");
-
+            productId= $(this).attr("productId");
+            product.productId=productId;
+            product.productName = $(this).attr("productName");
+            product.productPrice = $(this).attr("productPrice");
+            product.discount = $(this).attr("discount");
             product.num = $(".orderItemNumberSetting[productId=" + productId + "]").val();
-
-
             products.push(product);
         });
-        alert(products);
+        alert(JSON.stringify(products));
+        // $.ajax({
+        //     url: "/shoppingCar/clear",
+        //     type: "delete",
+        //     // contentType: "application/json",
+        //     // data: JSON.stringify(productId),
+        //     success: function (data) {
+        //         if (data.state == 200) {
+        //             alert(data.message);
+        //             window.location.reload();
+        //         } else {
+        //             alert(data.message);
+        //         }
+        //     }
+        // })
+
 
     }
 </script>

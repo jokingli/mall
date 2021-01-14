@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+<div class="cartFoot">
+
+    <div class="pull-left">
+        <button onclick="deleteAll()" style="background-color: #ac2925">批量删除</button>
+    </div>
+</div>
+<div class="cartProductList">
+    <table class="cartProductTable">
+        <thead>
+        <tr>
+            <th class="selectAndImage">
+                <input type="checkbox" id="checks" name="selectAllItem">全选
+            </th>
+            <th>产品名</th>
+            <th>产品价格</th>
+            <th>库存</th>
+            <th>折扣</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+</body>
+<script src="/plugin/jquery/dist/jquery.js"></script>
+<script>
+
+    $(function () {
+        // 初始化收藏页面
+        initCollection();
+    });
+
+    //初始化产品信息
+    function initCollection() {
+        var userId = 1;
+        $.ajax({
+            url: "/collection/show/" + userId,
+            type: "get",
+            contentType: "application/json",
+            //data : JSON.stringify(searchVo),
+            success: function (data) {
+                // 生成购物车列表
+                $(".cartProductTable tbody").html("");
+                var temp = "";
+                $.each(data, function (i, product) {
+                    temp += "<tr productId='" + product.productId + "' class='cartProductItemTR'>";
+                    temp += "<td>";
+                    temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "' onclick='checkone()'  />";
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += product.productName;
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += product.productPrice;
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += product.productNum;
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += product.discount;
+                    temp += "</td>";
+
+                    temp += "<td>";
+                    temp += "<button productId='" + product.productId + "' onclick='deleteOne(this)' >移除</button>";
+                    temp += "</td>";
+
+                    temp += "</tr>";
+                });
+                $(".cartProductTable tbody").append(temp);
+
+                calcCartSumPriceAndNumber();
+            },
+            error: function () {
+                layer.msg("初始化页面错误");
+            }
+        });
+    }
+
+    /**
+     * 全选或全不选
+     */
+    document.getElementById("checks").onclick = function () {
+        var checked = document.getElementById("checks").checked;
+        var checkson = document.getElementsByName("check");
+        if (checked) {
+            for (var i = 0; i < checkson.length; i++) {
+                checkson[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < checkson.length; i++) {
+                checkson[i].checked = false;
+            }
+        }
+
+    }
+
+    /**
+     * 批量删除
+     */
+    function deleteAll() {
+        var ids = [];
+        // 获取选中的id
+        $("[name=check]:checked").each(function (idx, element) {
+            ids.push($(element).attr("productId"));
+        });
+
+        if (window.confirm("您确认要删除选中的产品吗？")) {
+            $.ajax({
+                url: "/collection/delete",
+                type: "delete",
+                contentType: "application/json",
+                //dataType: "json",
+                data: JSON.stringify(ids),
+                success: function (data) {
+                    if (data.state == 200) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+        }
+    }
+
+    /**
+     * 删除一个数据
+     */
+    function deleteOne(deleteBtn) {
+        var productId = $(deleteBtn).attr("productId");
+
+        if (window.confirm("您确认要删除选中的内容吗？")) {
+            $.ajax({
+                url: "/collection/delete-one/" + productId,
+                type: "delete",
+                // contentType: "application/json",
+                // data: JSON.stringify(productId),
+                success: function (data) {
+                    if (data.state == 200) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+        }
+
+    }
+</script>
+</html>

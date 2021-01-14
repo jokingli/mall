@@ -24,6 +24,7 @@ public class ShoppingCarController {
 
     /**
      *进入购物车页面
+     * 127.0.0.1/shoppingCar/enter
      */
     @RequestMapping(value = "/enter")
     public String enter(HttpServletRequest request){
@@ -39,8 +40,6 @@ public class ShoppingCarController {
     @ResponseBody
     public List<ShoppingCarItems> show(@PathVariable int userId, HttpServletRequest request) {
         //通过用户id得到用户购物车中商品和商品数量在页面上展示出来
-        shoppingCarService.selectShopingCar(userId);
-
         return shoppingCarService.selectShopingCar(userId);
     }
 

@@ -18,7 +18,7 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private Integer productId;
     private Integer pictureId;
     private Integer categoryId;
     private String pictureUrl;
