@@ -23,17 +23,25 @@ public class ShoppingCarController {
     ProductService productService;
 
     /**
+     *进入购物车页面
+     */
+    @RequestMapping(value = "/enter")
+    public String enter(HttpServletRequest request){
+        request.setAttribute("template","/shopping/shoppingCar");
+        return "/mallIndex";
+    }
+
+    /**
      * 通过用户id显示用户购物车中的商品
      * 127.0.0.1/shoppingCar/show/1
      */
     @GetMapping(value = "/show/{userId}")
-    public String show(@PathVariable int userId, HttpServletRequest request) {
-
+    @ResponseBody
+    public List<ShoppingCarItems> show(@PathVariable int userId, HttpServletRequest request) {
         //通过用户id得到用户购物车中商品和商品数量在页面上展示出来
-        List<ShoppingCarItems> shoppingCarItemsList=shoppingCarService.selectShopingCar(userId);
+        shoppingCarService.selectShopingCar(userId);
 
-        request.setAttribute("productList",shoppingCarItemsList);
-        return "/shopping/shoppingCar";
+        return shoppingCarService.selectShopingCar(userId);
     }
 
     /**
