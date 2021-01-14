@@ -17,19 +17,19 @@
 	$(function() {
 		initProducts();
 		initCategory();
-		
+
 		$("[name=prodctSort]").bind("click", function() {
 			productSort($(this));
 		});
 	});
-	
+
 	// 初始化页面分页变量
 	var currentPage = 1;
 	var pageSize = 5;
 	var pageCount = 1;
 	var orderBy = "id";
 	var direction = "asc";
-	
+
 	// 排序按钮点击事件
 	function productSort(sortBtn) {
 		orderBy = sortBtn.attr("orderBy");
@@ -41,28 +41,28 @@
 			directionClass = "glyphicon glyphicon-arrow-down";
 			direction = "desc";
 		}
-		
+
 		// 复原其余排序按钮
 		$(".glyphicon").removeClass("glyphicon-arrow-down").removeClass("glyphicon-arrow-up")
 		$(".glyphicon").addClass("glyphicon-arrow-down");
 		// 切换点击按钮样式
 		sortBtn.children("span").removeClass("glyphicon-arrow-down").removeClass("glyphicon-arrow-up");
 		sortBtn.children("span").addClass(directionClass);
-		
+
 		initProducts();
 	}
-	
+
 	// 分页显示产品集合
 	function initProducts() {
 		var searchVo = {};
-	   	searchVo.currentPage = currentPage;
-	   	searchVo.pageSize = pageSize;
-	   	searchVo.orderBy = orderBy;
-	   	searchVo.sort = direction;
-	   	searchVo.categoryId = $("#categoryId").val();
-	   	
+		searchVo.currentPage = currentPage;
+		searchVo.pageSize = pageSize;
+		searchVo.orderBy = orderBy;
+		searchVo.sort = direction;
+		searchVo.categoryId = $("#categoryId").val();
+
 		$.ajax({
-			url : "/api/" + searchVo.categoryId + "/products",
+			url : "/mall/" + searchVo.categoryId + "/products",
 			type : "post",
 			contentType: "application/json",
 			data : JSON.stringify(searchVo),
@@ -72,6 +72,8 @@
 
 				var products = "";
 				$.each(data.list, function(i, item){
+					products += "<div class='productUnit'>";
+					products += "<div class='productUnitFrame'>";
 					products += "<div class=\"col-md-55\">";
 					products += "<div class=\"thumbnail\">";
 					products += "<div class=\"image view view-first\">";
@@ -90,6 +92,9 @@
 					products += "</div>";
 					products += "</div>";
 					products += "</div>";
+
+					products += "</div>";
+					products += "</div>";
 				});
 				if (products == "") {
 					$(".categoryProducts").html("未找到该类别产品");
@@ -97,7 +102,7 @@
 					products += "<div style='clear:both'></div>";
 					$(".categoryProducts").html(products);
 				}
-				
+
 				var page =new Paging('page', {
 					nowPage: currentPage, // 当前页码
 					pageNum: pageCount, // 总页码
@@ -105,11 +110,11 @@
 					canJump: 1, // 是否能跳转: 0=不显示（默认），1=显示
 					showOne: 1, //只有一页时，是否显示: 0=不显示,1=显示（默认）
 					callback: function (num) { //回调函数
-			            console.log(num);
-			            currentPage = num;
-			            initProducts();
-			        }
-			    })
+						console.log(num);
+						currentPage = num;
+						initProducts();
+					}
+				})
 			},
 			error : function (data) {
 				layer.msg(data.responseText, {icon: 0});

@@ -81,14 +81,13 @@ function initCategories() {
 		contentType: "application/json",
 		//data : JSON.stringify(category),
 		success : function (data) {
-			var categoryMenu = $("div.categoryMenu");
+			var categoryMenu = $("ul.categoryMenu");
 			var temp = "";
 			$.each(data, function(i, item){
-				temp += "<div category_id='" + item.categoryId + "' class='eachCategory'>";
-				temp += "<span class='glyphicon glyphicon-link'></span>";
-				temp += "<a href='/mall/category/1' onclick='initProductsByCategoryId(" + item.categoryId + ", \"" + item.categoryName + "\")'>";
+				temp += "<li categoryId='" + item.categoryId + "' class='eachCategory'>";
+				temp += "<a href='javascript:void(0); ' onclick='initProductsByCategoryId(" + item.categoryId + ", \"" + item.categoryName + "\")'>";
 				temp += item.categoryName;
-				temp += "</a></div>";
+				temp += "</a></li>";
 			});
 			categoryMenu.html(temp);
 

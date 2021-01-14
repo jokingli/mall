@@ -28,9 +28,9 @@ public class CategoryController {
     /**
      * 127.0.0.1/api/category/1 ---- get
      */
-    @GetMapping("/category/{id}")
-    public Category getCategoryById(@PathVariable int id) {
-        return categoryService.getCategoryById(id);
+    @GetMapping("/category/{categoryId}")
+    public Category getCategoryById(@PathVariable int categoryId) {
+        return categoryService.getCategoryById(categoryId);
     }
 
     /**

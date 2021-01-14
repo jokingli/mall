@@ -51,7 +51,7 @@ public class ProductController {
 
     //搜索
 
-    @PostMapping(value = "{categoryId}/products", consumes = "application/json")
+    @PostMapping(value = "/{categoryId}/products", consumes = "application/json")
     public PageInfo<Product> getProductsByProductSearchVo(@RequestBody ProductSearchVo productSearchVo) {
         return productService.getProductBySearchVo(productSearchVo);
     }
@@ -68,6 +68,7 @@ public class ProductController {
         modelMap.addAttribute("template", "mall/category");
         return "mallIndex";
     }
+
 
     @RequestMapping("/product/{productId}")
     public String getProductById(@PathVariable int productId, ModelMap modelMap) {
