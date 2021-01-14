@@ -63,8 +63,9 @@ public class IndentServiceImpl implements IndentService {
 
     //真删除订单
     @Override
-    public ResultEntity<Object> deleteIndexById(int indentId) {
-        indentDao.deleteIndexById(indentId);
+    public ResultEntity<Object> deleteIndentById(int indentId) {
+        indentDao.deleteIndentById(indentId);
+        indentItemDao.deleteIndentItemByIndentId(indentId);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Indent delete success");
     }

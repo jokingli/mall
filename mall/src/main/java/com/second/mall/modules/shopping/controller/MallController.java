@@ -4,6 +4,7 @@ import com.second.mall.modules.shopping.service.IndentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -75,6 +76,18 @@ public class MallController {
     public String comments(@PathVariable String indentItemId,ModelMap modelMap){
         modelMap.put("indentCode",indentItemId);
         modelMap.put("template","mall/comment");
+        return "mallIndex";
+    }
+
+    /**
+     * 127.0.0.1/mall/comment/528569379068055552/3/1
+     */
+    @GetMapping("/comment/{indentCode}/{productId}/{indentItemId}")
+    public String reviewPage(@PathVariable String indentCode, @PathVariable int productId, @PathVariable int indentItemId, ModelMap modelMap) {
+        modelMap.put("template", "mall/comment");
+        modelMap.put("productId", productId);
+        modelMap.put("indentCode", indentCode);
+        modelMap.put("indentItemId", indentItemId);
         return "mallIndex";
     }
 }

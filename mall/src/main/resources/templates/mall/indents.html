@@ -5,10 +5,10 @@
 <div class="boughtDiv">
     <div class="orderType">
         <div state="" class="statusDiv selectedOrderType"><a href="javascript:void(0);">所有订单</a></div>
-        <div state="待付款" class="statusDiv"><a href="javascript:void(0);">待付款</a></div>
-        <div state="待发货" class="statusDiv"><a href="javascript:void(0);">待发货</a></div>
-        <div state="待收货" class="statusDiv"><a href="javascript:void(0);">待收货</a></div>
-        <div state="待评价" class="statusDiv"><a href="javascript:void(0);" class="noRightborder">待评价</a></div>
+        <div state="0" class="statusDiv"><a href="javascript:void(0);">待付款</a></div>
+        <div state="1" class="statusDiv"><a href="javascript:void(0);">待发货</a></div>
+        <div state="2" class="statusDiv"><a href="javascript:void(0);">待收货</a></div>
+        <div state="3" class="statusDiv"><a href="javascript:void(0);" class="noRightborder">待评价</a></div>
         <div class="orderTypeLastOne"><a class="noRightborder">&nbsp;</a></div>
     </div>
 
@@ -33,7 +33,7 @@
 <script type="text/javascript">
     $(function() {
 
-        initOrders();
+        initIndents();
 
         $(".statusDiv").bind("click", function() {
             orderTypeEvent(this);
@@ -45,9 +45,10 @@
     function orderTypeEvent(orderTypeDiv) {
         $(".statusDiv").removeClass("selectedOrderType");
         $(orderTypeDiv).addClass("selectedOrderType");
-        keyWord = $(orderTypeDiv).attr("status");
+        keyWord = $(orderTypeDiv).attr("state");
         currentPage = 1;
-        initOrders();
+        console.log(keyWord)
+        initIndents();
     }
 
     // 初始化订单列表
@@ -55,14 +56,14 @@
     var pageSize = 5;
     var pageCount = 1;
     var keyWord = "";
-    function initOrders() {
+    function initIndents() {
         var searchBean = {};
         searchBean.currentPage = currentPage;
         searchBean.pageSize = pageSize;
         searchBean.orderBy = "create_date";
         searchBean.sort = "desc";
         searchBean.keyWord = keyWord;
-
+        console.log(searchBean)
         $.ajax({
             url : "/api/indents",
             type : "post",
@@ -88,7 +89,7 @@
                     indents += "</a>";
                     indents += "</td>";
                     indents += "<td class='orderItemDeleteTD'>";
-                    indents += "<a class='deleteOrderLink' indentId='" + indent.indentId + "' href='javascript:void(0);'>";
+                    indents += "<a class='deleteIndentLink' indentId='" + indent.indentId + "' href='javascript:void(0);'>";
                     indents += "<span class='orderListItemDelete glyphicon glyphicon-trash'></span>";
                     indents += "</a>";
                     indents += "</td>";
@@ -118,19 +119,25 @@
                         indents += "</td>";
                         if (indent.state == 3) {
                             if (i == 0) {
-                                indents += "<td rowspan='" + indent.indentItem.length +
+                                indents += "<td rowspan='" + indent.indentItems.length +
                                     "' width='120px' class='orderListItemProductRealPriceTD orderItemOrderInfoPartTD'>";
                                 indents += "<div class='orderListItemProductRealPrice'>￥" + indent.indentPrice + "</div>";
                                 indents += "<div class='orderListItemPriceWithTransport'>(含运费：￥" + indent.postPrice + ")</div>";
                                 indents += "</td>";
                             }
-                            indents += "<td class='orderListItemButtonTD orderItemOrderInfoPartTD' width='100px'>";
-                            indents += "<a class='orderOperation' indentState='" + indent.state +
-                                "' indentCode='" + indent.indentCode + "' productId='" + indentItem.productId +
-                                "' href='javascript:void(0);'>";
-                            indents += "<button class='orderListItemConfirm'>评论</button>";
-                            indents += "</a>";
-                            indents += "</td>";
+                            if (indentItem.state != 0){
+                                indents += "<td class='orderListItemButtonTD orderItemOrderInfoPartTD' width='100px'>";
+                                indents += "<span>已评论</span>";
+                                indents += "</td>";
+                            }else {
+                                indents += "<td class='orderListItemButtonTD orderItemOrderInfoPartTD' width='100px'>";
+                                indents += "<a class='indentOperation' indentState='" + indent.state + "' indentCode='" + indent.indentCode +
+                                    "' indentItemId='" + indentItem.indentItemId + "' productId='" + indentItem.productId +
+                                    "' href='javascript:void(0);'>";
+                                indents += "<button class='orderListItemConfirm'>评论</button>";
+                                indents += "</a>";
+                                indents += "</td>";
+                            }
                         } else {
                             if (i == 0) {
                                 indents += "<td rowspan='" + indent.indentItems.length +
@@ -141,16 +148,16 @@
                                 indents += "<td rowspan='" + indent.indentItems.length +
                                     "' class='orderListItemButtonTD orderItemOrderInfoPartTD' width='100px'>";
                                 var temp = "";
-                                if (indent.state == 1) {
+                                if (indent.state == 0) {
                                     temp = "付款";
-                                } else if (indent.state == 2 || indent.state == 3) {
+                                } else if (indent.state == 1 || indent.state == 2) {
                                     temp = "收货";
-                                } else if (indent.state == 4) {
+                                } else if (indent.state == 3) {
                                     temp = "评论";
                                 } else {
                                     temp = "完成";
                                 }
-                                indents += "<a class='orderOperation' indentState='" + indent.state +
+                                indents += "<a class='indentOperation' indentState='" + indent.state +
                                     "' indentCode='" + indent.indentCode + "' productId='" + indentItem.productId +
                                     "' href='javascript:void(0);'>";
                                 indents += "<button class='orderListItemConfirm'>" + temp + "</button>";
@@ -177,22 +184,23 @@
                 });
 
                 // 绑定订单删除事件
-                $(".deleteOrderLink").bind("click", function() {
+                $(".deleteIndentLink").bind("click", function() {
                     var indentId = $(this).attr("indentId");
-                    deleteOrder(indentId);
+                    deleteIndent(indentId);
                 });
 
                 // 绑定订单操作按钮
-                $(".orderOperation").bind("click", function() {
+                $(".indentOperation").bind("click", function() {
                     var productId = $(this).attr("productId");
-                    var orderStatus = $(this).attr("orderStatus");
-                    var orderCode = $(this).attr("orderCode");
-                    if (orderStatus == "待付款") {
-                        location.href = "/tmall/pay/" + orderCode;
-                    } else if (orderStatus == '待发货' || orderStatus == '待收货') {
-                        changeOrderStatus(orderCode, "待评价", "/tmall/orders");
-                    } else if (orderStatus == "待评价") {
-                        location.href = "/tmall/review/" + orderCode + "/" + productId;
+                    var indentState = $(this).attr("indentState");
+                    var indentCode = $(this).attr("indentCode");
+                    var indentItemId = $(this).attr("indentItemId");
+                    if (indentState == 0) {
+                        location.href = "/mall/pay/" + indentCode;
+                    } else if (indentState == 1 || indentState == 2) {
+                        changeOrderStatus(indentCode, 3, "/mall/indents");
+                    } else if (indentState == 3) {
+                        location.href = "/mall/comment/" + indentCode + "/" + productId+ "/" + indentItemId;
                     }
                 })
             },
@@ -203,18 +211,18 @@
     }
 
     // 删除订单信息
-    function deleteOrder(orderId) {
+    function deleteIndent(indentId) {
         bootbox.confirm("确认删除订单？", function(result) {
             if(result) {
                 $.ajax({
-                    url : "/api/order/" + orderId,
+                    url : "/api/indent/" + indentId,
                     type : "delete",
                     success : function (rs) {
-                        if (rs.status == 200) {
+                        if (rs.state == 200) {
                             currentPage = 1;
                             pageSize = 5;
                             keyWord = "";
-                            initOrders();
+                            initIndents();
                         } else {
                             layer.msg(rs.message, {icon: 0});
                         }

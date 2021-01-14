@@ -1,75 +1,104 @@
-<div class="confirmPayPageDiv">
-    <input type="hidden" id="indentItemId" th:value="${indentItemId}"/>
-    <input type="hidden" id="productId" value=""/>
-<!--    <input type="hidden" id="userId" value=""/>-->
-    <input type="hidden" id="indentId" value=""/>
-    <input type="hidden" id="shopId" value=""/>
-    <input type="hidden" id="indentCode" value=""/>
-    <div class="confirmPayOrderDetailDiv">
-        <table class="confirmPayOrderDetailTable">
-            <tr>
-                <td>商品名称：</td>
-                <td>
-                    <span class="productName"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>总价：</td>
-                <td>
-                    <span class="Price"></span>(<span class="productPrice"></span>*<span class="productNum"></span>+<span class="postage"></span>)
-                </td>
-            </tr>
-            <tr>
-                <td>卖家昵称：</td>
-                <td>
-                    <span class="shopName"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>成交时间：</td>
-                <td><span class="payTime"></span></td>
-            </tr>
-            <tr>
-                <td>评论：</td>
-                <td><textarea id="comments"></textarea></td>
-            </tr>
-            <tr>
-                <td>上传图片：</td>
-                <td></td>
-            </tr>
-        </table>
+<input type="hidden" id="productId" th:value="${productId}" />
+<input type="hidden" id="indentCode" th:value="${indentCode}" />
+<input type="hidden" id="indentItemId" th:value="${indentItemId}" />
+<input type="hidden" id="shopId" value="" />
+<div class="reviewDiv">
+    <div class="reviewProductInfoDiv">
+        <div class="reviewProductInfoImg">
+            <img id="productImage" width="400px" height="400px" src="">
+        </div>
+        <div class="reviewProductInfoRightDiv">
+            <div class="reviewProductInfoRightText"></div>
+            <table class="reviewProductInfoTable">
+                <tr>
+                    <td width="75px">价格:</td>
+                    <td>￥<span class="reviewProductInfoTablePrice"></span>元</td>
+                </tr>
+                <tr>
+                    <td>配送</td>
+                    <td>快递:  <span class="orderPostage"></span>元</td>
+                </tr>
+                <tr>
+                    <td>销量:</td>
+                    <td><span class="orderSaleCount"></span> 件</td>
+                </tr>
+            </table>
+
+            <div class="reviewProductInfoRightBelowDiv">
+                <span class="reviewProductInfoRightBelowImg"><img src="/img/site/reviewLight.png"></span>
+                <span class="reviewProductInfoRightBelowText" >您于<span class="orderDate"></span>下单购买了此商品 </span>
+            </div>
+        </div>
+        <div style="clear:both"></div>
     </div>
-    <div class="confirmPayButtonDiv confirmPay">
-        <a href="javascript:void(0);" onclick="comment()"><button class="confirmPayButton">评论</button></a>
+
+    <div class="reviewStasticsDiv">
+        <div class="reviewStasticsLeft">
+            <div class="reviewStasticsLeftTop"></div>
+            <div class="reviewStasticsLeftContent">累计评价 <span class="reviewStasticsNumber"></span></div>
+            <div class="reviewStasticsLeftFoot"></div>
+        </div>
+        <div class="reviewStasticsRight">
+            <div class="reviewStasticsRightEmpty"></div>
+            <div class="reviewStasticsFoot"></div>
+        </div>
+    </div>
+
+    <div class="makeReviewDiv">
+        <form method="post" action="javascript:void(0);">
+            <div class="makeReviewText">其他买家，需要你的建议哦！</div>
+            <table class="makeReviewTable">
+                <tr>
+                    <td class="makeReviewTableFirstTD">评价商品</td>
+                    <td><textarea name="comments"></textarea></td>
+                </tr>
+            </table>
+            <div class="makeReviewButtonDiv">
+                <button id="reviewBtn" type="button">提交评价</button>
+            </div>
+        </form>
     </div>
 </div>
+
 <script type="text/javascript">
     $(function() {
-        initComment();
+        initPageInfo();
+
+        $("#reviewBtn").bind("click", function() {
+            addComment();
+        });
     });
 
-    //初始化订单信息
-    function initComment() {
+    // 初始化页面信息
+    function initPageInfo() {
+        var productId = $("#productId").val();
+        var indentCode = $("#indentCode").val();
         var indentItemId = $("#indentItemId").val();
+
         $.ajax({
-            url : "/api/indentItem/" + indentItemId ,
+            url : "/mall/product/" + productId,
             type : "get",
-            contentType: "application/json",
-            //data : JSON.stringify(cartItem),
             success : function (rs) {
-                $("#productId").val(rs.object.productId);
-                $("#userId").val(rs.object.userId);
-                $("#indentId").val(rs.object.indentId);
-                $("#shopId").val(rs.object.shopId);
-                $("#indentCode").val(rs.object.indentCode);
-                $(".productName").html(rs.object.productName);
-                $(".productNum").html(rs.object.productNum);
-                var price = rs.object.productNum * rs.object.productPrice + rs.object.postage;
-                $(".Price").html(price);
-                $(".productPrice").html(rs.object.productPrice);
-                $(".postage").html(rs.object.postage);
-                $(".shopName").html(rs.object.shopName);
-                $(".payTime").html(rs.object.payTime);
+                console.log(rs)
+                // $("#productImage").attr("src", rs.bigPictures.length == 0 ? "" : rs.bigImages[0].src);
+                $(".reviewProductInfoRightText").html(rs.productName);
+                $(".reviewProductInfoTablePrice").html(rs.productPrice);
+                // $(".orderSaleCount").html(rs.saleCount);
+                $(".reviewStasticsNumber").html(rs.commentCount);
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        });
+
+        $.ajax({
+            url : "/api/indentItem/" + indentItemId,
+            type : "get",
+            success : function (rs) {
+                console.log(rs)
+                $(".orderPostage").html(rs.object.postage);
+                $(".orderDate").html(rs.object.createTime);
+                $("#shopId").val(rs.shopId);
             },
             error : function (data) {
                 layer.msg(data.responseText, {icon: 0});
@@ -77,33 +106,56 @@
         });
     }
 
-    function comment() {
-        var comment = {}
-        comment.indentItemId = $("#indentItemId").val();
-        comment.productId = $("#productId").val();
+    // 添加评论
+    function addComment() {
+        var comment = {};
         comment.userId = $("#userId").val();
-        comment.indentId = $("#indentId").val();
+        comment.productId = $("#productId").val();
+        comment.indentItemId = $("#indentItemId").val();
         comment.shopId = $("#shopId").val();
-        comment.indentCode = $("#indentCode").val();
         comment.parentId = 0;
-        comment.comments = $("#comments").val();
+        comment.comments = $("[name=comments]").val();
+
         $.ajax({
-            url : "/api/comment" ,
+            url : "/api/comment",
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(comment),
             success : function (rs) {
                 if (rs.state == 200) {
-                    var indentCode = $("#indentCode").val();
-                    window.location.href = "/mall/indent/" + indentCode;
+                    checkOrderViews();
                 } else {
-                    layer.msg(data.message, {icon: 0});
+                    layer.msg(rs.message, {icon: 0});
                 }
             },
-            error : function (data) {
-                layer.msg(data.responseText, {icon: 0});
+            error : function (rs) {
+                layer.msg(rs.responseText, {icon: 0});
             }
         });
     }
 
+    // 检查订单评论，若所有商品已经评论，则修改订单状态
+    function checkOrderViews() {
+        var indentCode = $("#indentCode").val();
+        $.ajax({
+            url : "/api/indentItem/noneCommentItems/" + indentCode,
+            type : "get",
+            success : function (rs) {
+                if (rs.length > 0) {
+                    bootbox.confirm("是否继续评价？", function(result) {
+                        if(result) {
+                            location.href = "/mall/comment/" + rs[0].indentCode + "/" + rs[0].productId + "/" +rs[0].indentItemId;
+                        } else {
+                            location.href = "/mall/indents";
+                        }
+                    });
+                } else {
+                    changeOrderStatus(indentCode, 4, "/mall/indents");
+                }
+            },
+            error : function (rs) {
+                layer.msg(rs.responseText, {icon: 0});
+            }
+        });
+    }
 </script>

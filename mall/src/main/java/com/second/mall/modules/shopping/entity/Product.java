@@ -29,6 +29,15 @@ public class Product {
     private Integer discount;
     private Integer shopId;
     private String describeInfo;//描述
+    private int commentCount;  //评论数量
     private LocalDateTime createTime;
 
+    @Transient
+    private List<Picture> bigPictures;
+    @Transient
+    private List<Picture> middlePictures;
+    @Transient
+    private List<Picture> smallPictures;
+    @Transient
+    private List<Picture> detailPictures;
 }

@@ -50,7 +50,7 @@ public class IndentController {
     //通过id真删除
     @DeleteMapping(value = "/indent/{indentId}")
     private ResultEntity<Object> deleteIndentById(@PathVariable int indentId){
-        return indentService.deleteIndexById(indentId);
+        return indentService.deleteIndentById(indentId);
     }
 
     /**

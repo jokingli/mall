@@ -19,7 +19,7 @@ public interface IndentService {
     //通过订单号查询id
     ResultEntity<Indent> selectIndentByCode(String indentCode);
     //真删除订单
-    ResultEntity<Object> deleteIndexById(int indentId);
+    ResultEntity<Object> deleteIndentById(int indentId);
 
     //修改订单状态
     ResultEntity<Indent> updateIndentState(Indent indent);
