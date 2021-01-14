@@ -40,7 +40,7 @@ public class ProductController {
         List<Product> productList = productService.selectProduct();
         request.setAttribute("productList", productList);
         request.setAttribute("template", "index");
-        return "managerIndex";
+        return "mallIndex";
     }
 
     @PostMapping(value = "/products", consumes = "application/json")
@@ -59,7 +59,7 @@ public class ProductController {
     @GetMapping("/searchResults")
     public String searchResultsPage(@RequestParam String keyWord, ModelMap modelMap) {
         modelMap.put("keyWord", keyWord);
-        return "managerIndex";
+        return "mallIndex";
     }
 
     @RequestMapping("/category/{categoryId}")

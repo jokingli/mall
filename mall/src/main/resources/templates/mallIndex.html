@@ -34,9 +34,10 @@
 	
 	<body>
 
-		<!-- header -->
-		<div th:replace="fragment/managerHeader"></div>
 
+		<!-- header -->
+		<div th:replace="fragment/mallHeader"></div>
+		<div th:replace="fragment/mallSearch"></div>
 		<!-- content -->
 		<div th:if="${template}">
 			<div th:replace="${template}"></div>

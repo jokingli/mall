@@ -1,64 +1,88 @@
-
-        <div class="col-md-3 left_col">
-            <div class="left_col scroll-view">
-                <div class="navbar nav_title" style="border: 0;">
-                    <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>网上购物商城</span></a>
-                </div>
-
-                <div class="clearfix"></div>
-
-                <!-- menu profile quick info -->
-                <div class="profile clearfix">
-                    <div class="profile_pic">
-                        <img src="/manager/images/img.jpg" alt="..." class="img-circle profile_img">
-                    </div>
-                    <div class="profile_info">
-                        <span>商城欢迎您</span>
-                        <a href="login"><h2>登录或注册</h2></a>
-                    </div>
-                </div>
-                <!-- /menu profile quick info -->
-
-                <br />
-
-                <!-- sidebar menu -->
-                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu" >
-                    <div class="menu_section">
-                        <h3>商城展示</h3>
-                        <ul class="nav side-menu" >
-                            <li><a href="index"><i class="fa fa-home"></i> 首页 </a>
-
-                            </li>
-                            <li><a><i class="fa fa-edit"></i> 商品分类 <span class="fa fa-chevron-down"></span></a>
-                                <ul class="categoryMenu">
-                                  <!--  <li><a href="index1" >1</a></li>
-                                    <li><a href="index4" >1</a></li>
-                                    <li><a href="index5" >1</a></li>
-                                    <li><a href="index6" >1</a></li>
-                                    <li><a href="index7" >1</a></li>
-                                    <li><a href="index8" >1</a></li>
-                                    <li><a href="index9" >1</a></li>
-                                    <li><a href="index10" >1</a></li>
-                                    <li><a href="index11" >1</a></li>
-                                    <li><a href="index12">1</a></li>-->
-                                </ul>
-                            </li>
-                            <li><a><i class="fa fa-edit"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li><a href="/shopping/indent" >所有订单</a></li>
-                                    <li><a href="index4" >1</a></li>
-                                </ul>
-                            </li>
-                            <li><a><i class="fa fa-edit"></i> 评论管理 <span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li><a href="/shopping/indent" >所有评论</a></li>
-                                    <li><a href="index4" >1</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+<div class="col-md-3 left_col">
+    <div class="left_col scroll-view">
+        <div class="navbar nav_title" style="border: 0;">
+            <a href="/common/dashboard" class="site_title">
+                <i class="fa fa-paw"></i>
+                <span>TMall 管理系统</span>
+            </a>
         </div>
 
+        <div class="clearfix"></div>
 
+        <!-- menu profile quick info -->
+        <div class="profile clearfix">
+            <div class="profile_pic">
+                <img src="/manager/images/default_small.jpg" alt="..." class="img-circle profile_img">
+            </div>
+            <div class="profile_info">
+                <span>Welcome,</span>
+                <h2>HymanHu</h2>
+            </div>
+        </div>
+        <!-- /menu profile quick info -->
+
+        <br />
+
+        <!-- sidebar menu -->
+        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+                <ul class="nav side-menu">
+                    <li>
+                        <a href="/common/dashboard">
+                            <i class="fa fa-dashboard"></i> Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <i class="fa fa-user"></i> Account <span class="fa fa-chevron-down"></span>
+                        </a>
+                        <ul class="nav child_menu">
+                            <li><a href="/account/profile">Profile</a></li>
+                            <li shiro:hasAnyRoles="admin,manager"><a href="/account/users">Users</a></li>
+                            <li shiro:hasAnyRoles="admin,manager"><a href="/account/roles">Roles</a></li>
+                            <li shiro:hasAnyRoles="admin,manager"><a href="/account/resources">Resources</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>
+                            <i class="fa fa-shopping-cart"></i> Shopping <span class="fa fa-chevron-down"></span>
+                        </a>
+                        <ul class="nav child_menu">
+                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/categories">Categories</a></li>
+                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/products">Products</a></li>
+                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/productProperties">Product Properties</a></li>
+                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/productImages">Product Images</a></li>
+                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/reviews">Reviews</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>
+                            <i class="fa fa-wrench"></i> Test <span class="fa fa-chevron-down"></span>
+                        </a>
+                        <ul class="nav child_menu">
+                            <li><a href="/test/index">Test Page</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /sidebar menu -->
+
+        <!-- /menu footer buttons -->
+        <div class="sidebar-footer hidden-small">
+            <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+            </a>
+        </div>
+        <!-- /menu footer buttons -->
+    </div>
+</div>
