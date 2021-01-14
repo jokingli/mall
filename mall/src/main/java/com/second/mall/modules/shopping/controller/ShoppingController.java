@@ -14,11 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/shopping")
 public class ShoppingController {
     /**
-     * 订单主页
+     * 所有订单
      */
     @RequestMapping(value = "/indent")
     public String indent(ModelMap modelMap){
         modelMap.put("template","shopping/indent");
+        return "managerIndex";
+    }
+    /**
+     * 所有评论
+     */
+    @RequestMapping(value = "/comment")
+    public String comment(ModelMap modelMap){
+        modelMap.put("template","shopping/comment");
         return "managerIndex";
     }
 }

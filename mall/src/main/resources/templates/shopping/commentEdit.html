@@ -10,26 +10,31 @@
             <div class="modal-body">
                 <form action="javascript:void(0);" data-parsley-validate class="form-horizontal form-label-left">
                     <input type="hidden" id="commentIdForEdit" name="commentId" value="">
+                    <input type="hidden" id="indentItemIdForEdit" name="indentItemId" value="">
+                    <input type="hidden" id="productIdForEdit" name="productId" value="">
+                    <input type="hidden" id="userIdForEdit" name="userId" value="">
+                    <input type="hidden" id="shopIdForEdit" name="shopId" value="">
+                    <input type="hidden" id="parentIdForEdit" name="parentId" value="">
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="indentId">indentId</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="productName">商品名称</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="indentIdForEdit" name="indentId" class="form-control ">
+                            <input type="text" id="productNameForEdit" name="productName" class="form-control " disabled >
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="userId">userId</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="userName">用户名</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="userIdForEdit" name="userId" class="form-control ">
+                            <input type="text" id="userNameForEdit" name="userName" class="form-control " disabled >
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="shopId">shopId</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="shopName">商铺名</label>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="text" id="shopIdForEdit" name="shopId" class="form-control ">
+                            <input type="text" id="shopNameForEdit" name="shopName" class="form-control " disabled >
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="comments">comments</label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="comments">评论内容</label>
                         <div class="col-md-6 col-sm-6 ">
                             <textarea id="commentsForEdit" name="comments" class="form-control "></textarea>
                         </div>

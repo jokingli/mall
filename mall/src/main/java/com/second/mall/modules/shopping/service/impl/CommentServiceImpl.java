@@ -6,6 +6,7 @@ import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.dao.CommentDao;
 import com.second.mall.modules.shopping.dao.IndentDao;
+import com.second.mall.modules.shopping.dao.IndentItemDao;
 import com.second.mall.modules.shopping.entity.Comment;
 import com.second.mall.modules.shopping.entity.Indent;
 import com.second.mall.modules.shopping.service.CommentService;
@@ -31,16 +32,21 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private IndentDao indentDao;
 
+    @Autowired
+    private IndentItemDao indentItemDao;
+
     @Override
     public ResultEntity<Comment> insertComment(Comment comment) {
-        if (comment.getComments()!=null){
-            comment.setCreateTime(LocalDateTime.now());
-            commentDao.insertComment(comment);
-            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                    "评论增加成功");
-        }
+        comment.setBrowseNum(0);
+        comment.setThumbsNum(0);
+        comment.setState(0);
+        comment.setCreateTime(LocalDateTime.now());
+        commentDao.insertComment(comment);
+        indentDao.updateStateForConfirm(comment.getIndentCode(),4,LocalDateTime.now());
+        indentItemDao.updateIndexItemState(comment.getIndentItemId(),1);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                "评论为空");
+                "评论增加成功");
+
     }
 
     @Override
@@ -67,18 +73,13 @@ public class CommentServiceImpl implements CommentService {
                 "这不是你的评论");
     }
 
-    //后端集合分页：显示评论id，订单编号，用户名，商铺名，评论内容，评论时间
+    //后端集合分页：显示评论id，商品名称，店铺名称，评论用户，评论内容，评论时间,浏览次数,点赞数
     @Override
     public PageInfo<Comment> getCommentBySearchBean(SearchBean searchBean) {
         searchBean.initSearchBean();
         PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
         List<Comment> commentBySearchBean = commentDao.getCommentBySearchBean(searchBean);
-        for (Comment comment : commentBySearchBean) {
-            if (comment.getIndentId()>0){
-                Indent indent = indentDao.selectIndexById(comment.getIndentId());
-                comment.setIndent(indent);
-            }
-        }
+
         return new PageInfo<Comment>(Optional
                 .ofNullable(commentBySearchBean)
                 .orElse(Collections.emptyList()));

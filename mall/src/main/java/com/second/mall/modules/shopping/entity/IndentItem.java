@@ -18,13 +18,16 @@ public class IndentItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int indentItemId;   //订单列id
-    private  int productId;     //商品Id
+    private int productId;     //商品Id
+    private int userId;         //用户id
     private int productNum;     //购买数量
     private int indentId;       //订单id：所属订单
     private int shopId;     //店铺id
     private LocalDateTime createTime;   //创建时间
+    private LocalDateTime payTime;   //成交时间
     private String delivery; //配送方式
     private double postage; //邮费
+    private int state;  //状态：0:未评论，1:已评论
 
     @Transient
     private  String pictureUrl; //商品图片id

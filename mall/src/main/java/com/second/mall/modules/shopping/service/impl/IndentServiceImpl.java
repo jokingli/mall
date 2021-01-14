@@ -98,4 +98,23 @@ public class IndentServiceImpl implements IndentService {
                 .ofNullable(indentDao.getIndentBySearchBean(searchBean))
                 .orElse(Collections.emptyList()));
     }
+
+    @Override
+    public List<Indent> getIndentByUserId(Indent indent) {
+        List<Indent> indents = new ArrayList<>();
+        if (indent.getState()== -1){
+            indents = indentDao.getIndentByUserId(indent.getUserId());
+            for (Indent indent1 : indents) {
+                List<IndentItem> indentItems = indentItemDao.selectIndexItemByIndentId(indent1.getIndentId());
+                indent1.setIndentItems(indentItems);
+            }
+        }else {
+            indents = indentDao.getIndentByUserIdAndState(indent.getUserId(),indent.getState());
+            for (Indent indent1 : indents) {
+                List<IndentItem> indentItems = indentItemDao.selectIndexItemByIndentId(indent1.getIndentId());
+                indent1.setIndentItems(indentItems);
+            }
+        }
+        return Optional.ofNullable(indents).orElse(Collections.emptyList());
+    }
 }

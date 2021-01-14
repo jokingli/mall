@@ -18,6 +18,7 @@
             <th width="120px">数量</th>
             <th width="120px">商品总价 </th>
             <th width="120px">运费</th>
+            <th width="60px" class="comment">评价</th>
             </thead>
             <tbody></tbody>
         </table>
@@ -68,7 +69,6 @@
     </div>
     <div class="confirmPayButtonDiv confirmedPay">
         <div class="confirmPayWarning">该订单已经确认收到！</div>
-        <a th:href="@{'/mall/pay/' + ${indentCode}}"><button class="confirmPayButton">评价</button></a>
     </div>
     <div class="confirmPayButtonDiv orderComplete">
         <div class="confirmPayWarning">该订单已经完成！</div>
@@ -112,6 +112,14 @@
                             "' class='orderItemOrderInfoPartTD'><span>" + item.delivery + ": " +
                             formatMoney(item.postage) + "</span></td>"
                     }
+                    if (item.state == 0){
+                        temp += "<td class='comment'>" +
+                            "<a href=\"/mall/comment/"+item.indentItemId+"\">" +
+                            "<button class='confirmPayButton confirmPayBtn'>评论</button>" +
+                            "</a></td>"
+                    }else {
+                        temp += "<td class='comment'> 已评论</td>"
+                    }
                     temp += "</tr>"
                 });
                 $(".confirmPayOrderItemTable tbody").append(temp);
@@ -129,6 +137,7 @@
                     $(".confirmPay").css("display", "none");
                     $(".confirmedPay").css("display", "none");
                     $(".orderComplete").css("display", "none");
+                    $(".comment").css("display", "none");
                 } else if (rs.object.state == 1) {
                     $(".orderFlow").attr("src", "/img/site/flow_3.png");
                     $(".confirmPayTime2").html(rs.object.createTime);
@@ -137,6 +146,7 @@
                     $(".confirmPay").css("display", "block");
                     $(".confirmedPay").css("display", "none");
                     $(".orderComplete").css("display", "none");
+                    $(".comment").css("display", "none");
                 } else if (rs.object.state == 2) {
                     $(".orderFlow").attr("src", "/img/site/flow_3.png");
                     $(".confirmPayTime2").html(rs.object.createTime);
@@ -145,6 +155,7 @@
                     $(".confirmPay").css("display", "block");
                     $(".confirmedPay").css("display", "none");
                     $(".orderComplete").css("display", "none");
+                    $(".comment").css("display", "none");
                 } else if (rs.object.state == 3) {
                     $(".orderFlow").attr("src", "/img/site/flow_4.png");
                     $(".confirmPayTime2").html(rs.object.createTime);
@@ -154,6 +165,7 @@
                     $(".confirmPay").css("display", "none");
                     $(".confirmedPay").css("display", "block");
                     $(".orderComplete").css("display", "none");
+                    $(".comment").css("display", "block");
                 } else if (rs.object.state == 4) {
                     $(".orderFlow").attr("src", "/img/site/flow_5.png");
                     $(".confirmPayTime2").html(rs.object.createTime);
@@ -163,6 +175,7 @@
                     $(".confirmPay").css("display", "none");
                     $(".confirmedPay").css("display", "none");
                     $(".orderComplete").css("display", "block");
+                    $(".comment").css("display", "block");
                 }
                 if (rs.object.state == 0) {
                     $(".payed").css("display", "none");
@@ -171,8 +184,8 @@
                     $(".payed").css("display", "block");
                 }
             },
-            error : function (data) {
-                layer.msg(data.responseText, {icon: 0});
+            error : function (rs) {
+                layer.msg(rs.responseText, {icon: 0});
             }
         });
     }

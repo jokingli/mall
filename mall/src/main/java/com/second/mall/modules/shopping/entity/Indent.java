@@ -36,8 +36,6 @@ public class Indent {
     private String userName;
 
     @Transient
-    private String shopName;
-    @Transient
     private String address; //收货地址
     @Transient
     private String linkman; //收货人

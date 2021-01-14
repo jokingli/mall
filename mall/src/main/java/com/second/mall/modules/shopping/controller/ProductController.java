@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Product;
 import com.second.mall.modules.shopping.service.ProductService;
+import com.second.mall.modules.vo.ProductSearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,10 +50,23 @@ public class ProductController {
     }
 
     //搜索
+
+    @PostMapping(value = "/{categoryId}/products", consumes = "application/json")
+    public PageInfo<Product> getProductsByProductSearchVo(@RequestBody ProductSearchVo productSearchVo) {
+        return productService.getProductBySearchVo(productSearchVo);
+    }
+
     @GetMapping("/searchResults")
     public String searchResultsPage(@RequestParam String keyWord, ModelMap modelMap) {
         modelMap.put("keyWord", keyWord);
         return "managerIndex";
+    }
+
+    @RequestMapping("/category/{categoryId}")
+    public String categoryPage(@PathVariable int categoryId, ModelMap modelMap) {
+        modelMap.addAttribute("categoryId", categoryId);
+        modelMap.addAttribute("template", "mall/category");
+        return "mallIndex";
     }
 
 
@@ -64,8 +78,5 @@ public class ProductController {
         return "mallIndex";
     }
 
-   /* @GetMapping("/product/{productId}")
-    public Product getProductById(@PathVariable int productId) {
-        return productService.getProductByProductId(productId);
-    }*/
+
 }

@@ -29,4 +29,6 @@ public interface IndentService {
 
     //分页
     PageInfo<Indent> getIndentBySearchBean(SearchBean searchBean);
+
+    List<Indent> getIndentByUserId(Indent indent);
 }
