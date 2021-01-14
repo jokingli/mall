@@ -94,8 +94,13 @@ public class IndentServiceImpl implements IndentService {
     public PageInfo<Indent> getIndentBySearchBean(SearchBean searchBean) {
         searchBean.initSearchBean();
         PageHelper.startPage(searchBean.getCurrentPage(), searchBean.getPageSize());
+        List<Indent> indentBySearchBean = indentDao.getIndentBySearchBean(searchBean);
+        for (Indent indent : indentBySearchBean) {
+            List<IndentItem> indentItems = indentItemDao.selectIndexItemByIndentId(indent.getIndentId());
+            indent.setIndentItems(indentItems);
+        }
         return new PageInfo<Indent>(Optional
-                .ofNullable(indentDao.getIndentBySearchBean(searchBean))
+                .ofNullable(indentBySearchBean)
                 .orElse(Collections.emptyList()));
     }
 

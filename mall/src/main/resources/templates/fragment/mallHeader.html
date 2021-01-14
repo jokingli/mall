@@ -3,16 +3,22 @@
 		<span style="color:#C40000;margin:0px" class="glyphicon glyphicon-home redColor"></span>
 		天猫首页
 	</a>
+<!--	<input type="hidden" id="userId" th:value="${session.userId}"/>-->
 	<input type="hidden" id="userId" value="1"/>
 	<span>喵，欢迎来天猫</span>
-	<a href="loginPage">请登录</a>
-	<a href="register">免费注册</a>
+	<span th:if="${session.userId} == null">
+		<a href="/mall/login">请登录</a>
+		<a href="/mall/register">免费注册</a>
+	</span>
+	<span th:if="${session.userId} != null">
+		<a href="javascript:void(0);" th:text="${session.userName}"></a>
+		<a href="/mall/logout">退出登录</a>
+	</span>
 
 	<span class="pull-right">
-		<a href="/mall/indent">我的订单</a>
+		<a href="/mall/indents">我的订单</a>
 		<a href="/mall/cart">
-			<span style="color:#C40000;margin:0px" class=" glyphicon glyphicon-shopping-cart redColor">
-			</span>购物车<strong name="cartCount">0</strong>件
+			<span style="color:#C40000;margin:0px" class=" glyphicon glyphicon-shopping-cart redColor"></span>购物车
 		</a>
 	</span>
 </nav>
