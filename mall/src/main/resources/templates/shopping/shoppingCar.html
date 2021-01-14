@@ -3,73 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
-<button onclick="deleteAll()">批量删除</button>
-<button onclick="clearAll()">清空购物车</button>
+<div class="cartFoot">
 
-<table>
-    <thead>
-    <tr>
-        <th><input type="checkbox" id="checks" name="selectAllItem">全选</th>
-        <th>产品名</th>
-        <th>产品价格</th>
-        <th>库存</th>
-        <th>折扣</th>
-        <th>购买数量</th>
-        <th colspan="2">操作</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="product:${productList}">
-        <input type="hidden" id="productId" th:value="${product.productId}">
-        <td><input id="check" type="checkbox" name="check" th:productId="${product.productId}"
-                   th:discount="${product.discount}" th:productPrice="${product.productPrice}" onclick="checkone()">
-        </td>
-        <td th:text="${product.productName}"></td>
-        <td th:text="${product.productPrice}"></td>
-        <td th:text="${product.stock}"></td>
-        <td th:text="${product.discount}"></td>
-        <td><span>
-         <button th:productId="${product.productId}" th:stock="${product.stock}" th:discount="${product.discount}"
-                 th:productPrice="${product.productPrice}" onclick="add(this)">+</button>
+    <div class="pull-left">
+        <button onclick="deleteAll()" style="background-color: #ac2925">批量删除</button>
+        <button onclick="clearAll()" style="background-color: #ac2925">清空购物车</button>
+    </div>
+</div>
 
-        <input type="text" th:value="${product.number}"
-               th:productId="${product.productId}"
-               th:stock="${product.stock}"
-               name="num" style="width: 30px" class='orderItemNumberSetting'
-               onkeyup="changeNum(this)"/>
+<div class="cartProductList">
+    <table class="cartProductTable">
+        <thead>
+        <tr>
+            <th class="selectAndImage">
+                <input type="checkbox" id="checks" name="selectAllItem">全选
+            </th>
+            <th>产品名</th>
+            <th>产品价格</th>
+            <th>库存</th>
+            <th>折扣</th>
+            <th>购买数量</th>
+            <th>操作</th>
+        </tr>
+        </thead>
 
+        <tbody>
+        </tbody>
+    </table>
+</div>
 
-         <button th:productId="${product.productId}" th:stock="${product.stock}" th:discount="${product.discount}"
-                 th:productPrice="${product.productPrice}" onclick="sub(this)">-</button>
-        </span></td>
-        <td>购买</td>
-        <td>
-            <button th:productId="${product.productId}" onclick="deleteOne(this)">删除</button>
-        </td>
-    </tr>
-    </tbody>
-
-</table>
-<button>全部购买</button>
-<button onclick="deleteAll()">批量删除</button>
-总数<span id="total">0</span>
-合计￥<span id="summation">0.0</span>
-
-
+<div class="cartFoot">
+    <div class="pull-right">
+        <span>1</span>
+        <span>总数:</span>
+        <span id="total">0</span>件
+        <span>合计 (不含运费): </span>
+        ￥<span class="cartSumPrice" id="summation">0.00</span>
+        <button class="createOrderButton" disabled="disabled" onclick="buy()" style="background-color: #ac2925">购买
+        </button>
+    </div>
+</div>
 </body>
 <script src="/plugin/jquery/dist/jquery.js"></script>
 <script>
 
     $(function () {
-        // 绑定结算事件
-        $(".createOrderButton").bind("click", function () {
-            settlementBtnEvent();
-        });
+        // 初始化购物车页面
+        initCart();
     });
 
+    //初始化购物车信息
+    function initCart() {
+        var userId = 1;
 
+        $.ajax({
+            url: "/shoppingCar/show/" + userId,
+            type: "get",
+            contentType: "application/json",
+            //data : JSON.stringify(searchVo),
+            success: function (data) {
+                // 生成购物车列表
+                $(".cartProductTable tbody").html("");
+                var temp = "";
+                $.each(data, function (i, product) {
+                    temp += "<tr productId='" + product.productId + "' stock='" + product.stock + "' class='cartProductItemTR'>";
+                    temp += "<input type='hidden' id='productId' value='" + product.productId + "'> ";
+                    temp += "<td>";
+                    temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "' productPrice='" + product.productPrice + "'  discount='" + product.discount +
+                        "' onclick='checkone()'  />";temp += "</td>";
+                    temp += "<td>";
+                    temp += product.productName;
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += product.productPrice;
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += product.stock;
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += product.discount;
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += "<button productId= '" + product.productId + "' stock='" + product.stock + "' discount='" + product.discount + "' productPrice='" + product.productPrice + "'  onclick='add(this)'> +";
+                    temp += "</button>";
+                    temp += "<input type='text' value='" + product.number + "'  productId='" + product.productId + "' stock='" + product.stock + "'  name='num' style='width: 30px' class='orderItemNumberSetting'onkeyup='changeNum(this)' />";
+                    temp += "<button productId= '" + product.productId + "' stock='" + product.stock + "' discount='" + product.discount + "' productPrice='" + product.productPrice + "'  onclick='sub(this)'>-";
+                    temp += "</button>";
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += "<button productId='" + product.productId + "' onclick='deleteOne(this)' >删除</button>";
+                    temp += "</td>";
+                    temp += "<td>";
+                    temp += "移至收藏夹"
+                    temp += "</td>";
+                    temp += "</tr>";
+                });
+                $(".cartProductTable tbody").append(temp);
+
+                calcCartSumPriceAndNumber();
+            },
+            error: function () {
+                layer.msg("初始化页面错误");
+            }
+        });
+    }
 
     /**
      * 全选或全不选
@@ -111,7 +151,6 @@
 
             sum += new Number(productPrice * discount * num);
             totalNumber += new Number(num);
-            console.log(sum + "--" + totalNumber);
 
         });
         //购物车总数和总价
@@ -130,7 +169,7 @@
             ids.push($(element).attr("productId"));
         });
 
-        if (window.confirm("您确认要删除选中的内容吗？")) {
+        if (window.confirm("您确认要删除选中的产品吗？")) {
             $.ajax({
                 url: "/shoppingCar/delete",
                 type: "delete",
@@ -209,7 +248,9 @@
         var pid = $(numberPlus).attr("productId");
         var stock = $(numberPlus).attr("stock");
         var number = $(".orderItemNumberSetting[productId=" + pid + "]").val();
+
         number++;
+
         if (number > stock) {
             number = stock;
         }
@@ -240,34 +281,43 @@
         var pid = $(putNum).attr("productId");
         var stock = $(putNum).attr("stock");
         var number = $(".orderItemNumberSetting[productId=" + pid + "]").val();
-        alert(pid)
+
+        number = parseInt(number);
+        if (isNaN(number)) {
+            number = 1;
+        }
+        if (number <= 0) {
+            number = 1;
+        }
+
         if (number > stock) {
             number = stock;
+
         }
+
         $(".orderItemNumberSetting[productId=" + pid + "]").val(number);
+
         calcCartSumPriceAndNumber();
     }
-        // var shoppingCar = {};
-        // shoppingCar.number = $("input[name=num]").val();
-        // shoppingCar.productId = $(changeNum).attr("productId");
-        //
-        // $.ajax({
-        //     url: "/shoppingCar/change",
-        //     type: "put",
-        //     contentType: "application/json",
-        //     //dataType: "json",
-        //     data: JSON.stringify(shoppingCar),
-        //     success: function (data) {
-        //         if (data.state == 200) {
-        //             alert(data.message);
-        //             window.location.reload();
-        //         } else {
-        //             alert(data.message);
-        //         }
-        //     }
-        // })
+
+    /**
+     * 购买产品
+     */
+    function buy() {
+        var products=[];
 
 
+        $("[name=check]:checked").each(function () {
+            var product={};
+            product.productId = $(this).attr("productId");
 
+            product.num = $(".orderItemNumberSetting[productId=" + productId + "]").val();
+
+
+            products.push(product);
+        });
+        alert(products);
+
+    }
 </script>
 </html>

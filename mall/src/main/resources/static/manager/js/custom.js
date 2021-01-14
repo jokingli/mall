@@ -172,13 +172,13 @@ $(document).ready(function () {
 });
 // /Panel toolbox
 
-// Tooltip
+//Tooltip
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip({
         container: 'body'
     });
 });
-// /Tooltip
+//Tooltip
 
 // Progressbar
 $(document).ready(function () {

@@ -1,0 +1,230 @@
+<!-- jquery page -->
+<link th:href="${'/plugin/jquery.page/paging.css'}" rel="stylesheet" />
+<script th:src="${'/plugin/jquery.page/paging.js'}" type="text/javascript"></script>
+
+<div class="boughtDiv">
+    <div class="orderType">
+        <div state="" class="statusDiv selectedOrderType"><a href="javascript:void(0);">所有订单</a></div>
+        <div state="待付款" class="statusDiv"><a href="javascript:void(0);">待付款</a></div>
+        <div state="待发货" class="statusDiv"><a href="javascript:void(0);">待发货</a></div>
+        <div state="待收货" class="statusDiv"><a href="javascript:void(0);">待收货</a></div>
+        <div state="待评价" class="statusDiv"><a href="javascript:void(0);" class="noRightborder">待评价</a></div>
+        <div class="orderTypeLastOne"><a class="noRightborder">&nbsp;</a></div>
+    </div>
+
+    <div style="clear:both"></div>
+
+    <div class="orderListTitle">
+        <table class="orderListTitleTable">
+            <tr>
+                <td>宝贝</td>
+                <td width="100px">单价</td>
+                <td width="100px">数量</td>
+                <td width="120px">实付款</td>
+                <td width="100px">交易操作</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="orderListItem">
+    </div>
+    <div id="page"></div>
+</div>
+<script type="text/javascript">
+    $(function() {
+
+        initOrders();
+
+        $(".statusDiv").bind("click", function() {
+            orderTypeEvent(this);
+        });
+
+    });
+
+    // 点击订单状态事件
+    function orderTypeEvent(orderTypeDiv) {
+        $(".statusDiv").removeClass("selectedOrderType");
+        $(orderTypeDiv).addClass("selectedOrderType");
+        keyWord = $(orderTypeDiv).attr("status");
+        currentPage = 1;
+        initOrders();
+    }
+
+    // 初始化订单列表
+    var currentPage = 1;
+    var pageSize = 5;
+    var pageCount = 1;
+    var keyWord = "";
+    function initOrders() {
+        var searchBean = {};
+        searchBean.currentPage = currentPage;
+        searchBean.pageSize = pageSize;
+        searchBean.orderBy = "create_date";
+        searchBean.sort = "desc";
+        searchBean.keyWord = keyWord;
+
+        $.ajax({
+            url : "/api/indents",
+            type : "post",
+            contentType: "application/json",
+            data : JSON.stringify(searchBean),
+            success : function (data) {
+                currentPage = data.pageNum;
+                pageCount = data.pages;
+
+                var indents = "";
+                $.each(data.list, function(i, indent){
+                    indents += "<table class='orderListItemTable' indentStates='' indentId='" + indent.indentId + "'>";
+                    indents += "<tr class='orderListItemFirstTR'>";
+                    indents += "<td colspan='2'>";
+                    indents += "<b>" + indent.createTime + "</b> ";
+                    indents += "<a href='/mall/indent/" + indent.indentCode + "'><span>订单号: " +
+                        indent.indentCode + "</span></a>";
+                    indents += "</td>";
+                    indents += "<td colspan='2'><img width='13px' src='/img/site/orderItemTmall.png'>天猫商场</td>";
+                    indents += "<td colspan='1'>";
+                    indents += "<a class='wangwanglink' href='javascript:void(0);'>";
+                    indents += "<div class='orderItemWangWangGif'></div>";
+                    indents += "</a>";
+                    indents += "</td>";
+                    indents += "<td class='orderItemDeleteTD'>";
+                    indents += "<a class='deleteOrderLink' indentId='" + indent.indentId + "' href='javascript:void(0);'>";
+                    indents += "<span class='orderListItemDelete glyphicon glyphicon-trash'></span>";
+                    indents += "</a>";
+                    indents += "</td>";
+                    indents += "</tr>";
+                    $.each(indent.indentItems, function(i, indentItem) {
+                        indents += "<tr class='orderItemProductInfoPartTR'>";
+                        indents += "<td width='200px' class='orderItemProductInfoPartTD'>";
+                        indents += "<a href='/mall/product/" + indentItem.productId +
+                            "'><img width='80' height='80' src='" + indentItem.pictureUrl + "'></a>";
+                        indents += "</td>";
+                        indents += "<td class='orderItemProductInfoPartTD'>";
+                        indents += "<div class='orderListItemProductLinkOutDiv'>";
+                        indents += "<a href='/mall/product/" + indentItem.productId + "'>" + indentItem.productName + "</a>";
+                        indents += "<div class='orderListItemProductLinkInnerDiv'>";
+                        indents += "<img src='/img/site/creditcard.png' title='支持信用卡支付'>";
+                        indents += "<img src='/img/site/7day.png' title='消费者保障服务,承诺7天退货'>";
+                        indents += "<img src='/img/site/promise.png' title='消费者保障服务,承诺如实描述'>";
+                        indents += "</div>";
+                        indents += "</div>";
+                        indents += "</td>";
+                        indents += "<td class='orderItemProductInfoPartTD' width='100px'>";
+                        indents += "<div class='orderListItemProductOriginalPrice'>￥" + indentItem.productPrice + "</div>";
+                        indents += "<div class='orderListItemProductPrice'>￥" + indentItem.productPrice + "</div>";
+                        indents += "</td>";
+                        indents += "<td class='orderListItemNumberTD orderItemProductInfoPartTD' width='100px'>";
+                        indents += "<span class='orderListItemNumber'>" + indentItem.productNum + "</span>";
+                        indents += "</td>";
+                        if (indent.state == 3) {
+                            if (i == 0) {
+                                indents += "<td rowspan='" + indent.indentItem.length +
+                                    "' width='120px' class='orderListItemProductRealPriceTD orderItemOrderInfoPartTD'>";
+                                indents += "<div class='orderListItemProductRealPrice'>￥" + indent.indentPrice + "</div>";
+                                indents += "<div class='orderListItemPriceWithTransport'>(含运费：￥" + indent.postPrice + ")</div>";
+                                indents += "</td>";
+                            }
+                            indents += "<td class='orderListItemButtonTD orderItemOrderInfoPartTD' width='100px'>";
+                            indents += "<a class='orderOperation' indentState='" + indent.state +
+                                "' indentCode='" + indent.indentCode + "' productId='" + indentItem.productId +
+                                "' href='javascript:void(0);'>";
+                            indents += "<button class='orderListItemConfirm'>评论</button>";
+                            indents += "</a>";
+                            indents += "</td>";
+                        } else {
+                            if (i == 0) {
+                                indents += "<td rowspan='" + indent.indentItems.length +
+                                    "' width='120px' class='orderListItemProductRealPriceTD orderItemOrderInfoPartTD'>";
+                                indents += "<div class='orderListItemProductRealPrice'>￥" + indent.indentPrice + "</div>";
+                                indents += "<div class='orderListItemPriceWithTransport'>(含运费：￥" + indent.postPrice + ")</div>";
+                                indents += "</td>";
+                                indents += "<td rowspan='" + indent.indentItems.length +
+                                    "' class='orderListItemButtonTD orderItemOrderInfoPartTD' width='100px'>";
+                                var temp = "";
+                                if (indent.state == 1) {
+                                    temp = "付款";
+                                } else if (indent.state == 2 || indent.state == 3) {
+                                    temp = "收货";
+                                } else if (indent.state == 4) {
+                                    temp = "评论";
+                                } else {
+                                    temp = "完成";
+                                }
+                                indents += "<a class='orderOperation' indentState='" + indent.state +
+                                    "' indentCode='" + indent.indentCode + "' productId='" + indentItem.productId +
+                                    "' href='javascript:void(0);'>";
+                                indents += "<button class='orderListItemConfirm'>" + temp + "</button>";
+                                indents += "</a>";
+                                indents += "</td>";
+                            }
+                        }
+                        indents += "</tr>";
+                    });
+                });
+                $("[class=orderListItem]").html(indents);
+
+                var page =new Paging('page', {
+                    nowPage: currentPage, // 当前页码
+                    pageNum: pageCount, // 总页码
+                    buttonNum: 5, //要展示的页码数量
+                    canJump: 1, // 是否能跳转: 0=不显示（默认），1=显示
+                    showOne: 1, //只有一页时，是否显示: 0=不显示,1=显示（默认）
+                    callback: function (num) { //回调函数
+                        console.log(num);
+                        currentPage = num;
+                        initOrders();
+                    }
+                });
+
+                // 绑定订单删除事件
+                $(".deleteOrderLink").bind("click", function() {
+                    var indentId = $(this).attr("indentId");
+                    deleteOrder(indentId);
+                });
+
+                // 绑定订单操作按钮
+                $(".orderOperation").bind("click", function() {
+                    var productId = $(this).attr("productId");
+                    var orderStatus = $(this).attr("orderStatus");
+                    var orderCode = $(this).attr("orderCode");
+                    if (orderStatus == "待付款") {
+                        location.href = "/tmall/pay/" + orderCode;
+                    } else if (orderStatus == '待发货' || orderStatus == '待收货') {
+                        changeOrderStatus(orderCode, "待评价", "/tmall/orders");
+                    } else if (orderStatus == "待评价") {
+                        location.href = "/tmall/review/" + orderCode + "/" + productId;
+                    }
+                })
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        });
+    }
+
+    // 删除订单信息
+    function deleteOrder(orderId) {
+        bootbox.confirm("确认删除订单？", function(result) {
+            if(result) {
+                $.ajax({
+                    url : "/api/order/" + orderId,
+                    type : "delete",
+                    success : function (rs) {
+                        if (rs.status == 200) {
+                            currentPage = 1;
+                            pageSize = 5;
+                            keyWord = "";
+                            initOrders();
+                        } else {
+                            layer.msg(rs.message, {icon: 0});
+                        }
+                    },
+                    error : function (data) {
+                        layer.msg(data.responseText, {icon: 0});
+                    }
+                });
+            }
+        });
+    }
+
+</script>

@@ -24,7 +24,6 @@ public class UserLoginController {
     //进入商城登录页面
     @RequestMapping(value = "/login")
     public String login(ModelMap modelMap){
-        System.err.println("进入用户登录页面");
         modelMap.put("template","account/userLogin");
         return "managerIndexSimple";
     }
@@ -34,11 +33,6 @@ public class UserLoginController {
     @ResponseBody
     @RequestMapping(value = "/pwdLogin", consumes="application/json")
     public ResultEntity<User> pwdLogin(@RequestBody User user){
-        System.err.println("开始进行用户密码登录");
-        System.err.println(user.getUserName());
-        System.err.println(user.getPassword());
-        System.err.println(user);
-
         return userService.login(user);
     }
 
@@ -46,15 +40,13 @@ public class UserLoginController {
     @RequestMapping("/index")
     //登录成功跳转到主页面
     public String userIndex(ModelMap modelMap){
-        System.err.println("开始跳转用户主页面");
-        modelMap.put("template","account/userIndex");
+        modelMap.put("template","index");
         return "managerIndexSimple";
     }
 
     //进入商城用户注册页面
     @RequestMapping(value = "/register")
     public String register(ModelMap modelMap) {
-        System.err.println("进入用户密码注册页面");
         modelMap.put("template","account/userRegister");
         return "managerIndexSimple";
     }

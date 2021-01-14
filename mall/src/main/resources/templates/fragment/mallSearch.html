@@ -1,17 +1,16 @@
 
 <div>
-    <!-- <a href="/mall/index"><img id="simpleLogo" class="simpleLogo" src="/manager/images/simpleLogo.png"></a>-->
-
-    <div class="pull-right">
-        <input type="text" placeholder="衣服"  value="" name="searchInput">
-        <button class="searchButton" type="submit">搜天猫</button>
-    </div>
-    <div style="clear:both" ></div>
+	<a href="/mall/home"><img id="simpleLogo" class="simpleLogo" src="/img/site/simpleLogo.png"></a>
+	<div class="simpleSearchDiv pull-right">
+		<input type="text" placeholder="平衡车 原汁机"  value="" name="searchInput">
+		<button class="searchButton" type="submit">搜天猫</button>
+	</div>
+	<div style="clear:both"></div>
 </div>
 <script type="text/javascript">
-    $(function() {
-        $(".searchButton").bind("click", function() {
-            location.href = "/mall/searchResults?keyWord=" + $("[name=searchInput]").val();
-        });
-    });
+	$(function() {
+		$(".searchButton").bind("click", function() {
+			location.href = "/mall/searchResults?keyWord=" + $("[name=searchInput]").val();
+		});
+	});
 </script>

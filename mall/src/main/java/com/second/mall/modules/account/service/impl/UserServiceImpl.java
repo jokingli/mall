@@ -87,8 +87,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResultEntity<User> register(User user) {
-        System.err.println(user.getUserName());
-        System.err.println(user.getPassword());
         if (user.getUserName() == "" || user.getPassword() == "" ){
             return new ResultEntity<User>(ResultEntity.ResultStatus.FAILED.status, "账号名或密码不能为空！");
         }
@@ -102,27 +100,10 @@ public class UserServiceImpl implements UserService {
         user.setCreateTime(LocalDateTime.now());
         user.setState(1);
         user.setDel(1);
+        //将注册的账号信息放入数据库
+        userDao.insertUser(user);
 
-        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "注册账号成功，返回登录页！");
-
-////         管理员编辑用户信息时，只修改用户角色
-//        if (user.getUserId() > 0) {
-////            return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status, "注册失败", user);
-////			userDao.updateUser(user);
-//            userRoleDao.deletUserRoleByUserId(user.getUserId());
-//        } else {
-//            userDao.insertUser(user);
-//            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status, "注册成功", user);
-//        }
-//
-//        List<Role> roles = user.getRoleList();
-//        if (roles != null && roles.size() > 0) {
-//            for (Role role : roles) {
-//                userRoleDao.addUserRole(user.getUserId(), role.getRoleId());
-//            }
-//        }
-//        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "注册账号成功，返回登录页！",user);
-
+        return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "注册账号成功，返回登录页！",user);
     }
 
 

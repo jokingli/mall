@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/mall")
 public class MallController {
 
-    @RequestMapping(value = "/user")
-    public String user(ModelMap modelMap){
-        modelMap.put("template","mall/userIndex");
+    @RequestMapping(value = "/indents")
+    public String indents(ModelMap modelMap){
+        modelMap.put("template","mall/indents");
         return "mallIndex";
     }
 
