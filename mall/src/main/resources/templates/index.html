@@ -13,153 +13,147 @@
 
 	<div style="position: relative">
 		<div class="categoryMenu">
-			<!-- <div cid="11111" class="eachCategory">
-				<span class="glyphicon glyphicon-link"></span>
-				<a href="forecategory?cid=${c.id}">
-					11111
-				</a>
-			</div> -->
+
 		</div>
 	</div>
-
-
 	<div class="carouselBackgroundDiv"></div>
 </div>
 
-<div class="row">
+<div class="homepageCategoryProducts">
+	<div class="eachHomepageCategoryProducts"></div>
+	<div id="page"></div>
+	<img id="endpng" class="endpng" src="/tmall/img/site/end.png">
+</div>
+
+<!--<div class="row">
 	<div class="col-md-12">
 		<div class="x_panel">
 			<div class="x_content">
 				<div class="row" name="products" href="product">
+
+
 				</div>
 			</div>
 			<div id="page">
+
 			</div>
 		</div>
 	</div>
-</div>
+</div>-->
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        $(function() {
-            initProducts();
-			initCategories();
-			initHomeEvent();
+	$(function() {
+		initProducts();
+		initCategories();
+		initHomeEvent();
 
-        });
-
-				// 初始化 home 页面事件
-				function initHomeEvent() {
-					$("div.categoryMenu").hide();
-					$("[class='head']").mouseleave(function(){
-						$("div.categoryMenu").hide();
-					});
-					$("[class='head']").mouseenter(function(){
-						$("div.categoryMenu").show();
-					});
-					$("[class='categoryMenu']").mouseleave(function(){
-						$("div.categoryMenu").hide();
-					});
-					$("[class='categoryMenu']").mouseenter(function(){
-						$("div.categoryMenu").show();
-					});
-				}
-
-				// 初始化产品种类
-function initCategories() {
-	$.ajax({
-		url : "/api/categories",
-		type : "get",
-		contentType: "application/json",
-		//data : JSON.stringify(category),
-		success : function (data) {
-			var categoryMenu = $("div.categoryMenu");
-			var temp = "";
-			$.each(data, function(i, item){
-				temp += "<div categoryId='" + item.categoryId + "' class='eachCategory'>";
-				temp += "<span class='glyphicon glyphicon-link'></span>";
-				temp += "<a href='javascript:void(0);' onclick='initProductsByCategoryId(" + item.categoryId + ", \"" + item.categoryName + "\")'>";
-				temp += item.categoryName;
-				temp += "</a></div>";
-			});
-			categoryMenu.html(temp);
-
-			$(".eachCategory").bind("click", function() {
-				location.href = "/mall/category/" + $(this).attr("categoryId");
-			});
-		},
-		error : function (data) {
-			layer.msg(data.responseText, {icon: 0});
-		}
 	});
-				}
+
+	// 初始化 home 页面事件
+	function initHomeEvent() {
+		$("div.categoryMenu").hide();
+		$("[class='head']").mouseleave(function(){
+			$("div.categoryMenu").hide();
+		});
+		$("[class='head']").mouseenter(function(){
+			$("div.categoryMenu").show();
+		});
+		$("[class='categoryMenu']").mouseleave(function(){
+			$("div.categoryMenu").hide();
+		});
+		$("[class='categoryMenu']").mouseenter(function(){
+			$("div.categoryMenu").show();
+		});
+	}
+
+	// 初始化产品种类
+	function initCategories() {
+		$.ajax({
+			url : "/api/categories",
+			type : "get",
+			contentType: "application/json",
+			//data : JSON.stringify(category),
+			success : function (data) {
+				var categoryMenu = $("div.categoryMenu");
+				var temp = "";
+				$.each(data, function(i, item){
+					temp += "<div categoryId='" + item.categoryId + "' class='eachCategory'>";
+					temp += "<span class='glyphicon glyphicon-link'></span>";
+					temp += "<a href='javascript:void(0);' onclick='initProductsByCategoryId(" + item.categoryId + ", \"" + item.categoryName + "\")'>";
+					temp += item.categoryName;
+					temp += "</a></div>";
+				});
+				categoryMenu.html(temp);
+
+				$(".eachCategory").bind("click", function() {
+					location.href = "/mall/category/" + $(this).attr("categoryId");
+				});
+			},
+			error : function (data) {
+				layer.msg(data.responseText, {icon: 0});
+			}
+		});
+	}
 
 
-        // 分页显示产品集合
-        var currentPage = 1;
-        var pageSize = 10;
-        var pageCount = 1;
-        function initProducts() {
-            var searchVo = {};
-            searchVo.currentPage = currentPage;
-            searchVo.pageSize = pageSize;
-            searchVo.orderBy = "sale_count";
-            searchVo.sort = "desc";
+	// 分页显示产品集合
+	var currentPage = 1;
+	var pageSize = 10;
+	var pageCount = 1;
+	function initProducts() {
+		var searchVo = {};
+		searchVo.currentPage = currentPage;
+		searchVo.pageSize = pageSize;
+		searchVo.orderBy = "sale_count";
+		searchVo.sort = "desc";
 
-            $.ajax({
-                url : "/mall/products",
-                type : "post",
-                contentType: "application/json",
-                data : JSON.stringify(searchVo),
-                success : function (data) {
-                    currentPage = data.pageNum;
-                    pageCount = data.pages;
+		$.ajax({
+			url : "/mall/products",
+			type : "post",
+			contentType: "application/json",
+			data : JSON.stringify(searchVo),
+			success : function (data) {
+				currentPage = data.pageNum;
+				pageCount = data.pages;
 
-                    var products = "";
-                    $.each(data.list, function(i, item){
-                        products += "<div class=\"col-md-55\">";
-                        products += "<div class=\"thumbnail\">";
-                        products += "<div class=\"image view view-first\">";
-                        products += "<img style=\"width: 100%; display: block;\"  src='" + item.pictureUrl + "'  alt=\"image\" />";
-                        products += "<div class=\"mask\">";
-                        products += "<p>你的美丽远重衣开始</p>";
-                        products += "<div class=\"tools tools-bottom\">";
+				var products = "";
+				$.each(data.list, function(i, item){
+					products += "<div class='productItem'>";
+					products += "<a href='/mall/product/" + item.productId + "'>";
+					products += "<img width='100px' src='" + item.pictureUrl + "'>";
+					products += "</a>";
+					products += "<a class='productItemDescLink' href='/mall/product/" + item.productId + "'>";
+					products += "<span class='productItemDesc'>商品名: " + item.productName + "</span>";
+					products += "</a>";
+					products += "<span class='productPrice'>价格：￥" + item.productPrice + "</span>";
+					products += "</div>";
 
-                        products += "</div>";
-                        products += "</div>";
-                        products += "</div>";
-                        products += "<div class=\"caption\">";
-                        products += "<p>商品名：<a href='/mall/product/" + item.productId + "'>" + item.productName + "</a></p>";
-                        products += "<p>价   格：¥<a href='/mall/product/" + item.productId + "'>" + item.productPrice + "</a></p>";
-                        products += "</div>";
-                        products += "</div>";
-                        products += "</div>";
-                        products += "</div>";
 
-                    });
+				});
+				products += "<div style='clear: both'></div>";
+				$("[class=eachHomepageCategoryProducts]").html(products);
 
-                    $("[name=products]").html(products);
-
-                    var page =new Paging('page', {
-                        nowPage: currentPage, // 当前页码
-                        pageNum: pageCount, // 总页码
-                        buttonNum: 5, //要展示的页码数量
-                        canJump: 1, // 是否能跳转: 0=不显示（默认），1=显示
-                        showOne: 1, //只有一页时，是否显示: 0=不显示,1=显示（默认）
-                        callback: function (num) { //回调函数
-                            console.log(num);
-                            currentPage = num;
-                            initProducts();
-                        }
-                    })
-                },
-                error : function (data) {
-                    layer.msg(data.responseText, {icon: 0});
-                }
-            });
-        }
-    </script>
+				var page =new Paging('page', {
+					nowPage: currentPage, // 当前页码
+					pageNum: pageCount, // 总页码
+					buttonNum: 5, //要展示的页码数量
+					canJump: 1, // 是否能跳转: 0=不显示（默认），1=显示
+					showOne: 1, //只有一页时，是否显示: 0=不显示,1=显示（默认）
+					callback: function (num) { //回调函数
+						console.log(num);
+						currentPage = num;
+						initProducts();
+					}
+				})
+			},
+			error : function (data) {
+				layer.msg(data.responseText, {icon: 0});
+			}
+		});
+	}
+</script>
 
 
 
