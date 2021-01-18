@@ -7,6 +7,10 @@ import com.second.mall.modules.shopping.service.IndentItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 /**
  * @ClassName IndentItemServiceImpl
  * @Author icy
@@ -23,4 +27,12 @@ public class IndentItemServiceImpl implements IndentItemService {
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "状态修改成功",indentItemDao.selectIndexItemByIndentItemId(IndentItemId));
     }
+
+    @Override
+    public List<IndentItem> selectNoneCommentItems(String indentCode) {
+        return Optional
+                .ofNullable(indentItemDao.selectNoneCommentItems(indentCode))
+                .orElse(Collections.emptyList());
+    }
+
 }

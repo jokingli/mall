@@ -80,5 +80,10 @@ public class ProductController {
         return "mallIndex";
     }
 
+    @GetMapping("/product/{productId}")
+    @ResponseBody
+    public Product selectProductById(@PathVariable int productId, ModelMap modelMap) {
+        return productService.getProductByProductId(productId);
+    }
 
 }

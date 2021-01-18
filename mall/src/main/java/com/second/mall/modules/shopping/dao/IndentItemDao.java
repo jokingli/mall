@@ -63,4 +63,15 @@ public interface IndentItemDao {
 
     @Update("update indent_item set state = #{state} where indent_item_id = #{indentItemId}")
     void updateIndexItemState(@Param("indentItemId")int indentItemId,@Param("state")int state);
+
+    //通过indentId删除订单列
+    @Delete("DELETE FROM `indent_item` WHERE indent_id = #{indentId}")
+    void deleteIndentItemByIndentId(int indentId);
+
+    @Select("SELECT indent_item.*, indent.indent_code \n" +
+            "FROM indent_item \n" +
+            "INNER JOIN indent\n" +
+            "ON indent_item.indent_id = indent.indent_id\n" +
+            "WHERE indent.indent_code =  #{indentCode} and indent_item.state = 0")
+    List<IndentItem> selectNoneCommentItems(String indentCode);
 }

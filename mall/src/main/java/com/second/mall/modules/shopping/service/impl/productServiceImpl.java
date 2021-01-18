@@ -58,6 +58,6 @@ public class productServiceImpl implements ProductService
     }
 
     private Product initProduct(Product product) {
-        return null;
+        return product;
     }
 }

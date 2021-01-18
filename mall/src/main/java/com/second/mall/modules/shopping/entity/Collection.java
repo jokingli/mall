@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 public class Collection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int collectionId;
-    private String userId;
-    private String productId;
+    private Integer collectionId;
+    private Integer userId;
+    private Integer productId;
     private LocalDateTime createTime;
 }

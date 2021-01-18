@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @ClassName IndentItemController
  * @Author icy
@@ -28,5 +30,11 @@ public class IndentItemController {
     @GetMapping(value = "/indentItem/{IndentItemId}")
     private ResultEntity<IndentItem> selectIndentByCode(@PathVariable int IndentItemId){
         return indentItemService.selectIndentItemById(IndentItemId);
+    }
+
+
+    @GetMapping(value = "/indentItem/noneCommentItems/{indentCode}")
+    private List<IndentItem> selectNoneCommentItems(@PathVariable String indentCode){
+        return indentItemService.selectNoneCommentItems(indentCode);
     }
 }

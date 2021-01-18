@@ -114,7 +114,7 @@
                     }
                     if (item.state == 0){
                         temp += "<td class='comment'>" +
-                            "<a href=\"/mall/comment/"+item.indentItemId+"\">" +
+                            "<a href=\"/mall/comment/"+rs.object.indentCode+'/'+item.productId+'/'+item.indentItemId+"\">" +
                             "<button class='confirmPayButton confirmPayBtn'>评论</button>" +
                             "</a></td>"
                     }else {

@@ -37,7 +37,7 @@ public interface IndentDao {
 
     //真删除订单
     @Delete("DELETE FROM `indent` WHERE indent_id = #{indentId}")
-    void deleteIndexById(int indentId);
+    void deleteIndentById(int indentId);
 
     //通过订单对象修改订单
     @Update("update indent set state = #{state}, pay_time = #{payTime} where indent_code = #{indentCode}")
@@ -63,7 +63,7 @@ public interface IndentDao {
             "ON indent.address_id = address.address_id "
             + "<where> "
             + "<if test='keyWord != \"\" and keyWord != null'>"
-            + " and (indent_code like '%${keyWord}%' or address.linkman like '%${keyWord}%' or address.address like '%${keyWord}%') "
+            + " and (indent_code = '%${keyWord}%' or address.linkman like '%${keyWord}%' or address.address like '%${keyWord}%' or indent.state like '%${keyWord}%') "
             + "</if>"
             + "</where>"
             + "<choose>"
