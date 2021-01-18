@@ -71,10 +71,10 @@
 				var products = "";
 				$.each(data.list, function(i, item){
 					products += "<div class='productItem'>";
-					products += "<a href='/mall/product/" + item.productId + "'>";
+					products += "<a href='/mall/product/" + item.categoryId + "'>";
 					products += "<img width='100px' src='" + item.pictureUrl + "'>";
 					products += "</a>";
-					products += "<a class='productItemDescLink' href='/mall/product/" + item.productId + "'>";
+					products += "<a class='productItemDescLink' href='/mall/product/" + item.categoryId + "'>";
 					products += "<span class='productItemDesc'>商品名: " + item.productName + "</span>";
 					products += "</a>";
 					products += "<span class='productPrice'>价格：￥" + item.productPrice + "</span>";

@@ -59,6 +59,11 @@ public class productServiceImpl implements ProductService
         return initProduct(product);
     }
 
+    @Override
+    public List<Product> getProductsByCategoryId(int categoryId) {
+        return Optional.ofNullable(productDao.getProductsByCategoryId(categoryId)).orElse(Collections.emptyList());
+    }
+
     private Product initProduct(Product product) {
         return product;
     }

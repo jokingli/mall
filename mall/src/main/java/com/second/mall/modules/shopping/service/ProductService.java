@@ -14,6 +14,8 @@ public interface ProductService {
 
     Product getProductByProductId(int productId);
 
+    List<Product> getProductsByCategoryId(int categoryId);
+
     PageInfo<Product> getProductsByProductSearchVo(ProductSearchVo productSearchVo);
 
 

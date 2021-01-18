@@ -30,6 +30,10 @@ public interface ProductDao {
     @Select("select * from product where product_id = #{productId}")
     Product getProductById(int productId);
 
+    @Select("select * from product p left join category c on p.category_id = c.id "
+            + "where category_id = #{categoryId} order by sale_count desc")
+    List<Product> getProductsByCategoryId(int categoryId);
+
     @Select("<script>" +
             "select *, c.name as categoryName from product p left join category c on p.category_id = c.category_id"
             + "<where> "
@@ -50,7 +54,7 @@ public interface ProductDao {
 
     @Select("<script>" +
             "select * from product p left join category c on p.category_id = c.category_id"
-            + "<where> "
+            + "<where> p.category_id = #{categoryId} "
             + "<if test='keyWord != \"\" and keyWord != null'>"
             + " and (p.product_name like '%${keyWord}%') "
             + "</if>"

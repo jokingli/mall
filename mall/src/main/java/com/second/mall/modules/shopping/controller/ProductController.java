@@ -62,6 +62,7 @@ public class ProductController {
     @GetMapping("/searchResults")
     public String searchResultsPage(@RequestParam String keyWord, ModelMap modelMap) {
         modelMap.put("keyWord", keyWord);
+
         return "mallIndex";
     }
 
@@ -75,15 +76,14 @@ public class ProductController {
 
     @RequestMapping("/product/{productId}")
     public String getProductById(@PathVariable int productId, ModelMap modelMap) {
-        productService.getProductByProductId(productId);
         modelMap.addAttribute("productId", productId);
         modelMap.addAttribute("template", "mall/product");
         return "mallIndex";
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping(value ="/product/{productId}", consumes = "application/json")
     @ResponseBody
-    public Product selectProductById(@PathVariable int productId, ModelMap modelMap) {
+    public Product selectProductById(@PathVariable int productId) {
         return productService.getProductByProductId(productId);
     }
 
