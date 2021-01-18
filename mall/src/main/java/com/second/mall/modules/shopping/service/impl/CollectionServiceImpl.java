@@ -35,7 +35,7 @@ public class CollectionServiceImpl implements CollectionService {
 
         }
 
-        return productDao.selectCollectionByProductIdList(productIdList);
+        return productDao.selectProductByProductIdlist(productIdList);
 
     }
 

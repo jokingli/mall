@@ -47,4 +47,22 @@ public interface ProductDao {
             + "</choose>"
             + "</script>")
     List<Product> getProductBySearchVo(ProductSearchVo productSearchVo);
+
+    @Select("<script>" +
+            "select * from product p left join category c on p.category_id = c.category_id"
+            + "<where> "
+            + "<if test='keyWord != \"\" and keyWord != null'>"
+            + " and (p.product_name like '%${keyWord}%') "
+            + "</if>"
+            + "</where>"
+            + "<choose>"
+            + "<when test='orderBy != \"\" and orderBy != null'>"
+            + " order by p.${orderBy} ${sort}"
+            + "</when>"
+            + "<otherwise>"
+            + " order by p.product_id desc"
+            + "</otherwise>"
+            + "</choose>"
+            + "</script>")
+    List<Product> getProductsByProductSearchVo(ProductSearchVo productSearchVo);
 }

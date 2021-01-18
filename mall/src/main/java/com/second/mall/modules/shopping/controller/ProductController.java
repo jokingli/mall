@@ -53,6 +53,7 @@ public class ProductController {
 
 
     @PostMapping(value = "/{categoryId}/products", consumes = "application/json")
+    @ResponseBody
     public PageInfo<Product> getProductsByProductSearchVo(@RequestBody ProductSearchVo productSearchVo) {
         return productService.getProductsByProductSearchVo(productSearchVo);
     }

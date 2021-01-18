@@ -16,7 +16,7 @@ public class SearchBean {
     private int currentPage;
     private int pageSize;
     private String keyWord;
-    private String order;
+    private String orderBy;
     private String direction;
 
     public void initSearchBean() {
@@ -54,11 +54,11 @@ public class SearchBean {
     }
 
     public String getOrder() {
-        return order;
+        return orderBy;
     }
 
     public void setOrder(String order) {
-        this.order = order;
+        this.orderBy = orderBy;
     }
 
     public String getDirection() {

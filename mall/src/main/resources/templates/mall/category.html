@@ -25,7 +25,7 @@
 
 	// 初始化页面分页变量
 	var currentPage = 1;
-	var pageSize = 5;
+	var pageSize = 4;
 	var pageCount = 1;
 	var order = "id";
 	var direction = "asc";
@@ -70,30 +70,14 @@
 
 				var products = "";
 				$.each(data.list, function(i, item){
-					products += "<div class='productUnit'>";
-					products += "<div class='productUnitFrame'>";
+					products += "<div class='productItem'>";
 					products += "<a href='/mall/product/" + item.productId + "'>";
-					var productUrl = "";
-					if (item.middleImages.length > 0) {
-						productUrl = item.middleImages[0].src;
-					}
-					products += "<img class='productImage' src='" + productUrl + "'>";
+					products += "<img width='100px' src='" + item.pictureUrl + "'>";
 					products += "</a>";
-					products += "<span class='productPrice'>¥" + item.productPrice + "</span>";
-					products += "<a class='productLink' href='/mall/product/" + item.productId + "'>" + item.productName + "</a>";
-					products += "<a class='tmallLink' href='javascript:void(0);'>" + item.seller + "</a>";
-					products += "<div class='show1 productInfo'>";
-					products += "<span class='monthDeal'>成交 <span class='productDealNumber'>" +
-							item.saleCount + "</span>笔</span>";
-					products += "<span class='productReview'>评价<span class='productReviewNumber'>" +
-							item.reviewCount + "</span></span>";
-					products += "<span class='wangwang'>";
-					products += "<a class='wangwanglink' href='javascript:void(0);'>";
-					products += "<img src='/manager/images/wangwang.png'>";
+					products += "<a class='productItemDescLink' href='/mall/product/" + item.productId + "'>";
+					products += "<span class='productItemDesc'>商品名: " + item.productName + "</span>";
 					products += "</a>";
-					products += "</span>";
-					products += "</div>";
-					products += "</div>";
+					products += "<span class='productPrice'>价格：￥" + item.productPrice + "</span>";
 					products += "</div>";
 				});
 				if (products == "") {

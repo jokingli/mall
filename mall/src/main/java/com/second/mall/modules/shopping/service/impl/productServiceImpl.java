@@ -51,6 +51,8 @@ public class productServiceImpl implements ProductService
         return pageInfo;
     }
 
+
+
     @Override
     public Product getProductByProductId(int productId) {
         Product product = productDao.getProductById(productId);

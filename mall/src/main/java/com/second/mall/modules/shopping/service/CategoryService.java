@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Category;
-
+import com.second.mall.modules.shopping.entity.Product;
 
 
 import java.util.List;
@@ -15,6 +15,8 @@ public interface CategoryService {
     Category getCategoryById(int categoryId);
 
     PageInfo<Category> getCategoriesBySearchVo(SearchBean searchVo);
+
+    PageInfo<Category> getCategoryBySearchVo(SearchBean searchVo);
 
     List<Category> getCategories();
 
