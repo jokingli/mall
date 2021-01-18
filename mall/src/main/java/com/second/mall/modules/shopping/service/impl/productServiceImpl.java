@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class productServiceImpl implements ProductService
+
 {
     @Autowired
     private ProductDao productDao;
@@ -38,12 +39,13 @@ public class productServiceImpl implements ProductService
     }
 
     //搜索
+
     @Override
-    public PageInfo<Product> getProductBySearchVo(ProductSearchVo productSearchVo) {
+    public PageInfo<Product> getProductsByProductSearchVo(ProductSearchVo productSearchVo) {
         productSearchVo.initSearchBean();
         PageHelper.startPage(productSearchVo.getCurrentPage(), productSearchVo.getPageSize());
         PageInfo<Product> pageInfo = new PageInfo<Product>(Optional
-                .ofNullable(productDao.getProductBySearchVo(productSearchVo))
+                .ofNullable(productDao.getProductsByProductSearchVo(productSearchVo))
                 .orElse(Collections.emptyList()));
         pageInfo.setList(pageInfo.getList().stream().map(item -> initProduct(item)).collect(Collectors.toList()));
         return pageInfo;

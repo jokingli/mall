@@ -39,7 +39,7 @@ public class ProductController {
     public String index(HttpServletRequest request, HttpServletResponse response) {
         List<Product> productList = productService.selectProduct();
         request.setAttribute("productList", productList);
-        request.setAttribute("template", "index");
+        request.setAttribute("template", "mall/index");
         return "mallIndex";
     }
 
@@ -51,10 +51,12 @@ public class ProductController {
 
     //搜索
 
+
     @PostMapping(value = "/{categoryId}/products", consumes = "application/json")
     public PageInfo<Product> getProductsByProductSearchVo(@RequestBody ProductSearchVo productSearchVo) {
-        return productService.getProductBySearchVo(productSearchVo);
+        return productService.getProductsByProductSearchVo(productSearchVo);
     }
+
 
     @GetMapping("/searchResults")
     public String searchResultsPage(@RequestParam String keyWord, ModelMap modelMap) {

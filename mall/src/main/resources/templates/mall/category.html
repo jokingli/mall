@@ -27,12 +27,12 @@
 	var currentPage = 1;
 	var pageSize = 5;
 	var pageCount = 1;
-	var orderBy = "id";
+	var order = "id";
 	var direction = "asc";
 
 	// 排序按钮点击事件
 	function productSort(sortBtn) {
-		orderBy = sortBtn.attr("orderBy");
+		order= sortBtn.attr("order");
 		var directionClass = sortBtn.children("span").attr("class");
 		if (directionClass == "glyphicon glyphicon-arrow-down") {
 			directionClass = "glyphicon glyphicon-arrow-up";
@@ -57,8 +57,6 @@
 		var searchVo = {};
 		searchVo.currentPage = currentPage;
 		searchVo.pageSize = pageSize;
-		searchVo.orderBy = orderBy;
-		searchVo.sort = direction;
 		searchVo.categoryId = $("#categoryId").val();
 
 		$.ajax({
@@ -74,33 +72,35 @@
 				$.each(data.list, function(i, item){
 					products += "<div class='productUnit'>";
 					products += "<div class='productUnitFrame'>";
-					products += "<div class=\"col-md-55\">";
-					products += "<div class=\"thumbnail\">";
-					products += "<div class=\"image view view-first\">";
-					products += "<img style=\"width: 100%; display: block;\"  src='" + item.pictureUrl + "'  alt=\"image\" />";
-					products += "<div class=\"mask\">";
-					products += "<p>你的美丽远重衣开始</p>";
-					products += "<div class=\"tools tools-bottom\">";
-
+					products += "<a href='/mall/product/" + item.productId + "'>";
+					var productUrl = "";
+					if (item.middleImages.length > 0) {
+						productUrl = item.middleImages[0].src;
+					}
+					products += "<img class='productImage' src='" + productUrl + "'>";
+					products += "</a>";
+					products += "<span class='productPrice'>¥" + item.productPrice + "</span>";
+					products += "<a class='productLink' href='/mall/product/" + item.productId + "'>" + item.productName + "</a>";
+					products += "<a class='tmallLink' href='javascript:void(0);'>" + item.seller + "</a>";
+					products += "<div class='show1 productInfo'>";
+					products += "<span class='monthDeal'>成交 <span class='productDealNumber'>" +
+							item.saleCount + "</span>笔</span>";
+					products += "<span class='productReview'>评价<span class='productReviewNumber'>" +
+							item.reviewCount + "</span></span>";
+					products += "<span class='wangwang'>";
+					products += "<a class='wangwanglink' href='javascript:void(0);'>";
+					products += "<img src='/manager/images/wangwang.png'>";
+					products += "</a>";
+					products += "</span>";
 					products += "</div>";
-					products += "</div>";
-					products += "</div>";
-					products += "<div class=\"caption\">";
-					products += "<p>商品名：<a href='/mall/product/" + item.productId + "'>" + item.productName + "</a></p>";
-					products += "<p>价   格：¥<a href='/mall/product/" + item.productId + "'>" + item.productPrice + "</a></p>";
-					products += "</div>";
-					products += "</div>";
-					products += "</div>";
-					products += "</div>";
-
 					products += "</div>";
 					products += "</div>";
 				});
 				if (products == "") {
-					$(".categoryProducts").html("未找到该类别产品");
+					$("[class=\"categoryProducts\"]").html("未找到该类别产品");
 				} else {
 					products += "<div style='clear:both'></div>";
-					$(".categoryProducts").html(products);
+					$("[class=\"categoryProducts\"]").html(products);
 				}
 
 				var page =new Paging('page', {

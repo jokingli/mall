@@ -13,7 +13,8 @@ public interface ProductService {
     PageInfo<Product> getProductsBySearchVo(SearchBean searchVo);
 
     Product getProductByProductId(int productId);
-    PageInfo<Product> getProductBySearchVo(ProductSearchVo productSearchVo);
+
+    PageInfo<Product> getProductsByProductSearchVo(ProductSearchVo productSearchVo);
 
 
 }
