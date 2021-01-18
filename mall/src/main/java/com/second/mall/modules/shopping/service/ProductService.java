@@ -10,13 +10,15 @@ import java.util.List;
 public interface ProductService {
     List<Product> selectProduct();
 
-    PageInfo<Product> getProductsBySearchVo(SearchBean searchVo);
+    PageInfo<Product> getProductsBySearchVo(SearchBean searchBean);
 
     Product getProductByProductId(int productId);
 
-    List<Product> getProductsByCategoryId(int categoryId);
 
     PageInfo<Product> getProductsByProductSearchVo(ProductSearchVo productSearchVo);
+
+    //根据商品名称进行搜索
+    PageInfo<Product> selectProductByName(SearchBean searchBean);
 
 
 }

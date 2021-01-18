@@ -27,6 +27,10 @@ public interface ProductDao {
     @Select("SELECT *FROM `product`")
     List<Product> selectProduct();
 
+    @Select("select * from product where product_name like #{keyWord}")
+    List<Product> selectProductByName(String keyWord);
+
+
     @Select("select * from product where product_id = #{productId}")
     Product getProductById(int productId);
 
@@ -69,4 +73,28 @@ public interface ProductDao {
             + "</choose>"
             + "</script>")
     List<Product> getProductsByProductSearchVo(ProductSearchVo productSearchVo);
+
+
+
+    //站点搜索商品
+    @Select("<script>" +
+            "select *, c.name as categoryName from product p left join category c on p.category_id = c.id"
+            + "<where> "
+            + "<if test='keyWord != \"\" and keyWord != null'>"
+            + " and (p.name like '%${keyWord}%' or "
+            + " p.sub_title like '%${keyWord}%') "
+            + "</if>"
+            + "</where>"
+            + "<choose>"
+            + "<when test='orderBy != \"\" and orderBy != null'>"
+            + " order by p.${orderBy} ${sort}"
+            + "</when>"
+            + "<otherwise>"
+            + " order by p.id desc"
+            + "</otherwise>"
+            + "</choose>"
+            + "</script>")
+    List<Product> getProductsBySearchVo(SearchBean searchBean);
+
+
 }
