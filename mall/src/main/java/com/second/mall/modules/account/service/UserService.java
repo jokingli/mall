@@ -3,7 +3,7 @@ package com.second.mall.modules.account.service;
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.common.entity.ResultEntity;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 /**
@@ -24,6 +24,9 @@ public interface UserService {
 
     //注册用户
     ResultEntity<User> register(User user);
+
+    //查询用户
+    List<User> select();
 
 //    ResultEntity<User> queryRoleByUserName(User user, HttpServletRequest request);
 }

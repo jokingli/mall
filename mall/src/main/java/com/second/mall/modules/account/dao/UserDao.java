@@ -75,4 +75,7 @@ public interface UserDao {
     @Select("select * from user u inner join user_role ur on u.user_id = ur.user_id" +
             "inner join role r on r.role_id = ur.role_id")
     List<Role> getRolesByUserId(int userId);
+
+    @Select("select * from user")
+    List<User> select();
 }

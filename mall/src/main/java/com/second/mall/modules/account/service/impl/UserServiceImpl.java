@@ -9,17 +9,15 @@ import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.utils.MdFive;
 import org.apache.shiro.SecurityUtils;
 
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -106,6 +104,12 @@ public class UserServiceImpl implements UserService {
         return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "注册账号成功，返回登录页！",user);
     }
 
+    //查询所有用户信息
+    @Override
+    public List<User> select() {
+        List<User> userList = userDao.select();
+        return userList;
+    }
 
 
     @Override

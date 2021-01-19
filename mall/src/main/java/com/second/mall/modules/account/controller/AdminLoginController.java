@@ -73,6 +73,16 @@ public class AdminLoginController {
         return "managerIndex";
     }
 
+    @GetMapping("/userList")
+    public String userList(ModelMap modelMap,User user){
+        modelMap.addAttribute("list",userService.select());
+        System.err.println(user);
+        System.err.println(this);
+        System.err.println(user);
+
+        return "account/userList";
+    }
+
 
 }
 
