@@ -43,6 +43,7 @@ public interface CategoryDao {
             + "</script>")
     List<Category> getCategoriesBySearchVo(SearchBean searchVo);
 
+
     @Select("select * from category order by category_id")
     List<Category> getCategories();
 

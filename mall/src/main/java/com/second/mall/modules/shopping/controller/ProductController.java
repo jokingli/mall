@@ -29,39 +29,6 @@ public class ProductController {
     @Autowired(required = false)
     private ProductService productService;
 
-    //访问登录页页面
-    /*http://localhost:8080/mall/login*/
-    @RequestMapping("/login")
-    public String day02(Model model) {
-        return "managerIndexSimple";
-    }
-
-    /*访问主页面  http://localhost:8080/mall/index*/
-    @RequestMapping("/index")
-    public String index(HttpServletRequest request, HttpServletResponse response) {
-        List<Product> productList = productService.selectProduct();
-        request.setAttribute("productList", productList);
-        request.setAttribute("template", "mall/index");
-        return "mallIndex";
-    }
-
-    //跳转到商城主页
-    @RequestMapping("/home")
-    public String homePage(ModelMap modelMap) {
-        modelMap.put("template","fragment/selectProductByName");
-        return "managerIndex";
-    }
-
-    //保存商品名，跳转到搜索页面
-    @GetMapping(value = "/selectProductByName")
-    public String selectProductByName(@RequestParam String keyWord, ModelMap modelMap) {
-        modelMap.put("keyWord", keyWord);
-        modelMap.put("template", "fragment/selectProductByName");
-        return "mallIndex";
-    }
-
-
-
     //分页
     @PostMapping(value = "/products", consumes = "application/json")
     @ResponseBody
@@ -76,27 +43,6 @@ public class ProductController {
         return productService.getProductsByProductSearchVo(productSearchVo);
     }
 
-
-    @GetMapping("/searchResults")
-    public String searchResultsPage(@RequestParam String keyWord, ModelMap modelMap) {
-        modelMap.put("keyWord", keyWord);
-
-        return "mallIndex";
-    }
-
-    @RequestMapping("/category/{categoryId}")
-    public String categoryPage(@PathVariable int categoryId, ModelMap modelMap) {
-        modelMap.addAttribute("categoryId", categoryId);
-        modelMap.addAttribute("template", "mall/category");
-        return "mallIndex";
-    }
-
-    @RequestMapping("/product/{productId}")
-    public String getProductById(@PathVariable int productId, ModelMap modelMap) {
-        modelMap.addAttribute("productId", productId);
-        modelMap.addAttribute("template", "mall/product");
-        return "mallIndex";
-    }
 
     @GetMapping(value ="/product/{productId}", consumes = "application/json")
     @ResponseBody
