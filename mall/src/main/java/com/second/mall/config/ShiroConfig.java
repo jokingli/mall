@@ -47,22 +47,52 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setLoginUrl("/account/login");
         shiroFilterFactoryBean.setSuccessUrl("/account/index");
 
-        // 自定义过滤器
+        // 自定义过滤器  后台管理过滤
         FormAuthenticationFilter managerAuthc = new FormAuthenticationFilter();
+        //managerAuthc未登陆过用户必须登录
         managerAuthc.setLoginUrl("/account/login");
         managerAuthc.setSuccessUrl("/account/index");
+        //已登录用户，记住密码后直接登录
         UserFilter managerUser = new UserFilter();
         managerUser.setLoginUrl("/account/login");
 
+        //商城页面过滤
+        FormAuthenticationFilter mallAuthc = new FormAuthenticationFilter();
+        mallAuthc.setLoginUrl("/shopping/login");
+        mallAuthc.setSuccessUrl("/mall/index");
+        UserFilter mallUser = new UserFilter();
+        mallUser.setLoginUrl("/shopping/login");
+
+        //将自定义角色添加过滤器中
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         filters.put("managerAuthc", managerAuthc);
         filters.put("managerUser", managerUser);
+        filters.put("mallAuthc",mallAuthc);
+        filters.put("mallUser",mallUser);
         shiroFilterFactoryBean.setFilters(filters);
 
+        //设置访问规则   anon不需要权限  other注册用户 admin管理员
         Map<String, String> map = new LinkedHashMap<String, String>();
         map.put("/account/login", "anon");
         map.put("/account/register", "anon");
         map.put("/account/logout", "anon");
+        map.put("/mall/index","anon");
+        map.put("/shopping/login", "anon");
+        map.put("/shopping/register", "anon");
+        map.put("/mall/logout", "anon");
+
+        //商城过滤规则  对购物车、订单、收藏页面的过滤
+        map.put("/shoppingCar/enter","mallAuthc");
+        map.put("/shopping/indent","mallAuthc");
+        map.put("/collection/enter","mallAuthc");
+
+        //后台过滤规则
+//        map.put("/account/index", "admin");
+//        map.put("/account/userList", "managerAuthc");
+//        map.put("/account/index", "managerAuthc");
+//        map.put("/account/index", "managerAuthc");
+//        map.put("/account/index", "managerAuthc");
+//        map.put("/account/index", "managerAuthc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         return shiroFilterFactoryBean;

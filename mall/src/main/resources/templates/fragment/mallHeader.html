@@ -11,12 +11,13 @@
 	</span>
 	<span th:if="${session.userId} != null">
 		<a href="javascript:void(0);" th:text="${session.userName}"></a>
-		<a href="/shopping/login">退出登录</a>
+		<a href="/shopping/logout">退出登录</a>
 	</span>
 
 	<span class="pull-right">
-		<a href="/shopping/login">我的订单</a>
-		<a href="/shopping/login">
+		<a href="/shopping/indent">我的订单</a>
+		<a href="/collection/enter">我的收藏</a>
+		<a href="/shoppingCar/enter">
 			<span style="color:#C40000;margin:0px" class=" glyphicon glyphicon-shopping-cart redColor"></span>购物车
 		</a>
 	</span>

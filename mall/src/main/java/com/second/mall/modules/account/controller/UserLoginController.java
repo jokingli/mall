@@ -3,10 +3,16 @@ package com.second.mall.modules.account.controller;
 import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.account.service.UserService;
 import com.second.mall.modules.common.entity.ResultEntity;
+import com.second.mall.modules.shopping.entity.Product;
+import com.second.mall.modules.shopping.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 /**
@@ -20,6 +26,9 @@ public class UserLoginController {
 
     @Autowired(required = false)
     UserService userService;
+
+    @Autowired
+    ProductService productService;
 
     //进入商城登录页面
     @RequestMapping(value = "/login")
@@ -61,8 +70,12 @@ public class UserLoginController {
     @RequestMapping("/logout")
     public String logout(ModelMap modelMap) {
         userService.logout();
-        modelMap.addAttribute("template", "account/userLogin");
-        return "managerIndexSimple";
+//        List<Product> productList = productService.selectProduct();
+//        request.setAttribute("productList", productList);
+//        request.setAttribute("template", "mall/index");
+        modelMap.addAttribute("template", "mall/index");
+        return "mallIndex";
+
     }
 
     @GetMapping("/dashboard")
