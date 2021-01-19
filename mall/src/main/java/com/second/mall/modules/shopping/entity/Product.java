@@ -21,16 +21,16 @@ public class Product {
     private Integer productId;
     private Integer pictureId;
     private Integer categoryId;
-    private String pictureUrl;
-    private String productName;
-    private double productPrice;
+    private String pictureUrl;//图片地址
+    private String productName;//商品名字
+    private double productPrice;//商品价格
     private Integer productNum;//商品库存
     private Integer num;//购买数量
     private Integer discount;//折扣价
     private Integer shopId;
     private String describeInfo;//描述
     private int commentCount;  //评论数量
-    private LocalDateTime createTime;
+    private LocalDateTime createTime;//购买时间
 
     @Transient
     private List<Picture> bigPictures;

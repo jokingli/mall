@@ -29,14 +29,15 @@ public class ProductController {
     @Autowired(required = false)
     private ProductService productService;
 
-    //分页
+
     @PostMapping(value = "/products", consumes = "application/json")
     @ResponseBody
     public PageInfo<Product> getProductsBySearchVo(@RequestBody SearchBean searchBean) {
+
         return productService.getProductsBySearchVo(searchBean);
     }
 
-    //搜索
+
     @PostMapping(value = "/{categoryId}/products", consumes = "application/json")
     @ResponseBody
     public PageInfo<Product> getProductsByProductSearchVo(@RequestBody ProductSearchVo productSearchVo) {
