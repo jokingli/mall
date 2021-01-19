@@ -1,15 +1,13 @@
 package com.second.mall.modules.shopping.controller;
 
 import com.second.mall.modules.shopping.entity.Product;
+import com.second.mall.modules.shopping.entity.ShoppingCar;
 import com.second.mall.modules.shopping.service.IndentService;
 import com.second.mall.modules.shopping.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -134,6 +132,12 @@ public class MallController {
     public String indentConfirmed(@PathVariable String indentCode,ModelMap modelMap){
         modelMap.put("indentCode",indentCode);
         modelMap.put("template","mall/indent");
+        return "mallIndex";
+    }
+
+    @RequestMapping(value = "/buy")
+    public String buy(ModelMap modelMap){
+        modelMap.put("template","mall/buy");
         return "mallIndex";
     }
 

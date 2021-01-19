@@ -47,4 +47,6 @@ public class Comment {
     @Transient
     List<Picture> pictures; //评论所属图片
 
+    @Transient
+    List<Comment> commentList; //子评论集合
 }

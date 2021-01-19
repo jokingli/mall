@@ -83,7 +83,7 @@
                 $(".productDetailImagesPart").html(detailImages);
 
                 // 初始化产品评论页面
-                $(".productReviewTopReviewLinkNumber").html(data.reviewCount);
+                $(".productReviewTopReviewLinkNumber").html(data.commentCount);
                 var reviews = "";
                 $.each(data.reviews, function(i, item){
                     reviews += "<div class='productReviewItem'>";
@@ -136,7 +136,7 @@
     // 检查用户登录状态
     function checkUser() {
         if ($("#userId").val() == "")　{
-            location.href = "/tmall/login";
+            location.href = "/mall/login";
         }
     }
 

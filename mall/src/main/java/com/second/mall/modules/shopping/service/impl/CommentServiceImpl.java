@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @ClassName CommentServiceImpl
@@ -65,7 +63,12 @@ public class CommentServiceImpl implements CommentService {
     public ResultEntity<Object> updateComment(Comment comment) {
         Comment comment_db = commentDao.selectCommentById(comment.getCommentId());
         if (comment_db.getUserId()==comment.getUserId()){
-            commentDao.updateComment(comment);
+            if (comment.getComments()!=null){
+                commentDao.updateComment(comment);
+            }else if(comment.getState()!=0){
+                commentDao.updateCommentState(comment);
+            }
+
             return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                     "评论修改成功");
         }
@@ -89,5 +92,26 @@ public class CommentServiceImpl implements CommentService {
     public ResultEntity<Comment> selectCommentById(int commentId) {
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "comment",commentDao.selectCommentById(commentId));
+    }
+
+    @Override
+    public HashMap<String, Object> selectCommentByProductId(int productId) {
+        HashMap<String,Object> hashMap = new HashMap<>();
+        List<Comment> comments = commentDao.selectCommentByProductId(productId);
+        List<Integer> parentIds = new ArrayList<>();
+        for (Comment comment : comments) {
+            boolean flag = true;
+            for (Integer parentId : parentIds) {
+                if (comment.getParentId() == parentId){
+                    flag = false;
+                }
+            }
+            if (flag){
+                parentIds.add(comment.getParentId());
+            }
+        }
+        hashMap.put("parentIds",parentIds);
+        hashMap.put("comments",comments);
+        return hashMap;
     }
 }

@@ -1,0 +1,216 @@
+<div class="buyPageDiv">
+    <div class="buyFlow">
+        <img class="pull-left" src="/img/site/simpleLogo.png">
+        <img class="pull-right" src="/img/site/buyflow.png">
+        <div style="clear:both"></div>
+    </div>
+
+    <div class="address">
+        <div class="addressTip">选择收货地址：</div>
+        <div th:replace="mall/address"></div>
+    </div>
+
+    <div class="productList">
+        <div class="productListTip">确认订单信息</div>
+        <table class="productListTable">
+            <thead>
+            <tr>
+                <th colspan="2" class="productListTableFirstColumn">
+                    <img class="tmallbuy" src="/img/site/tmallbuy.png">
+                    <a class="marketLink" href="javascript:void(0);">店铺：天猫店铺</a>
+                    <a class="wangwanglink" href="javascript:void(0);"><span class="wangwangGif"></span></a>
+                </th>
+                <th>单价</th>
+                <th>数量</th>
+                <th>小计</th>
+                <th>配送方式</th>
+            </tr>
+            <tr class="rowborder">
+                <td  colspan="2" ></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody class="productListTableTbody">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="orderItemSumDiv">
+        <div class="pull-left">
+            <span class="leaveMessageText">给卖家留言:</span>
+            <span class="leaveMessageTextareaSpan">
+				<textarea name="userMessage" class="leaveMessageTextarea"></textarea>
+				<div>
+					<span>还可以输入200个字符</span>
+				</div>
+			</span>
+        </div>
+        <div class="pull-right">
+            <span>&emsp;&emsp;运费: <span class="postageTotal"></span></span><br/>
+            <span>商品合计: <span class="cartTotal"></span></span>
+        </div>
+    </div>
+
+    <div class="orderItemTotalSumDiv">
+        <div class="pull-right">
+            <span>实付款：</span>
+            <span class="orderItemTotalSumSpan"></span>
+        </div>
+    </div>
+    <div class="submitOrderDiv">
+        <button type="button" class="submitOrderButton">提交订单</button>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+
+        // 初始化购物车被选中项
+        initCheckedCart();
+
+        // 绑定提交订单按钮
+        $(".submitOrderButton").bind("click", function() {
+            submitOrderEvent();
+        });
+    });
+
+    // 初始化被选中的购物车
+    function initCheckedCart() {
+        var userId = $("#userId").val();
+        $.ajax({
+            url: "/shoppingCar/show/" + userId,
+            type: "get",
+            contentType: "application/json",
+            //data : JSON.stringify(searchVo),
+            success : function (data) {
+                console.log(data)
+                $(".productListTable tbody").html("");
+                var temp = "";
+                var SumSpan = 0;
+                $.each(data, function(i, item) {
+                    SumSpan += item.productPrice*item.discount*item.number
+                    temp += "<tr class='orderItemTR' productId='" + item.productId +
+                        "' productName='" + item.productName +
+                        "' productPrice='" + item.productPrice +
+                        "' promotePrice='" + item.productPrice*item.discount +
+                        // "' image='" + item.image +
+                        "' number='" + item.number +
+                        "' total='" + item.total + "'>";
+                    temp += "<td class='orderItemFirstTD'>";
+                    temp += "<a href='/mall/product/" + item.productId + "'>"
+                        // +"<img class='orderItemImg' src='" + item.image + "'>";
+                    temp += "</td>";
+                    temp += "<td class='orderItemProductInfo'>";
+                    temp += "<a  href='/mall/product/" + item.productId + "' class='orderItemProductLink'>";
+                    temp += item.productName;
+                    temp += "</a>";
+                    temp += "<img src='/img/site/creditcard.png' title='支持信用卡支付'>";
+                    temp += "<img src='/img/site/7day.png' title='消费者保障服务,承诺7天退货'>";
+                    temp += "<img src='/img/site/promise.png' title='消费者保障服务,承诺如实描述'>";
+                    temp += "</td>";
+                    temp += "<td><span class='orderItemProductPrice'>" +
+                        formatMoney(item.productPrice*item.discount) + "</span></td>";
+                    temp += "<td><span class='orderItemProductNumber'>" + item.number + "</span></td>";
+                    temp += "<td>";
+                    temp += "<span class='orderItemUnitSum'>" + formatMoney(item.productPrice*item.discount*item.number) + "</span>";
+                    temp += "</td>";
+                    if (i == 0) {
+                        temp += "<td rowspan='" + data.length +
+                            "' class='orderItemLastTD orderItemOrderInfoPartTD'>";
+                        temp += "<select class='orderItemDeliverySelect' onchange='deliverySelectEvent(this)'>";
+                        temp += "<option value='10' selected>圆通</option>";
+                        temp += "<option value='11'>韵达</option>";
+                        temp += "<option value='12'>申通</option>";
+                        temp += "<option value='13'>顺风</option>";
+                        temp += "<option value='14'>中通</option>";
+                        temp += "<option value='15'>邮政</option>";
+                        temp += "</select>";
+                        temp += "</td>";
+                    }
+                    temp += "</tr>";
+                });
+                $(".productListTable tbody").append(temp);
+
+                postageTotal = getPostageTotal();
+                $(".postageTotal").html(formatMoney(postageTotal));
+                $(".cartTotal").html(formatMoney(SumSpan));
+                $(".orderItemTotalSumSpan").html(formatMoney(SumSpan + postageTotal));
+                $(".cartTotal").attr("cartTotal", data.total);
+                $(".orderItemTotalSumSpan").attr("total", parseFloat(SumSpan) + parseFloat(postageTotal));
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        });
+    }
+
+    // 计算邮资总和
+    function getPostageTotal() {
+        var postageTotal = 0;
+        $(".orderItemDeliverySelect").each(function() {
+            postageTotal += parseFloat($(this).find("option:selected").attr("value"));
+        });
+        console.log(postageTotal);
+        return postageTotal;
+    }
+
+    // 配送方式选择框事件
+    function deliverySelectEvent(select) {
+        var postageTotal = getPostageTotal();
+        var cartTotal = $(".cartTotal").attr("cartTotal");
+        console.log(postageTotal + "--" + cartTotal);
+
+        $(".postageTotal").html(formatMoney(postageTotal));
+        $(".orderItemTotalSumSpan").html(formatMoney(parseFloat(cartTotal) + parseFloat(postageTotal)));
+        $(".orderItemTotalSumSpan").attr("total", parseFloat(cartTotal) + parseFloat(postageTotal));
+    }
+
+    // 提交订单事件
+    function submitOrderEvent() {
+        var order = {};
+        order.userId = $("#userId").val();
+        order.address = $("[name=address]").val();
+        order.post = $("[name=post]").val();
+        order.receiver = $("[name=receiver]").val();
+        order.mobile = $("[name=mobile]").val();
+        order.userMessage = $("[name=userMessage]").val();
+        order.postMethod = $(".orderItemDeliverySelect").find("option:selected").text();
+        order.postage = $(".orderItemDeliverySelect").find("option:selected").attr("value");
+        order.total = $(".orderItemTotalSumSpan").attr("total");
+        var orderItems = [];
+        $(".orderItemTR").each(function() {
+            var orderItem = {};
+            orderItem.productId = $(this).attr("productId");
+            orderItem.productName = $(this).attr("productName");
+            orderItem.originalPrice = $(this).attr("originalPrice");
+            orderItem.promotePrice = $(this).attr("promotePrice");
+            orderItem.image = $(this).attr("image");
+            orderItem.number = $(this).attr("number");
+            orderItem.total = $(this).attr("total");
+            orderItem.delivery = $(".orderItemDeliverySelect").find("option:selected").text();
+            orderItem.postage = $(".orderItemDeliverySelect").find("option:selected").attr("value");
+            orderItems.push(orderItem);
+        });
+        order.orderItems = orderItems;
+        console.log(order);
+
+        $.ajax({
+            url : "/api/order",
+            type : "post",
+            contentType: "application/json",
+            data : JSON.stringify(order),
+            success : function (data) {
+                if (data.status == 200) {
+                    window.location.href = "/tmall/pay/" + data.object.orderCode;
+                } else {
+                    layer.msg(data.message, {icon: 0});
+                }
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        });
+    }
+</script>
