@@ -54,7 +54,7 @@ public class AdminLoginController {
         return "managerIndexSimple";
     }
 
-    //开始进行管理员注册
+    //开始进行管理员页面注册
     @ResponseBody
     @PostMapping(value = "/user")
     public ResultEntity<User> user(@RequestBody User user){
