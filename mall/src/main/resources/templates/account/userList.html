@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -84,12 +86,6 @@
                                 </a>
                                 <ul class="nav child_menu">
                                     <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/indent">所有订单</a></li>
-                                    <!--                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/products">Products</a></li>-->
-                                    <!--                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/productProperties">Product-->
-                                    <!--                                Properties</a></li>-->
-                                    <!--                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/productImages">Product Images</a>-->
-                                    <!--                            </li>-->
-                                    <!--                            <li shiro:hasAnyRoles="admin,manager"><a href="/shopping/reviews">Reviews</a></li>-->
                                 </ul>
                             </li>
                             <li>
@@ -123,16 +119,16 @@
 
                 <!-- /menu footer buttons -->
                 <div class="sidebar-footer hidden-small">
-                    <a data-toggle="tooltip" data-placement="top" title="Settings">
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                    </a>
-                    <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                    </a>
-                    <a data-toggle="tooltip" data-placement="top" title="Lock">
-                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                    </a>
-                    <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+<!--                    <a data-toggle="tooltip" data-placement="top" title="Settings">-->
+<!--                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>-->
+<!--                    </a>-->
+<!--                    <a data-toggle="tooltip" data-placement="top" title="FullScreen">-->
+<!--                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>-->
+<!--                    </a>-->
+<!--                    <a data-toggle="tooltip" data-placement="top" title="Lock">-->
+<!--                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>-->
+<!--                    </a>-->
+                    <a data-toggle="tooltip" data-placement="top" title="Logout" href="/account/login">
                         <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                     </a>
                 </div>
@@ -241,22 +237,6 @@
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
-                    <!--                    <div class="title_left">-->
-                    <!--                        <h3>Users <small>Some examples to get you started</small></h3>-->
-                    <!--                    </div>-->
-
-<!--                    <div class="title_right">-->
-<!--                        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">-->
-<!--                            <div class="input-group">-->
-<!--                                <input type="text" class="form-control" placeholder="Search for...">-->
-<!--                                <span class="input-group-btn">-->
-<!--                      <button class="btn btn-secondary" type="button">Go!</button>-->
-<!--                    </span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                </div>
-
                 <div class="clearfix"></div>
 
                 <div class="row">
@@ -284,7 +264,6 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card-box table-responsive">
-
                                             <table id="datatable" class="table table-striped table-bordered"
                                                    style="width:100%">
                                                 <thead>
@@ -313,8 +292,6 @@
                                                     <td th:text="${x.state}"></td>
                                                     <td th:text="${x.del}"></td>
                                                 </tr>
-
-
                                                 </tbody>
                                             </table>
                                         </div>
@@ -323,7 +300,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
