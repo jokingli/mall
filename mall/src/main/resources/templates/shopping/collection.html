@@ -44,7 +44,7 @@
 
     //初始化产品信息
     function initCollection() {
-        var userId = 1;
+        var userId=$("#userId").val();
         $.ajax({
             url: "/collection/show/" + userId,
             type: "get",

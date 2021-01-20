@@ -1,5 +1,6 @@
 package com.second.mall.modules.shopping.service.impl;
 
+import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.modules.shopping.dao.ShoppingCarDao;
 import com.second.mall.modules.shopping.dao.ShoppingCarItemsDao;
@@ -8,6 +9,8 @@ import com.second.mall.modules.shopping.entity.ShoppingCar;
 import com.second.mall.modules.shopping.entity.ShoppingCarItems;
 import com.second.mall.modules.shopping.service.ProductService;
 import com.second.mall.modules.shopping.service.ShoppingCarService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +36,10 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
      */
     @Override
     public ResultEntity<ShoppingCar> userAddShoppingCar(ShoppingCarItems shoppingCarItems) {
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
         //通过session拿到用户id;
-        int userId = 1;
+        int userId =user.getUserId();
         //查询用户是否存在购物车
         ShoppingCar shoppingCar = shoppingCarDao.findByUserId(userId);
         if (shoppingCar != null) {
@@ -88,6 +93,8 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
                         "添加购物车失败");
             }
         }
+
+
 
     }
 
