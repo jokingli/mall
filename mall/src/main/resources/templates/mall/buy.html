@@ -89,7 +89,6 @@
                 $(".productListTable tbody").html("");
                 var temp = "";
                 var SumSpan = 0;
-
                 $.each(data, function(i, item) {
                     SumSpan += item.productPrice*item.discount*item.number
                     temp += "<tr class='orderItemTR' productId='" + item.productId +
