@@ -37,21 +37,39 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
         int userId = 1;
         //查询用户是否存在购物车
         ShoppingCar shoppingCar = shoppingCarDao.findByUserId(userId);
-
         if (shoppingCar != null) {
-            //把商品信息和购物车id添加到 ShoppingCarItems中
-            shoppingCarItems.setShoppingCarId(shoppingCar.getShoppingCarId());
-
-            ShoppingCarItems shoppingCarItems1 = shoppingCarItemsDao.save(shoppingCarItems);
+            //判断产品是否在用户购物车中
+            ShoppingCarItems shoppingCarItems1 = shoppingCarItemsDao.findByProductIdAndShoppingCarId(shoppingCarItems.getProductId(),shoppingCar.getShoppingCarId());
             if (shoppingCarItems1 != null) {
-                return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
-                        "添加购物车成功");
+                int num = shoppingCarItems1.getNumber();
+                //如果产品数量加一小于库存
+                if (num + 1 <= shoppingCarItems1.getStock()) {
+                    //购物车产品数加一
+                    int i = shoppingCarItemsDao.NumberOfProductsPlusOne(shoppingCarItems1.getProductId(),shoppingCarItems1.getShoppingCarId());
+                    if (i > 0) {
+                        return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
+                                "添加购物车成功");
+                    } else {
+                        return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.FAILED.status,
+                                "添加购物车失败");
+                    }
+                } else {
+
+                    return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
+                            "添加购物车成功");
+                }
             } else {
-                return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.FAILED.status,
-                        "添加购物车失败");
 
+                shoppingCarItems.setShoppingCarId(shoppingCar.getShoppingCarId());
+                ShoppingCarItems shoppingCarItems2 = shoppingCarItemsDao.save(shoppingCarItems);
+                if (shoppingCarItems2 != null) {
+                    return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
+                            "添加购物车成功");
+                } else {
+                    return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.FAILED.status,
+                            "添加购物车失败");
+                }
             }
-
         } else {
             //创建一个新的购物车
             ShoppingCar shoppingCar1 = new ShoppingCar();
@@ -60,6 +78,7 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
             ShoppingCar shoppingCar2 = shoppingCarDao.save(shoppingCar1);
             //将购物车id传入购物车商品列表中
             shoppingCarItems.setShoppingCarId(shoppingCar2.getShoppingCarId());
+
             ShoppingCarItems shoppingCarItems1 = shoppingCarItemsDao.save(shoppingCarItems);
             if (shoppingCarItems1 != null) {
                 return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
@@ -88,9 +107,9 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
     @Override
     public ResultEntity<ShoppingCar> deleteShoppingCarByProductIdList(List<Integer> productIdList, int userId) {
         //通过userId得到购物车id
-        ShoppingCar shoppingCar=shoppingCarDao.findByUserId(userId);
+        ShoppingCar shoppingCar = shoppingCarDao.findByUserId(userId);
         //通过购物车id和产品id集合删除
-        int i = shoppingCarItemsDao.deleteShoppingCarItemsByShoppingCarIdAndProductIdList(shoppingCar.getShoppingCarId(),productIdList);
+        int i = shoppingCarItemsDao.deleteShoppingCarItemsByShoppingCarIdAndProductIdList(shoppingCar.getShoppingCarId(), productIdList);
         if (i > 0) {
             return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
                     "删除成功");
@@ -107,7 +126,7 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
     @Override
     public ResultEntity<ShoppingCar> clearShopingCarByUserId(int userId) {
         //通过userId得到购物车id
-        ShoppingCar shoppingCar=shoppingCarDao.findByUserId(userId);
+        ShoppingCar shoppingCar = shoppingCarDao.findByUserId(userId);
         //通过shoppingcCarId清空购物车商品列表
         int i = shoppingCarItemsDao.deleteAllByShoppingCarId(shoppingCar.getShoppingCarId());
         if (i > 0) {
@@ -122,7 +141,7 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
     @Override
     public ResultEntity<ShoppingCar> deletOneProduct(int userId, int poductId) {
         //通过userId得到购物车id
-        ShoppingCar shoppingCar=shoppingCarDao.findByUserId(userId);
+        ShoppingCar shoppingCar = shoppingCarDao.findByUserId(userId);
         //
         int i = shoppingCarItemsDao.deletOneProduct(userId, poductId);
         if (i > 0) {
@@ -135,7 +154,7 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
 
     @Override
     public ResultEntity<ShoppingCar> changeNum(int productId, int num) {
-        int i= shoppingCarItemsDao.changeNum(num,productId);
+        int i = shoppingCarItemsDao.changeNum(num, productId);
         if (i > 0) {
             return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
                     "修改成功");

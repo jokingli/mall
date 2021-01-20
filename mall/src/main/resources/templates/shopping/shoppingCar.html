@@ -73,10 +73,11 @@
                     temp += "<input type='hidden' id='productId' value='" + product.productId + "'> ";
                     temp += "<td>";
                     temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "' productName='"+product.productName +"' productPrice='" + product.productPrice + "'  discount='" + product.discount +
-                        "' onclick='checkone()'  />";temp += "</td>";
-                    temp += "<td>";
-                    temp += product.productName;
+                        "' onclick='checkone()'  />";
                     temp += "</td>";
+                    temp += "<td><a href='/categories.html'> <img src='/img/lunbo/1.jpg' width='100px' height='100px'> ";
+                    temp += product.productName;
+                    temp += "</a> </td>";
                     temp += "<td>";
                     temp += product.productPrice;
                     temp += "</td>";
@@ -84,7 +85,7 @@
                     temp += product.stock;
                     temp += "</td>";
                     temp += "<td>";
-                    temp += product.discount;
+                    temp += product.discount+'折';
                     temp += "</td>";
                     temp += "<td>";
                     temp += "<button productId= '" + product.productId + "' stock='" + product.stock + "' discount='" + product.discount + "' productPrice='" + product.productPrice + "'  onclick='add(this)'> +";
@@ -97,7 +98,7 @@
                     temp += "<button productId='" + product.productId + "' onclick='deleteOne(this)' >删除</button>";
                     temp += "</td>";
                     temp += "<td>";
-                    temp += "移至收藏夹"
+                    temp += "<a productId='"+product.productId+"' onclick='addCollection(this)' >移至收藏夹</a>"
                     temp += "</td>";
                     temp += "</tr>";
                 });
@@ -149,7 +150,7 @@
             var discount = $(this).attr("discount");
             var num = $(".orderItemNumberSetting[productId=" + pid + "]").val();
 
-            sum += new Number(productPrice * discount * num);
+            sum += new Number(productPrice * discount * num*0.1);
             totalNumber += new Number(num);
 
         });
@@ -331,6 +332,26 @@
         //         }
         //     }
         // })
+
+
+    }
+
+
+    function addCollection(btn){
+        var productId=$(btn).attr("productId");
+        console.log(productId);
+        $.ajax({
+            url : "/collection/add/"+productId,
+            type : "post",
+            success : function (data) {
+                alert(data.message);
+            },
+            error : function (data) {
+                alert(data.message);
+            },
+        });
+
+
 
 
     }
