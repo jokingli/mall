@@ -59,7 +59,7 @@
                 // 初始化 category 图片信息
                // initCategory();
 
-               /* // 初始化产品图片框和鼠标移动事件
+                // 初始化产品图片框和鼠标移动事件
                 var smallImages = "";
 
                 $(".smallImageDiv").html(smallImages);
@@ -85,7 +85,7 @@
                 });
                 $(".productDetailImagesPart").html(detailImages);
 
-                $(".productReviewContentPart").html(reviews);*/
+                $(".productReviewContentPart").html(reviews);
             },
             error : function (data) {
                 layer.msg(data.responseText, {icon: 0});
@@ -120,7 +120,7 @@
                 num=1;
             $(".productNumberSetting").val(num);
         });
-    }*/
+    }
 //初始化详情页图片
     initPictures();
     function initPictures() {
@@ -148,7 +148,6 @@
 
         $.ajax({
             url : "/shoppingCar/add",
-            url : "/api/pictures",
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(shoppingCarItems),
@@ -215,10 +214,6 @@
            },
        });
 
-
-
-
    }
-
 
 </script>
