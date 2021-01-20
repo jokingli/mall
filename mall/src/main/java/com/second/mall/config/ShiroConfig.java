@@ -2,7 +2,6 @@ package com.second.mall.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import javax.servlet.Filter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -44,6 +42,7 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilterFactoryBean(){
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(getSecurity());
+        //进入后台管理的一种过滤拦截
         shiroFilterFactoryBean.setLoginUrl("/account/login");
         shiroFilterFactoryBean.setSuccessUrl("/account/index");
 
@@ -71,7 +70,7 @@ public class ShiroConfig {
         filters.put("mallUser",mallUser);
         shiroFilterFactoryBean.setFilters(filters);
 
-        //设置访问规则   anon不需要权限  other注册用户 admin管理员
+        //设置访问规则   anon不需要权限  Authc现在登录 User已经登录
         Map<String, String> map = new LinkedHashMap<String, String>();
         map.put("/account/login", "anon");
         map.put("/account/register", "anon");
@@ -85,11 +84,15 @@ public class ShiroConfig {
         map.put("/shoppingCar/enter","mallAuthc");
         map.put("/shopping/indent","mallAuthc");
         map.put("/collection/enter","mallAuthc");
+        map.put(" /mall/indents","mallAuthc");
+
+//        map.put("/shoppingCar/enter","mallUser");
+//        map.put("/shopping/indent","mallUser");
+//        map.put("/collection/enter","mallUser");
 
         //后台过滤规则
-//        map.put("/account/index", "admin");
-//        map.put("/account/userList", "managerAuthc");
-//        map.put("/account/index", "managerAuthc");
+        map.put("/account/userList", "managerAuthc");
+        map.put("/account/index", "managerAuthc");
 //        map.put("/account/index", "managerAuthc");
 //        map.put("/account/index", "managerAuthc");
 //        map.put("/account/index", "managerAuthc");

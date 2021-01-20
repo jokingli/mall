@@ -57,8 +57,7 @@
 
     //初始化购物车信息
     function initCart() {
-        var userId = 1;
-
+        var userId=$("#userId").val();
         $.ajax({
             url: "/shoppingCar/show/" + userId,
             type: "get",
@@ -75,7 +74,7 @@
                     temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "'shoppingCarItemsId ='"+product.shoppingCarItemsId+
                         "' productName='"+product.productName +"' productPrice='" + product.productPrice + "'  discount='" + product.discount +
                         "' onclick='checkone()'  />";temp += "</td>";
-                    temp += "<td><a href='/categories.html'> <img src='/img/lunbo/1.jpg' width='100px' height='100px'> ";
+                    temp += "<td><a th:href='/mall/product'> <img th:src='"+product.image+"'  width='100px' height='100px'> ";
                     temp += product.productName;
                     temp += "</a> </td>";
                     temp += "<td>";

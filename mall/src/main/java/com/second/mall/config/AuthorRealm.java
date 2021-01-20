@@ -12,6 +12,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +48,11 @@ public class AuthorRealm extends AuthorizingRealm {
             }
         } else {
             roles = roleService.getRolesByUserId(user.getUserId());
+            System.err.println("授权成功"+roles);
         }
         for (Role role :roles) {
             simpleAuthorizationInfo.addRole(role.getRemark());
+            System.err.println("授权成功"+roles);
         }
         return simpleAuthorizationInfo;
     }
@@ -61,6 +65,8 @@ public class AuthorRealm extends AuthorizingRealm {
         String userName = (String) aToken.getPrincipal();
         //2.查询用户存入数据库的密码
         User user = userService.getUserByUserName(userName);
+//        HttpServletRequest request=ServletActionContext.getRequest();
+//        request.getSession().setAttribute("userId",user.getUserId());
         //3.判断用户输入是否正确
         if (user == null) {
             throw new UnknownAccountException("这个用户不存在！");

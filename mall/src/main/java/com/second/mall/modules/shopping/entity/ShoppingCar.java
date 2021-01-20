@@ -20,7 +20,6 @@ public class ShoppingCar {
         private double total;
         private LocalDateTime createTime;   //购物车创建时间
 
-
     }
 
 

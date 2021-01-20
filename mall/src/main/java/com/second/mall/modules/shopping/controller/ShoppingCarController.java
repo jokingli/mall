@@ -1,11 +1,14 @@
 package com.second.mall.modules.shopping.controller;
 
+import com.second.mall.modules.account.entity.User;
 import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.modules.shopping.entity.Product;
 import com.second.mall.modules.shopping.entity.ShoppingCar;
 import com.second.mall.modules.shopping.entity.ShoppingCarItems;
 import com.second.mall.modules.shopping.service.ProductService;
 import com.second.mall.modules.shopping.service.ShoppingCarService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -74,7 +77,10 @@ public class ShoppingCarController {
     @DeleteMapping(value = "/delete", consumes = "application/json")
     @ResponseBody
     public ResultEntity<ShoppingCar> deleteShoppingCar(@RequestBody List<Integer> ids) {
-        int userId=1;
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        //通过session拿到用户id;
+        int userId =user.getUserId();
         return shoppingCarService.deleteShoppingCarByProductIdList(ids,userId);
     }
 
@@ -85,7 +91,10 @@ public class ShoppingCarController {
     @DeleteMapping(value = "/clear")
     @ResponseBody
     public ResultEntity<ShoppingCar> clearShoppingCar() {
-        int userId=1;
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        //通过session拿到用户id;
+        int userId =user.getUserId();
         return shoppingCarService.clearShopingCarByUserId(userId);
     }
 
@@ -97,7 +106,10 @@ public class ShoppingCarController {
     @DeleteMapping(value = "/delete-one/{productId}")
     @ResponseBody
     public ResultEntity<ShoppingCar> deletOneProduct(@PathVariable int productId) {
-        int userId=1;
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        //通过session拿到用户id;
+        int userId =user.getUserId();
         return shoppingCarService.deletOneProduct(userId,productId);
     }
 

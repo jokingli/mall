@@ -27,7 +27,9 @@
 </head>
 
 <body class="nav-md">
-<h1 shiro:lacksRole="admin">你没有权限访问该页面！！！</h1>
+<!--<h1 shiro:lacksRole="admin">你没有权限访问该页面！！！</h1>-->
+
+
 <div class="container body" shiro:hasRole="admin">
     <div class="main_container">
         <div class="col-md-3 left_col">
@@ -180,6 +182,8 @@
                 <!-- /menu footer buttons -->
             </div>
         </div>
+    </div>
+</div>
 
         <!-- top navigation -->
         <div class="top_nav">
