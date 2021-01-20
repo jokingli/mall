@@ -26,8 +26,8 @@ public class PictureController {
     }
 
 
-    @PostMapping(value ="/pictures", consumes = "application/json")
-    public Picture selectPicture(Model model,@PathVariable int pictureId) {
+    @PostMapping(value ="/pictures/{pictureId}", consumes = "application/json")
+    public Picture selectPicture(Model model, @PathVariable int pictureId) {
         List<Picture> pictureList = pictureService.selectPicture();
         model.addAttribute("pictureList",pictureList);
        return pictureService.getPictureById(pictureId);
