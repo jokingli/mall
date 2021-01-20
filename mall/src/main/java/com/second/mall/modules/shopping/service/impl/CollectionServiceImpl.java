@@ -42,17 +42,26 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public ResultEntity<ShoppingCar> userAddCollection(int productId) {
         int userId =1;
-        Collection collection= new Collection();
-        collection.setUserId(userId);
-        collection.setProductId(productId);
-        collection.setCreateTime(LocalDateTime.now());
-        Collection collection1=collectionDao.save(collection);
-        if (collection1!=null){
-            return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
-                    "添加成功");
-        }
-        return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status,
-                "添加失败");
+        //查询是否已经存在该藏品
+        Collection collection1=collectionDao.findByUserIdAndProductId(userId,productId);
+            if(collection1==null) {
+                Collection collection= new Collection();
+                collection.setUserId(userId);
+                collection.setProductId(productId);
+                collection.setCreateTime(LocalDateTime.now());
+                Collection collection2=collectionDao.save(collection);
+                if (collection2!=null){
+                    return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                            "添加成功");
+                }
+                return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status,
+                        "添加失败");
+            }
+
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "该产品已经在你的收藏中");
+
+
     }
 
     @Override

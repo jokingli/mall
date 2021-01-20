@@ -14,8 +14,9 @@ import java.util.List;
 public class Picture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pictureId;
-    private String pictureUrl;
+    private Integer pictureId;
+    private String pictureUr;
+    private Integer productId;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 

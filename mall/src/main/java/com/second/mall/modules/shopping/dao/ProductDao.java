@@ -18,9 +18,20 @@ import java.util.List;
 @Repository
 @Mapper
 public interface ProductDao {
-    //通过id查询商品
-    Product selectProductById(int productId);
 
+
+
+
+    //通过产品id集合查询
+    @Select( "<script> "
+            +"select * from product "
+            +"<where> "
+            +"product_id  in "
+            +"<foreach collection='list' index='index' item='item' open='(' separator=',' close=')'> "
+            +"#{item} "
+            +"</foreach>"
+            + "</where> "
+            + "</script>")
     List<Product> selectProductByProductIdlist(List<Integer> productIdlist);
 
     //查询所有
@@ -95,6 +106,9 @@ public interface ProductDao {
             + "</choose>"
             + "</script>")
     List<Product> getProductsBySearchVo(SearchBean searchBean);
+
+
+
 
 
 }

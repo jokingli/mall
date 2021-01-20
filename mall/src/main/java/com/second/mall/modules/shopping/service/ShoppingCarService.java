@@ -22,4 +22,8 @@ public interface ShoppingCarService {
     ResultEntity<ShoppingCar> deletOneProduct(int userId,int poductId);
 
     ResultEntity<ShoppingCar> changeNum(int productId, int num);
+
+    ResultEntity<Object> userUpdateShoppingCar(List<ShoppingCarItems> shoppingCarItems);
+
+    List<ShoppingCarItems> selectShoppingCarByState(int userId);
 }

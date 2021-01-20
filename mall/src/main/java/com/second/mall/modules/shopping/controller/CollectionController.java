@@ -51,6 +51,7 @@ public class CollectionController {
      * {"userId":"1","productId":"2"}
      */
     @PostMapping(value = "/add/{productId}")
+    @ResponseBody
     public ResultEntity<ShoppingCar> userAddShoppingCar(@PathVariable int productId) {
         return  collectionService.userAddCollection(productId);
     }

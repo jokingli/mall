@@ -16,9 +16,9 @@ import javax.persistence.*;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int categoryId;
-    private String categoryName;
-    private int parentId;
+    private int categoryId;//种类id
+    private String categoryName;//种类名
+    private int parentId;//种类
 
 
     public int getCategoryId() {

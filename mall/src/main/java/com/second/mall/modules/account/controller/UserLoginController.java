@@ -42,6 +42,7 @@ public class UserLoginController {
     @ResponseBody
     @RequestMapping(value = "/pwdLogin", consumes="application/json")
     public ResultEntity<User> pwdLogin(@RequestBody User user){
+
         return userService.login(user);
     }
 

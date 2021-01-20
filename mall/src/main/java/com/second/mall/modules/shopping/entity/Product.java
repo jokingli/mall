@@ -21,25 +21,33 @@ public class Product {
     private Integer productId;
     private Integer pictureId;
     private Integer categoryId;
-    private String pictureUrl;
-    private String productName;
-    private double productPrice;
+    private String pictureUrl;//图片地址
+    private String productName;//商品名字
+    private double productPrice;//商品价格
     private Integer productNum;//商品库存
     private Integer num;//购买数量
     private Integer discount;//折扣价
     private Integer shopId;
     private String describeInfo;//描述
     private int commentCount;  //评论数量
-    private LocalDateTime createTime;
+    private LocalDateTime createTime;//购买时间
 
     @Transient
-    private List<Picture> bigPictures;
+    private List<Picture> pictureList;
+
     @Transient
-    private List<Picture> middlePictures;
-    @Transient
-    private List<Picture> smallPictures;
-    @Transient
-    private List<Picture> detailPictures;
+    private List<ProductProductAtt> productProperties;
+
+
+    public List<Picture> getPictureList() {
+        return pictureList;
+    }
+
+    public void setPictureList(List<Picture> pictureList) {
+        this.pictureList = pictureList;
+    }
+
+
 
     public Integer getProductId() {
         return productId;
@@ -145,35 +153,13 @@ public class Product {
         this.createTime = createTime;
     }
 
-    public List<Picture> getBigPictures() {
-        return bigPictures;
+
+
+    public List<ProductProductAtt> getProductProperties() {
+        return productProperties;
     }
 
-    public void setBigPictures(List<Picture> bigPictures) {
-        this.bigPictures = bigPictures;
-    }
-
-    public List<Picture> getMiddlePictures() {
-        return middlePictures;
-    }
-
-    public void setMiddlePictures(List<Picture> middlePictures) {
-        this.middlePictures = middlePictures;
-    }
-
-    public List<Picture> getSmallPictures() {
-        return smallPictures;
-    }
-
-    public void setSmallPictures(List<Picture> smallPictures) {
-        this.smallPictures = smallPictures;
-    }
-
-    public List<Picture> getDetailPictures() {
-        return detailPictures;
-    }
-
-    public void setDetailPictures(List<Picture> detailPictures) {
-        this.detailPictures = detailPictures;
+    public void setProductProperties(List<ProductProductAtt> productProperties) {
+        this.productProperties = productProperties;
     }
 }
