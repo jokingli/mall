@@ -182,5 +182,12 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
                 "修改成功");
     }
 
-
+    @Override
+    public ResultEntity<Object> insertItemOne(ShoppingCarItems shoppingCarItems) {
+        ShoppingCar byUserId = shoppingCarDao.findByUserId(shoppingCarItems.getUserId());
+        shoppingCarItems.setShoppingCarId(byUserId.getShoppingCarId());
+        shoppingCarItemsDao.save(shoppingCarItems);
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "修改成功");
+    }
 }

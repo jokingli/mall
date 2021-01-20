@@ -125,4 +125,15 @@ public class ShoppingCarController {
     }
 
 
+    /**
+     * 立即购买事件
+     * 127.0.0.1/shoppingCar/add
+     * {"userId":"1","productId":"2"}
+     */
+    @PostMapping(value = "/cartItem",consumes = "application/json")
+    @ResponseBody
+    public ResultEntity<Object> insertItemOne(@RequestBody ShoppingCarItems shoppingCarItems) {
+
+        return  shoppingCarService.insertItemOne(shoppingCarItems);
+    }
 }

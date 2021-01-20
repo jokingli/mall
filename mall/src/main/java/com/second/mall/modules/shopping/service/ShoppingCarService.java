@@ -26,4 +26,6 @@ public interface ShoppingCarService {
     ResultEntity<Object> userUpdateShoppingCar(List<ShoppingCarItems> shoppingCarItems);
 
     List<ShoppingCarItems> selectShoppingCarByState(int userId);
+
+    ResultEntity<Object> insertItemOne(ShoppingCarItems shoppingCarItems);
 }

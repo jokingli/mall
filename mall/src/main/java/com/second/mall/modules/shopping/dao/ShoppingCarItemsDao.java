@@ -59,4 +59,9 @@ public interface ShoppingCarItemsDao extends JpaRepository<ShoppingCarItems, Int
     @Modifying(clearAutomatically = true)
     @Query(value = "select *from shopping_car_items  WHERE shopping_car_id=:shoppingCarId and state= 1 ", nativeQuery = true)
     List<ShoppingCarItems> selectShoppingCarByState(Integer shoppingCarId);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE shopping_car_items set state=:state WHERE shopping_car_items_id=:shoppingCarItemsId", nativeQuery = true)
+    void updateState(Integer shoppingCarItemsId, int state);
 }

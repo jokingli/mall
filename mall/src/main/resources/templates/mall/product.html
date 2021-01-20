@@ -53,14 +53,14 @@
                 $(".bigImg").attr('src',data.pictureUrl)
                 $(".promotionPrice").html(data.productPrice);
                 $("[name='saleCount']").html(data.saleCount);
-                $("[name='reviewCount']").html(data.reviewCount);
+                $("[name='reviewCount']").html(data.commentCount);
                 $("[name='number']").html(data.productNum);
                 $("#discount").text(data.discount);
 
                 // 初始化 category 图片信息
-               // initCategory();
+               initCategory();
 
-               /* // 初始化产品图片框和鼠标移动事件
+               // 初始化产品图片框和鼠标移动事件
                 var smallImages = "";
 
                 $(".smallImageDiv").html(smallImages);
@@ -113,23 +113,24 @@
         // checkUser();
 
         var cartItem = {};
+        cartItem.userId = $("#userId").val();
         cartItem.productId = $("#productId").val();
         cartItem.productName = $(".productTitle").html();
-        cartItem.originalPrice = $(".originalPrice").html();
-        cartItem.promotePrice = $(".promotionPrice").html();
+        cartItem.discount = $(".discount").html();
+        cartItem.productPrice = $(".promotionPrice").html();
         cartItem.number = $(".productNumberSetting").val();
-        cartItem.total = cartItem.promotePrice * cartItem.number;
+        cartItem.total = cartItem.productPrice * cartItem.number;
         cartItem.image = $(".smallImage").attr("src");
-        cartItem.stock = $("[name='number']").html();
-        cartItem.checked = true;
+        cartItem.number = $("[name='number']").html();
+        cartItem.state = 2;
 
         $.ajax({
-            url : "/api/redis/cartItem",
+            url : "/shoppingCar/cartItem",
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(cartItem),
             success : function (data) {
-                window.location.href = "/tmall/buy";
+                window.location.href = "/mall/buy";
                 var pictures = "";
                 $.each(data.list, function(i, item){
                     pictures += "<div class='imgInimgAndInfo'>";

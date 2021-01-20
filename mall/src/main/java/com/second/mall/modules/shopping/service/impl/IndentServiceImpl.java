@@ -7,6 +7,7 @@ import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.dao.IndentDao;
 import com.second.mall.modules.shopping.dao.IndentItemDao;
 import com.second.mall.modules.shopping.dao.ProductDao;
+import com.second.mall.modules.shopping.dao.ShoppingCarItemsDao;
 import com.second.mall.modules.shopping.entity.Indent;
 import com.second.mall.modules.shopping.entity.IndentItem;
 import com.second.mall.modules.shopping.entity.Product;
@@ -34,7 +35,8 @@ public class IndentServiceImpl implements IndentService {
     private IndentItemDao indentItemDao;
     @Autowired
     private ProductDao productDao;
-
+    @Autowired
+    private ShoppingCarItemsDao shoppingCarItemsDao;
 
     //订单新增
     @Override
@@ -49,6 +51,7 @@ public class IndentServiceImpl implements IndentService {
         indent.setCreateTime(LocalDateTime.now());
         indent.setState(0);
         indentDao.insertIndex(indent);
+        //生成订单列
         List<IndentItem> indentItems = indent.getIndentItems();
         for (IndentItem indentItem : indentItems) {
             indentItem.setIndentId(indent.getIndentId());
@@ -57,6 +60,11 @@ public class IndentServiceImpl implements IndentService {
             indentItem.setShopId(product.getShopId());
             indentItem.setCreateTime(LocalDateTime.now());
             indentItemDao.insertIndexItem(indentItem);
+        }
+        //修改购物车列状态
+        List<Integer> shoppingCarItemsIds = indent.getShoppingCarItemsIds();
+        for (Integer shoppingCarItemsId : shoppingCarItemsIds) {
+            shoppingCarItemsDao.updateState(shoppingCarItemsId,3);
         }
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Indent insert success", indent);

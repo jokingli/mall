@@ -97,6 +97,7 @@
                         "' promotePrice='" + item.productPrice*item.discount +
                         // "' image='" + item.image +
                         "' number='" + item.number +
+                        "' shoppingCarItemsId='" + item.shoppingCarItemsId +
                         "' total='" + item.total + "'>";
                     temp += "<td class='orderItemFirstTD'>";
                     temp += "<a href='/mall/product/" + item.productId + "'>"
@@ -180,8 +181,11 @@
         indent.postPrice = $(".orderItemDeliverySelect").find("option:selected").attr("value");
         indent.indentPrice = $(".orderItemTotalSumSpan").attr("total");
         var indentItems = [];
+        var shoppingCarItemsIds = [];
         $(".orderItemTR").each(function() {
             var indentItem = {};
+            var shoppingCarItemsId = $(this).attr("shoppingCarItemsId");
+            shoppingCarItemsIds.push(shoppingCarItemsId);
             indentItem.productId = $(this).attr("productId");
             indentItem.userId = $("#userId").val();
             indentItem.productName = $(this).attr("productName");
@@ -195,8 +199,7 @@
             indentItems.push(indentItem);
         });
         indent.indentItems = indentItems;
-        console.log(indent);
-
+        indent.shoppingCarItemsIds = shoppingCarItemsIds;
         $.ajax({
             url : "/api/indent",
             type : "post",

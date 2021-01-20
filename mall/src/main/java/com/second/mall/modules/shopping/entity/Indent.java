@@ -44,4 +44,7 @@ public class Indent {
 
     @Transient
     private List<IndentItem> indentItems;   //订单所属商品列
+
+    @Transient
+    private List<Integer> shoppingCarItemsIds;
 }

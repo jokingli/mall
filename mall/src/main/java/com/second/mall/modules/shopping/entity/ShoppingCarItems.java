@@ -24,4 +24,7 @@ public class ShoppingCarItems {
     private double total;//总价
     private int state;
 
+    @Transient
+    private int userId;
+
 }
