@@ -97,9 +97,9 @@
                     temp += "<td>";
                     temp += "<button productId='" + product.productId + "' onclick='deleteOne(this)' >删除</button>";
                     temp += "</td>";
-                    temp += "<td>";
+                    temp += "<td ><a productId='" + product.productId + "' onclick='addCollection(this)'> ";
                     temp += "移至收藏夹"
-                    temp += "</td>";
+                    temp += "</a></td>";
                     temp += "</tr>";
                 });
                 $(".cartProductTable tbody").append(temp);
@@ -332,6 +332,23 @@
                 }
             }
         })
+
+
+    }
+//添加到收藏
+    function addCollection(btn){
+        var productId=$(btn).attr("productId");
+        console.log(productId);
+        $.ajax({
+            url : "/collection/add/"+productId,
+            type : "post",
+            success : function (data) {
+                alert(data.message);
+            },
+            error : function (data) {
+                alert(data.message);
+            },
+        });
 
 
     }
