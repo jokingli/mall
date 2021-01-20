@@ -72,6 +72,7 @@ public class UserServiceImpl implements UserService {
             return new ResultEntity<>(ResultEntity.ResultStatus.FAILED.status, "用户名或者密码错误");
         }
         return new ResultEntity<User>(ResultEntity.ResultStatus.SUCCESS.status, "登录成功", user);
+
     }
 
 

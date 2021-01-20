@@ -32,7 +32,8 @@ public class AdminLoginController {
     //进行管理员密码登录
     @PostMapping(value = "/pwdLogin", consumes = "application/json")
     @ResponseBody
-    public ResultEntity<User> pwdLogin(@RequestBody User user) {
+    public ResultEntity<User> pwdLogin(@RequestBody User user,ModelMap modelMap) {
+        modelMap.put("userName",user.getUserName());
         return userService.login(user);
     }
 
@@ -41,9 +42,8 @@ public class AdminLoginController {
     @GetMapping(value = "/index")
     //登录成功跳转到主页面
     public String adminIndex(ModelMap modelMap){
-//        modelMap.put("template", "common/dashboard");
-        modelMap.put("template","account/adminIndex");
-        return "managerIndexSimple";
+        modelMap.put("template","common/dashboard");
+        return "managerIndex";
     }
 
 
@@ -76,11 +76,8 @@ public class AdminLoginController {
     @GetMapping("/userList")
     public String userList(ModelMap modelMap,User user){
         modelMap.addAttribute("list",userService.select());
-        System.err.println(user);
-        System.err.println(this);
-        System.err.println(user);
-
-        return "account/userList";
+        modelMap.put("template","account/userList");
+        return "managerIndex";
     }
 
 

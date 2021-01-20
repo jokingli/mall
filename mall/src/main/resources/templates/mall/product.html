@@ -1,7 +1,7 @@
 <input type="hidden" id="productId" th:value="${productId}"/>
 
 <div class="categoryPictureInProductPageDiv">
-    <input type="hidden" id="produc" value="" />
+    <input type="hidden" id="product" value="" />
     <img id="picture" class="productPictureInProductPage" src="" />
 </div>
 
@@ -136,30 +136,28 @@
     // 检查用户登录状态
     function checkUser() {
         if ($("#userId").val() == "")　{
-            location.href = "/tmall/login";
+            location.href = "/mall/login";
         }
     }
 
     // 添加购物车事件
     function addCartEvent() {
-        checkUser();
 
-        var cartItem = {};
-        cartItem.productId = $("#productId").val();
-        cartItem.productName = $(".productTitle").html();
-        cartItem.originalPrice = $(".originalPrice").html();
-        cartItem.promotePrice = $(".promotionPrice").html();
-        cartItem.number = $(".productNumberSetting").val();
-        cartItem.total = cartItem.promotePrice * cartItem.number;
-        cartItem.image = $(".smallImage").attr("src");
-        cartItem.stock = $("[name='number']").html();
-        cartItem.checked = false;
+        var shoppingCarItems = {};
+
+        shoppingCarItems.productId = $("#productId").val();
+        shoppingCarItems.productName = $(".productTitle").html();
+        shoppingCarItems.productPrice = $(".promotionPrice").html();
+        shoppingCarItems.discount=$("#discount").html();
+        shoppingCarItems.number = $(".productNumberSetting").val();
+        shoppingCarItems.image = $(".smallImage").attr("src");
+        shoppingCarItems.stock = $("[name='number']").html();
 
         $.ajax({
-            url : "/api/redis/cartItem",
+            url : "/shoppingCar/add",
             type : "post",
             contentType: "application/json",
-            data : JSON.stringify(cartItem),
+            data : JSON.stringify(shoppingCarItems),
             success : function (data) {
                 layer.msg(data.message, {icon: 0});
             },
@@ -185,12 +183,12 @@
         cartItem.checked = true;
 
         $.ajax({
-            url : "/api/redis/cartItem",
+            url : "/shoppingCar/enter",
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(cartItem),
             success : function (data) {
-                window.location.href = "/tmall/buy";
+                window.location.href = "/shopping/indent";
             },
             error : function (data) {
                 layer.msg(data.responseText, {icon: 0});
