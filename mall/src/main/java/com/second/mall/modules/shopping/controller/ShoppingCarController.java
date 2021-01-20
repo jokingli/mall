@@ -108,8 +108,10 @@ public class ShoppingCarController {
      */
     @PostMapping(value = "/shoppingCars",consumes = "application/json")
     @ResponseBody
-    public ResultEntity<ShoppingCar> userUpdateShoppingCar(/*@RequestBody ShoppingCar shoppingCar*/) {
+    public ResultEntity<Object> userUpdateShoppingCar(@RequestBody List<ShoppingCarItems> shoppingCarItems) {
 
-        return  shoppingCarService.changeNum(1,12);
+        return  shoppingCarService.userUpdateShoppingCar(shoppingCarItems);
     }
+
+
 }

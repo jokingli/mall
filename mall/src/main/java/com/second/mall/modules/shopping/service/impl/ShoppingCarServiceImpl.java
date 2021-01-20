@@ -145,5 +145,12 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
 
     }
 
-
+    @Override
+    public ResultEntity<Object> userUpdateShoppingCar(List<ShoppingCarItems> shoppingCarItems) {
+        for (ShoppingCarItems shoppingCarItem : shoppingCarItems) {
+            shoppingCarItemsDao.userUpdateShoppingCar(shoppingCarItem.getShoppingCarItemsId(),shoppingCarItem.getNumber(),shoppingCarItem.getState());
+        }
+        return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
+                "修改成功");
+    }
 }

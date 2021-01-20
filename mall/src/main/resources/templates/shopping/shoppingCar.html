@@ -65,6 +65,7 @@
             contentType: "application/json",
             //data : JSON.stringify(searchVo),
             success: function (data) {
+                console.log(data)
                 // 生成购物车列表
                 $(".cartProductTable tbody").html("");
                 var temp = "";
@@ -72,7 +73,8 @@
                     temp += "<tr productId='" + product.productId + "' stock='" + product.stock + "' class='cartProductItemTR'>";
                     temp += "<input type='hidden' id='productId' value='" + product.productId + "'> ";
                     temp += "<td>";
-                    temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "' productName='"+product.productName +"' productPrice='" + product.productPrice + "'  discount='" + product.discount +
+                    temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "'shoppingCarItemsId ='"+product.shoppingCarItemsId+
+                        "' productName='"+product.productName +"' productPrice='" + product.productPrice + "'  discount='" + product.discount +
                         "' onclick='checkone()'  />";temp += "</td>";
                     temp += "<td>";
                     temp += product.productName;
@@ -89,7 +91,8 @@
                     temp += "<td>";
                     temp += "<button productId= '" + product.productId + "' stock='" + product.stock + "' discount='" + product.discount + "' productPrice='" + product.productPrice + "'  onclick='add(this)'> +";
                     temp += "</button>";
-                    temp += "<input type='text' value='" + product.number + "'  productId='" + product.productId + "' stock='" + product.stock + "'  name='num' style='width: 30px' class='orderItemNumberSetting'onkeyup='changeNum(this)' />";
+                    temp += "<input type='text' value='" + product.number + "'  productId='" + product.productId + "' stock='" + product.stock + "'  " +
+                        "name='num' style='width: 30px' class='orderItemNumberSetting'onkeyup='changeNum(this)' />";
                     temp += "<button productId= '" + product.productId + "' stock='" + product.stock + "' discount='" + product.discount + "' productPrice='" + product.productPrice + "'  onclick='sub(this)'>-";
                     temp += "</button>";
                     temp += "</td>";
@@ -305,12 +308,24 @@
      */
     function buy() {
 
-        var shoppingCar = [];
+        var shoppingCarItems = [];
+        $("[name=check]:checked").each(function (idx, element) {
+            var carItem = {};
+            var productId= $(this).attr("productId");
+            carItem.shoppingCarItemsId = $(this).attr("shoppingCarItemsId")
+            carItem.productId = productId
+            carItem.productName = $(this).attr("productName")
+            carItem.productPrice = $(this).attr("productPrice")
+            carItem.number = $(".orderItemNumberSetting[productId=" + productId + "]").val();
+            carItem.state = 1;
+            shoppingCarItems.push(carItem)
+        });
+
         $.ajax({
             url: "/shoppingCar/shoppingCars",
             type: "post",
             contentType: "application/json",
-            // data: JSON.stringify(shoppingCar),
+            data: JSON.stringify(shoppingCarItems),
             success: function (data) {
                 console.log(data)
                 if (data.state == 200) {

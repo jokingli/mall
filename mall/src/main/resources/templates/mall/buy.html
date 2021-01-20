@@ -169,41 +169,42 @@
 
     // 提交订单事件
     function submitOrderEvent() {
-        var order = {};
-        order.userId = $("#userId").val();
-        order.address = $("[name=address]").val();
-        order.post = $("[name=post]").val();
-        order.receiver = $("[name=receiver]").val();
-        order.mobile = $("[name=mobile]").val();
-        order.userMessage = $("[name=userMessage]").val();
-        order.postMethod = $(".orderItemDeliverySelect").find("option:selected").text();
-        order.postage = $(".orderItemDeliverySelect").find("option:selected").attr("value");
-        order.total = $(".orderItemTotalSumSpan").attr("total");
-        var orderItems = [];
+        var indent = {};
+        indent.userId = $("#userId").val();
+        indent.addressId = $("[name=addressChoice]").val();
+        // indent.post = $("[name=post]").val();
+        // indent.receiver = $("[name=receiver]").val();
+        // indent.mobile = $("[name=mobile]").val();
+        indent.userMessage = $('input[name="addressChoice"]:checked').val();
+        indent.post = $(".orderItemDeliverySelect").find("option:selected").text();
+        indent.postPrice = $(".orderItemDeliverySelect").find("option:selected").attr("value");
+        indent.indentPrice = $(".orderItemTotalSumSpan").attr("total");
+        var indentItems = [];
         $(".orderItemTR").each(function() {
-            var orderItem = {};
-            orderItem.productId = $(this).attr("productId");
-            orderItem.productName = $(this).attr("productName");
-            orderItem.originalPrice = $(this).attr("originalPrice");
-            orderItem.promotePrice = $(this).attr("promotePrice");
-            orderItem.image = $(this).attr("image");
-            orderItem.number = $(this).attr("number");
-            orderItem.total = $(this).attr("total");
-            orderItem.delivery = $(".orderItemDeliverySelect").find("option:selected").text();
-            orderItem.postage = $(".orderItemDeliverySelect").find("option:selected").attr("value");
-            orderItems.push(orderItem);
+            var indentItem = {};
+            indentItem.productId = $(this).attr("productId");
+            indentItem.userId = $("#userId").val();
+            indentItem.productName = $(this).attr("productName");
+            // indentItem.originalPrice = $(this).attr("originalPrice");
+            // indentItem.promotePrice = $(this).attr("promotePrice");
+            // indentItem.image = $(this).attr("image");
+            indentItem.productNum = $(this).attr("number");
+            // indentItem.total = $(this).attr("total");
+            indentItem.delivery = $(".orderItemDeliverySelect").find("option:selected").text();
+            indentItem.postage = $(".orderItemDeliverySelect").find("option:selected").attr("value");
+            indentItems.push(indentItem);
         });
-        order.orderItems = orderItems;
-        console.log(order);
+        indent.indentItems = indentItems;
+        console.log(indent);
 
         $.ajax({
-            url : "/api/order",
+            url : "/api/indent",
             type : "post",
             contentType: "application/json",
-            data : JSON.stringify(order),
+            data : JSON.stringify(indent),
             success : function (data) {
-                if (data.status == 200) {
-                    window.location.href = "/tmall/pay/" + data.object.orderCode;
+                if (data.state == 200) {
+                    window.location.href = "/mall/pay/" + data.object.indentCode;
                 } else {
                     layer.msg(data.message, {icon: 0});
                 }
