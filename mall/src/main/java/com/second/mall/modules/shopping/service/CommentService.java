@@ -6,6 +6,7 @@ import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Comment;
 import com.second.mall.modules.shopping.entity.Indent;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,4 +33,6 @@ public interface CommentService {
 
     //通过id查询
     ResultEntity<Comment> selectCommentById(int commentId);
+
+    HashMap<String, Object> selectCommentByProductId(int productId);
 }

@@ -7,9 +7,11 @@ import com.second.mall.modules.shopping.entity.Comment;
 import com.second.mall.modules.shopping.entity.Indent;
 import com.second.mall.modules.shopping.service.CommentService;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -51,6 +53,11 @@ public class CommentController {
         return commentService.selectComment();
     }
 
+    //所有评论
+    @GetMapping(value = "/comment/show/{productId}")
+    private HashMap<String,Object> selectCommentByProductId(@PathVariable int productId){
+        return commentService.selectCommentByProductId(productId);
+    }
 
 
     /**
