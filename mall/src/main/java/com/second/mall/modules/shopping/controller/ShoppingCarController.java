@@ -49,6 +49,7 @@ public class ShoppingCarController {
      * {"userId":"1","productId":"2"}
      */
     @PostMapping(value = "/add",consumes = "application/json")
+    @ResponseBody
     public ResultEntity<ShoppingCar> userAddShoppingCar(@RequestBody ShoppingCarItems shoppingCarItems) {
 
         return  shoppingCarService.userAddShoppingCar(shoppingCarItems);

@@ -1,9 +1,9 @@
 <input type="hidden" id="productId" th:value="${productId}"/>
 
-<div class="categoryPictureInProductPageDiv">
+<!--<div class="categoryPictureInProductPageDiv">
     <input type="hidden" id="produc" value="" />
     <img id="picture" class="productPictureInProductPage" src="" />
-</div>
+</div>-->
 
 <div class="productPageDiv">
     <div th:replace="mall/product-imgAndInfo.html"></div>
@@ -49,23 +49,27 @@
             success : function (data) {
                 // 初始化产品信息
                 $("#categoryId").val(data.categoryId);
-                $(".productTitle").html(data.name);
+                $(".productTitle").html(data.productName);
                 $(".promotionPrice").html(data.productPrice);
                 $("[name='saleCount']").html(data.saleCount);
                 $("[name='reviewCount']").html(data.reviewCount);
-                $("[name='number']").html(data.number);
+                $("[name='number']").html(data.productNum);
+                $("#discount").text(data.discount);
 
                 // 初始化 category 图片信息
-                initCategory();
+               // initCategory();
 
-                // 初始化产品图片框和鼠标移动事件
+               /* // 初始化产品图片框和鼠标移动事件
                 var smallImages = "";
+
                 $(".smallImageDiv").html(smallImages);
-                $("img.bigImg").attr("src", data.bigImages[0].src);
+                $("img.bigImg").attr("src", data.pictureUrl.src);
+                // $("img.bigImg").attr("src", data.bigImages[0].src);
                 $("img.smallImage").mouseenter(function(){
                     var productUrl = $(this).attr("productUrl");
                     $("img.bigImg").attr("src", productUrl);
                 });
+
 
                 // 初始化数量框事件
                 initCountEvent(data.number);
@@ -105,7 +109,7 @@
     }
 
     // 初始化数量框事件
-    function initCountEvent(stock) {
+    /*function initCountEvent(stock) {
         $(".productNumberSetting").keyup(function() {
             var num = $(".productNumberSetting").val();
             num = parseInt(num);
@@ -131,37 +135,47 @@
                 num=1;
             $(".productNumberSetting").val(num);
         });
+    }*/
+//初始化详情页图片
+    initPictures();
+    function initPictures() {
     }
 
     // 检查用户登录状态
-    function checkUser() {
-        if ($("#userId").val() == "")　{
-            location.href = "/mall/login";
-        }
-    }
+    // function checkUser() {
+    //     if ($("#userId").val() == "")　{
+    //         location.href = "/tmall/login";
+    //     }
+    // }
 
     // 添加购物车事件
     function addCartEvent() {
-        checkUser();
 
-        var cartItem = {};
-        cartItem.productId = $("#productId").val();
-        cartItem.productName = $(".productTitle").html();
-        cartItem.originalPrice = $(".originalPrice").html();
-        cartItem.promotePrice = $(".promotionPrice").html();
-        cartItem.number = $(".productNumberSetting").val();
-        cartItem.total = cartItem.promotePrice * cartItem.number;
-        cartItem.image = $(".smallImage").attr("src");
-        cartItem.stock = $("[name='number']").html();
-        cartItem.checked = false;
+        var shoppingCarItems = {};
+
+        shoppingCarItems.productId = $("#productId").val();
+        shoppingCarItems.productName = $(".productTitle").html();
+        shoppingCarItems.productPrice = $(".promotionPrice").html();
+        shoppingCarItems.discount=$("#discount").html();
+        shoppingCarItems.number = $(".productNumberSetting").val();
+        shoppingCarItems.image = $(".smallImage").attr("src");
+        shoppingCarItems.stock = $("[name='number']").html();
 
         $.ajax({
-            url : "/api/redis/cartItem",
+            url : "/api/pictures",
             type : "post",
             contentType: "application/json",
-            data : JSON.stringify(cartItem),
             success : function (data) {
-                layer.msg(data.message, {icon: 0});
+                var pictures = "";
+                $.each(data.list, function(i, item){
+                    pictures += "<div class='imgInimgAndInfo'>";
+                    pictures += "<img width='100px' class='bigImg' src='" + item.pictureUrl + "'>";
+                    pictures += "<div class='smallImageDiv'>";
+                    pictures += "</div>";
+                    pictures += "</div>";
+                });
+                products += "<div style='clear: both'></div>";
+                $("[class=productDetailImagesPart]").html(pictures);
             },
             error : function (data) {
                 layer.msg(data.responseText, {icon: 0});
@@ -169,32 +183,5 @@
         });
     }
 
-    // 立即购买事件
-    function buyEvent() {
-        checkUser();
 
-        var cartItem = {};
-        cartItem.productId = $("#productId").val();
-        cartItem.productName = $(".productTitle").html();
-        cartItem.originalPrice = $(".originalPrice").html();
-        cartItem.promotePrice = $(".promotionPrice").html();
-        cartItem.number = $(".productNumberSetting").val();
-        cartItem.total = cartItem.promotePrice * cartItem.number;
-        cartItem.image = $(".smallImage").attr("src");
-        cartItem.stock = $("[name='number']").html();
-        cartItem.checked = true;
-
-        $.ajax({
-            url : "/api/redis/cartItem",
-            type : "post",
-            contentType: "application/json",
-            data : JSON.stringify(cartItem),
-            success : function (data) {
-                window.location.href = "/tmall/buy";
-            },
-            error : function (data) {
-                layer.msg(data.responseText, {icon: 0});
-            }
-        });
-    }
 </script>

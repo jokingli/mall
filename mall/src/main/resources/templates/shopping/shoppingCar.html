@@ -65,7 +65,6 @@
             contentType: "application/json",
             //data : JSON.stringify(searchVo),
             success: function (data) {
-                console.log(data)
                 // 生成购物车列表
                 $(".cartProductTable tbody").html("");
                 var temp = "";
@@ -76,9 +75,9 @@
                     temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "'shoppingCarItemsId ='"+product.shoppingCarItemsId+
                         "' productName='"+product.productName +"' productPrice='" + product.productPrice + "'  discount='" + product.discount +
                         "' onclick='checkone()'  />";temp += "</td>";
-                    temp += "<td>";
+                    temp += "<td><a href='/categories.html'> <img src='/img/lunbo/1.jpg' width='100px' height='100px'> ";
                     temp += product.productName;
-                    temp += "</td>";
+                    temp += "</a> </td>";
                     temp += "<td>";
                     temp += product.productPrice;
                     temp += "</td>";
@@ -91,8 +90,7 @@
                     temp += "<td>";
                     temp += "<button productId= '" + product.productId + "' stock='" + product.stock + "' discount='" + product.discount + "' productPrice='" + product.productPrice + "'  onclick='add(this)'> +";
                     temp += "</button>";
-                    temp += "<input type='text' value='" + product.number + "'  productId='" + product.productId + "' stock='" + product.stock + "'  " +
-                        "name='num' style='width: 30px' class='orderItemNumberSetting'onkeyup='changeNum(this)' />";
+                    temp += "<input type='text' value='" + product.number + "'  productId='" + product.productId + "' stock='" + product.stock + "'  name='num' style='width: 30px' class='orderItemNumberSetting'onkeyup='changeNum(this)' />";
                     temp += "<button productId= '" + product.productId + "' stock='" + product.stock + "' discount='" + product.discount + "' productPrice='" + product.productPrice + "'  onclick='sub(this)'>-";
                     temp += "</button>";
                     temp += "</td>";
@@ -307,35 +305,33 @@
      * 购买产品
      */
     function buy() {
+        var products=[];
 
-        var shoppingCarItems = [];
-        $("[name=check]:checked").each(function (idx, element) {
-            var carItem = {};
-            var productId= $(this).attr("productId");
-            carItem.shoppingCarItemsId = $(this).attr("shoppingCarItemsId")
-            carItem.productId = productId
-            carItem.productName = $(this).attr("productName")
-            carItem.productPrice = $(this).attr("productPrice")
-            carItem.number = $(".orderItemNumberSetting[productId=" + productId + "]").val();
-            carItem.state = 1;
-            shoppingCarItems.push(carItem)
+        $("[name=check]:checked").each(function () {
+            var product={};
+            productId= $(this).attr("productId");
+            product.productId=productId;
+            product.productName = $(this).attr("productName");
+            product.productPrice = $(this).attr("productPrice");
+            product.discount = $(this).attr("discount");
+            product.num = $(".orderItemNumberSetting[productId=" + productId + "]").val();
+            products.push(product);
         });
-
-        $.ajax({
-            url: "/shoppingCar/shoppingCars",
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify(shoppingCarItems),
-            success: function (data) {
-                console.log(data)
-                if (data.state == 200) {
-                    alert(data.message);
-                    window.location.href = "/mall/buy";
-                } else {
-                    alert(data.message);
-                }
-            }
-        })
+        alert(JSON.stringify(products));
+        // $.ajax({
+        //     url: "/shoppingCar/clear",
+        //     type: "delete",
+        //     // contentType: "application/json",
+        //     // data: JSON.stringify(productId),
+        //     success: function (data) {
+        //         if (data.state == 200) {
+        //             alert(data.message);
+        //             window.location.reload();
+        //         } else {
+        //             alert(data.message);
+        //         }
+        //     }
+        // })
 
 
     }
