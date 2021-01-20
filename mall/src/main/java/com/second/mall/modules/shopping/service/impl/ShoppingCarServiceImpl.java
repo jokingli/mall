@@ -159,7 +159,7 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
         //通过userId得到购物车id
         ShoppingCar shoppingCar = shoppingCarDao.findByUserId(userId);
         //
-        int i = shoppingCarItemsDao.deletOneProduct(userId, poductId);
+        int i = shoppingCarItemsDao.deletOneProduct(shoppingCar.getShoppingCarId(), poductId);
         if (i > 0) {
             return new ResultEntity<ShoppingCar>(ResultEntity.ResultStatus.SUCCESS.status,
                     "删除成功");

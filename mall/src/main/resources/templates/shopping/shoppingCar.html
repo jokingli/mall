@@ -46,6 +46,7 @@
         </button>
     </div>
 </div>
+
 </body>
 <script src="/plugin/jquery/dist/jquery.js"></script>
 <script>
@@ -74,7 +75,7 @@
                     temp += "<input type='checkbox' id='check' name='check' productId='" + product.productId + "'shoppingCarItemsId ='"+product.shoppingCarItemsId+
                         "' productName='"+product.productName +"' productPrice='" + product.productPrice + "'  discount='" + product.discount +
                         "' onclick='checkone()'  />";temp += "</td>";
-                    temp += "<td><a th:href='/mall/product'> <img th:src='"+product.image+"'  width='100px' height='100px'> ";
+                    temp += "<td><a href='/mall/product/" +product.productId +"'> <img src='"+product.image+"'  width='100px' height='100px'> ";
                     temp += product.productName;
                     temp += "</a> </td>";
                     temp += "<td>";

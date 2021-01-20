@@ -112,13 +112,12 @@
         checkUser();
 
         var shoppingCarItems = {};
-
         shoppingCarItems.productId = $("#productId").val();
         shoppingCarItems.productName = $(".productTitle").html();
         shoppingCarItems.productPrice = $(".promotionPrice").html();
         shoppingCarItems.discount=$("#discount").html();
         shoppingCarItems.number = $(".productNumberSetting").val();
-        shoppingCarItems.image = $(".smallImage").attr("src");
+        shoppingCarItems.image = $(".bigImg").attr("src");
         shoppingCarItems.stock = $("[name='number']").html();
 
         $.ajax({
@@ -176,7 +175,7 @@
         });
     }
 
-
+//添加到收藏
    function addCollection(){
            var productId=$("#productId").val();
            console.log(productId);

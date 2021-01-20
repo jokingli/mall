@@ -83,6 +83,8 @@ public class ShiroConfig {
         //商城过滤规则  对购物车、订单、收藏页面的过滤
         map.put("/shoppingCar/enter","mallAuthc");
         map.put("/shopping/indent","mallAuthc");
+        map.put("/shoppingCar/add","mallAuthc");
+        map.put("/collection/add","mallAuthc");
         map.put("/collection/enter","mallAuthc");
         map.put(" /mall/indents","mallAuthc");
 
