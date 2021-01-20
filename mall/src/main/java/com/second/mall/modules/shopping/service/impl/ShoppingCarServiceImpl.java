@@ -102,6 +102,15 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
     }
 
     /**
+     * 通过用户id查询用户购物车中的商品
+     */
+    @Override
+    public List<ShoppingCarItems> selectShoppingCarByState(int userId) {
+        ShoppingCar shoppingCar = shoppingCarDao.findByUserId(userId);
+        return shoppingCarItemsDao.selectShoppingCarByState(shoppingCar.getShoppingCarId());
+
+    }
+    /**
      * 批量删除购物车中商品
      */
     @Override
@@ -172,4 +181,6 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "修改成功");
     }
+
+
 }

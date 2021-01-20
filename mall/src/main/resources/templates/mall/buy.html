@@ -80,7 +80,7 @@
     function initCheckedCart() {
         var userId = $("#userId").val();
         $.ajax({
-            url: "/shoppingCar/show/" + userId,
+            url: "/shoppingCar/show/state/" + userId,
             type: "get",
             contentType: "application/json",
             //data : JSON.stringify(searchVo),
@@ -133,11 +133,11 @@
                 });
                 $(".productListTable tbody").append(temp);
 
-                postageTotal = getPostageTotal();
+                var postageTotal = getPostageTotal();
                 $(".postageTotal").html(formatMoney(postageTotal));
                 $(".cartTotal").html(formatMoney(SumSpan));
                 $(".orderItemTotalSumSpan").html(formatMoney(SumSpan + postageTotal));
-                $(".cartTotal").attr("cartTotal", data.total);
+                $(".cartTotal").attr("cartTotal", SumSpan);
                 $(".orderItemTotalSumSpan").attr("total", parseFloat(SumSpan) + parseFloat(postageTotal));
             },
             error : function (data) {

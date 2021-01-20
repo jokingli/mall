@@ -33,8 +33,6 @@
         $(".addCartButton").bind("click", function() {
             addCartEvent();
         });
-
-
         $(".buyButton").bind("click", function() {
             buyEvent();
         });
@@ -52,6 +50,7 @@
                 // 初始化产品信息
                 $("#categoryId").val(data.categoryId);
                 $(".productTitle").html(data.productName);
+                $(".bigImg").attr('src',data.pictureUrl)
                 $(".promotionPrice").html(data.productPrice);
                 $("[name='saleCount']").html(data.saleCount);
                 $("[name='reviewCount']").html(data.reviewCount);
@@ -61,7 +60,7 @@
                 // 初始化 category 图片信息
                // initCategory();
 
-               // 初始化产品图片框和鼠标移动事件
+               /* // 初始化产品图片框和鼠标移动事件
                 var smallImages = "";
 
                 $(".smallImageDiv").html(smallImages);
@@ -72,106 +71,36 @@
                     $("img.bigImg").attr("src", productUrl);
                 });
 
+                //初始化数量框事件
+                initCountEvent(data.number);
                 // 初始化数量框事件
-                initCountEvent(data.productNum);
-
-                // 初始化产品详情页面
-                var properties = "";
-                $.each(data.productProperties, function(i, item){
-                    properties += "<span>" + item.propertyKey + ": " + item.propertyValue + "</span>";
-                });
-                $(".productParamterList").html(properties);
-                var detailImages = "";
-                $.each(data.detailImages, function(i, item){
-                    detailImages += "<img src="  + item.src + ">";
-                });
-                $(".productDetailImagesPart").html(detailImages);
-
-                // 初始化产品评论页面
-                $(".productReviewTopReviewLinkNumber").html(data.commentCount);
-                var reviews = "";
-                $.each(data.reviews, function(i, item){
-                    reviews += "<div class='productReviewItem'>";
-                    reviews += "<div class='productReviewItemDesc'>";
-                    reviews += "<div class='productReviewItemContent'>" + item.content + "</div>";
-                    reviews += "<div class='productReviewItemDate'>" + item.createDate + "</div>";
-                    reviews += "</div>";
-                    reviews += "<div class='productReviewItemUserInfo'>" + item.userName +
-                        "<span class='userInfoGrayPart'></span></div>";
-                    reviews += "<div style='clear:both'></div>";
-                    reviews += "</div>";
-                });
-                $(".productReviewContentPart").html(reviews);
-            },
-            error : function (data) {
-                layer.msg(data.responseText, {icon: 0});
-            }
-        });
-    }
-
-    // 初始化数量框事件
-function initCountEvent(stock) {
-
-        $(".productNumberSetting").keyup(function() {
-            var num = $(".productNumberSetting").val();
-            num = parseInt(num);
-            if(isNaN(num))
-                num = 1;
-            if(num <= 0)
-                num = 1;
-            if(num > stock)
-                num = stock;
-            $(".productNumberSetting").val(num);
-        });
-
-        $(".increaseNumber").click(function(){
-            var num= $(".productNumberSetting").val();
-            num++;
-            if(num > stock)
-                num = stock;
-            $(".productNumberSetting").val(num);
-        });
-
-        $(".decreaseNumber").click(function(){
-            var num= $(".productNumberSetting").val();
-            --num;
-            if(num<=0)
-                num=1;
-            $(".productNumberSetting").val(num);
-        });
-    }
-  //初始化详情页图片
-    initPictures();
-    function initPictures() {
-    }
-
-    // 检查用户登录状态
-    // function checkUser() {
-    //     if ($("#userId").val() == "")　{
-    //         location.href = "/tmall/login";
-    //     }
-    // }
-
-    // 添加购物车事件
-    function addCartEvent() {
-
-        var shoppingCarItems = {};
-
-        shoppingCarItems.productId = $("#productId").val();
-        shoppingCarItems.productName = $(".productTitle").html();
-        shoppingCarItems.productPrice = $(".promotionPrice").html();
-        shoppingCarItems.discount=$("#discount").html();
-        shoppingCarItems.number = $(".productNumberSetting").val();
-        shoppingCarItems.image = $(".smallImage").attr("src");
-        shoppingCarItems.stock = $("[name='number']").html();
-
-        $.ajax({
-            url : "/shoppingCar/add",
-            type : "post",
-            contentType: "application/json",
-            data : JSON.stringify(shoppingCarItems),
-            success : function (data) {
-                layer.msg(data.message, {icon: 0});
+                function initCountEvent(stock) {
+                    $(".productNumberSetting").keyup(function() {
+                        var num = $(".productNumberSetting").val();
+                        num = parseInt(num);
+                        if(isNaN(num))
+                            num = 1;
+                        if(num <= 0)
+                            num = 1;
+                        if(num > stock)
+                            num = stock;
+                        $(".productNumberSetting").val(num);
+                    });
+                    $(".increaseNumber").click(function(){
+                        var num= $(".productNumberSetting").val();
+                        num++;
+                        if(num > stock)
+                            num = stock;
+                        $(".productNumberSetting").val(num);
+                    });
+                    $(".decreaseNumber").click(function(){
+                        var num= $(".productNumberSetting").val();
+                        --num;
+                        if(num<=0)
+                            num=1;
+                        $(".productNumberSetting").val(num);
+                    });
+                }
             },
             error : function (data) {
                 layer.msg(data.responseText, {icon: 0});
@@ -182,6 +111,7 @@ function initCountEvent(stock) {
     // 立即购买事件
     function buyEvent() {
         // checkUser();
+
         var cartItem = {};
         cartItem.productId = $("#productId").val();
         cartItem.productName = $(".productTitle").html();
@@ -218,16 +148,16 @@ function initCountEvent(stock) {
     }
 
 
-   function addCollection() {
-       var productId = $("#productId").val();
-       console.log(productId);
+   function addCollection(){
+           var productId=$("#productId").val();
+           console.log(productId);
        $.ajax({
-           url: "/collection/add/" + productId,
-           type: "post",
-           success: function (data) {
+           url : "/collection/add/"+productId,
+           type : "post",
+           success : function (data) {
                alert(data.message);
            },
-           error: function (data) {
+           error : function (data) {
                alert(data.message);
            },
        });
