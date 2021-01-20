@@ -4,8 +4,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.modules.common.entity.SearchBean;
+import com.second.mall.modules.shopping.dao.PictureDao;
 import com.second.mall.modules.shopping.dao.ProductDao;
+import com.second.mall.modules.shopping.dao.ProductProductAttDao;
+import com.second.mall.modules.shopping.entity.Picture;
 import com.second.mall.modules.shopping.entity.Product;
+import com.second.mall.modules.shopping.entity.ProductProductAtt;
 import com.second.mall.modules.shopping.service.ProductService;
 import com.second.mall.modules.vo.ProductSearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,10 @@ public class productServiceImpl implements ProductService
 {
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private ProductProductAttDao productProductAttDao;
+    @Autowired
+    private PictureDao pictureDao;
 
     @Override
     public List<Product> selectProduct() {
@@ -68,6 +76,15 @@ public class productServiceImpl implements ProductService
     }
 
     private Product initProduct(Product product) {
+        List<Picture> productImages = Optional
+                .ofNullable(pictureDao.getPictureByProductId(product.getProductId()))
+                .orElse(Collections.emptyList());
+        product.setPictureList(productImages);
+
+        List<ProductProductAtt> productProperties = Optional
+                .ofNullable(productProductAttDao.getProductPropertiesByProductId(product.getProductId()))
+                .orElse(Collections.emptyList());
+        product.setProductProperties(productProperties);
         return product;
     }
 
