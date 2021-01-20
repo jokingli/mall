@@ -15,7 +15,7 @@ public class Picture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pictureId;
-    private String pictureUr;
+    private String pictureUrl;
     private Integer productId;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

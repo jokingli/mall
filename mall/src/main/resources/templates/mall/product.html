@@ -122,7 +122,6 @@
 
         $.ajax({
             url : "/shoppingCar/add",
-
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(shoppingCarItems),
@@ -145,13 +144,13 @@
         cartItem.userId = $("#userId").val();
         cartItem.productId = $("#productId").val();
         cartItem.productName = $(".productTitle").html();
-        cartItem.discount = $(".discount").html();
+        cartItem.discount = $("#discount").html();
         cartItem.productPrice = $(".promotionPrice").html();
         cartItem.number = $(".productNumberSetting").val();
         cartItem.total = cartItem.productPrice * cartItem.number;
-        cartItem.image = $(".smallImage").attr("src");
-        cartItem.number = $("[name='number']").html();
-        cartItem.state = 2;
+        cartItem.image = $(".bigImg").attr("src");
+        cartItem.stock = $("[name='number']").html();
+        cartItem.state = 1;
 
         $.ajax({
             url : "/shoppingCar/cartItem",
@@ -160,16 +159,16 @@
             data : JSON.stringify(cartItem),
             success : function (data) {
                 window.location.href = "/mall/buy";
-                var pictures = "";
-                $.each(data.list, function(i, item){
-                    pictures += "<div class='imgInimgAndInfo'>";
-                    pictures += "<img width='100px' class='bigImg' src='" + item.pictureUrl + "'>";
-                    pictures += "<div class='smallImageDiv'>";
-                    pictures += "</div>";
-                    pictures += "</div>";
-                });
-                products += "<div style='clear: both'></div>";
-                $("[class=productDetailImagesPart]").html(pictures);
+                // var pictures = "";
+                // $.each(data.list, function(i, item){
+                //     pictures += "<div class='imgInimgAndInfo'>";
+                //     pictures += "<img width='100px' class='bigImg' src='" + item.pictureUrl + "'>";
+                //     pictures += "<div class='smallImageDiv'>";
+                //     pictures += "</div>";
+                //     pictures += "</div>";
+                // });
+                // products += "<div style='clear: both'></div>";
+                // $("[class=productDetailImagesPart]").html(pictures);
             },
             error : function (data) {
                 layer.msg(data.responseText, {icon: 0});

@@ -33,7 +33,7 @@
                 <td>订单编号：</td>
                 <td>
                     <span class="orderCode"></span>
-                    <img width="23px" src="#">
+<!--                    <img width="23px" src="#">-->
                 </td>
             </tr>
             <tr>
@@ -100,7 +100,7 @@
                 $.each(rs.object.indentItems, function(i, item) {
                     temp += "<tr>"
                     temp += "<td><a href='#" + item.productId +
-                        "'><img width='50px' src='" + item.pictureUrl + "'></a></td>"
+                        "'><img width='50px' src='" + item.image + "'></a></td>"
                     temp += "<td class='confirmPayOrderItemProductLink'>"
                     temp += "<a href='#" + item.productId + "'>" + item.productName + "</a>"
                     temp += "</td>"
@@ -132,7 +132,7 @@
                 $(".payDate").html(rs.object.payTime);
 
                 if (rs.object.state == 0) {
-                    $(".orderFlow").attr("src", "/img/site/flow_1.png");
+                    $(".orderFlow").attr("src", "/img/site/flow_2.png");
                     $(".waitPay").css("display", "block");
                     $(".confirmPay").css("display", "none");
                     $(".confirmedPay").css("display", "none");

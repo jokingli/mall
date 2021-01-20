@@ -95,13 +95,13 @@
                         "' productName='" + item.productName +
                         "' productPrice='" + item.productPrice +
                         "' promotePrice='" + item.productPrice*item.discount +
-                        // "' image='" + item.image +
+                        "' image='" + item.image +
                         "' number='" + item.number +
                         "' shoppingCarItemsId='" + item.shoppingCarItemsId +
                         "' total='" + item.total + "'>";
                     temp += "<td class='orderItemFirstTD'>";
                     temp += "<a href='/mall/product/" + item.productId + "'>"
-                        // +"<img class='orderItemImg' src='" + item.image + "'>";
+                        +"<img class='indentItemImg' src='" + item.image + "' width='100px' height='100px'>";
                     temp += "</td>";
                     temp += "<td class='orderItemProductInfo'>";
                     temp += "<a  href='/mall/product/" + item.productId + "' class='orderItemProductLink'>";
@@ -191,7 +191,7 @@
             indentItem.productName = $(this).attr("productName");
             // indentItem.originalPrice = $(this).attr("originalPrice");
             // indentItem.promotePrice = $(this).attr("promotePrice");
-            // indentItem.image = $(this).attr("image");
+            indentItem.image = $(this).attr("image");
             indentItem.productNum = $(this).attr("number");
             // indentItem.total = $(this).attr("total");
             indentItem.delivery = $(".orderItemDeliverySelect").find("option:selected").text();
@@ -200,6 +200,7 @@
         });
         indent.indentItems = indentItems;
         indent.shoppingCarItemsIds = shoppingCarItemsIds;
+        console.log(indent)
         $.ajax({
             url : "/api/indent",
             type : "post",

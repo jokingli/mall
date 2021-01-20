@@ -7,8 +7,10 @@ import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.dao.CommentDao;
 import com.second.mall.modules.shopping.dao.IndentDao;
 import com.second.mall.modules.shopping.dao.IndentItemDao;
+import com.second.mall.modules.shopping.dao.ProductDao;
 import com.second.mall.modules.shopping.entity.Comment;
 import com.second.mall.modules.shopping.entity.Indent;
+import com.second.mall.modules.shopping.entity.Product;
 import com.second.mall.modules.shopping.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private IndentItemDao indentItemDao;
+    @Autowired
+    private ProductDao productDao;
 
     @Override
     public ResultEntity<Comment> insertComment(Comment comment) {
@@ -40,6 +44,9 @@ public class CommentServiceImpl implements CommentService {
         comment.setState(0);
         comment.setCreateTime(LocalDateTime.now());
         commentDao.insertComment(comment);
+        Product productById = productDao.getProductById(comment.getProductId());
+        int commentCount = productById.getCommentCount();
+        productDao.commentCountAdd(commentCount+1,comment.getProductId());
         indentDao.updateStateForConfirm(comment.getIndentCode(),4,LocalDateTime.now());
         indentItemDao.updateIndexItemState(comment.getIndentItemId(),1);
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,

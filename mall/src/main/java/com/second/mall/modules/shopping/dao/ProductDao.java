@@ -3,8 +3,10 @@ package com.second.mall.modules.shopping.dao;
 import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.entity.Product;
 import com.second.mall.modules.vo.ProductSearchVo;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -107,8 +109,6 @@ public interface ProductDao {
             + "</script>")
     List<Product> getProductsBySearchVo(SearchBean searchBean);
 
-
-
-
-
+    @Update("update product set comment_count = #{commentCount} where product_id = #{productId}")
+    void commentCountAdd(@Param("commentCount") int commentCount,@Param("productId") int productId);
 }

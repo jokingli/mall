@@ -76,14 +76,14 @@
         var indentItemId = $("#indentItemId").val();
 
         $.ajax({
-            url : "/mall/product/" + productId,
+            url : "/mall/product/comment/" + productId,
             type : "get",
             success : function (rs) {
                 console.log(rs)
-                // $("#productImage").attr("src", rs.bigPictures.length == 0 ? "" : rs.bigImages[0].src);
+                $("#productImage").attr("src", rs.pictureUrl);
                 $(".reviewProductInfoRightText").html(rs.productName);
                 $(".reviewProductInfoTablePrice").html(rs.productPrice);
-                // $(".orderSaleCount").html(rs.saleCount);
+                $(".orderSaleCount").html(rs.saleCount);
                 $(".reviewStasticsNumber").html(rs.commentCount);
             },
             error : function (data) {

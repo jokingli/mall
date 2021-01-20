@@ -45,7 +45,7 @@ public class ProductController {
     }
 
 
-    @GetMapping(value ="/product/{productId}", consumes = "application/json")
+    @GetMapping(value ="/product/comment/{productId}")
     @ResponseBody
     public Product selectProductById(@PathVariable int productId) {
         return productService.getProductByProductId(productId);

@@ -24,9 +24,9 @@ import java.util.List;
 public interface IndentItemDao {
     //通过订单列对象增加订单列
     @Insert("INSERT INTO `indent_item` " +
-            "(product_id,product_num,indent_id,shop_id,create_time,postage,delivery,state) " +
+            "(product_id,user_id,product_num,indent_id,image,shop_id,create_time,postage,delivery,state) " +
             "VALUES " +
-            "(#{productId},#{productNum},#{indentId},#{shopId},#{createTime},#{postage},#{delivery},#{state})")
+            "(#{productId},#{userId},#{productNum},#{indentId},#{image},#{shopId},#{createTime},#{postage},#{delivery},#{state})")
     @Options(useGeneratedKeys = true,keyProperty = "indentItemId",keyColumn = "indent_item_id")
     void insertIndexItem(IndentItem indentItem);
 
