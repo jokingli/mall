@@ -33,6 +33,8 @@
         $(".addCartButton").bind("click", function() {
             addCartEvent();
         });
+
+
         $(".buyButton").bind("click", function() {
             buyEvent();
         });
@@ -59,7 +61,7 @@
                 // 初始化 category 图片信息
                // initCategory();
 
-               /* // 初始化产品图片框和鼠标移动事件
+               // 初始化产品图片框和鼠标移动事件
                 var smallImages = "";
 
                 $(".smallImageDiv").html(smallImages);
@@ -108,7 +110,8 @@
     }
 
     // 初始化数量框事件
-    function initCountEvent(stock) {
+function initCountEvent(stock) {
+
         $(".productNumberSetting").keyup(function() {
             var num = $(".productNumberSetting").val();
             num = parseInt(num);
@@ -120,6 +123,7 @@
                 num = stock;
             $(".productNumberSetting").val(num);
         });
+
         $(".increaseNumber").click(function(){
             var num= $(".productNumberSetting").val();
             num++;
@@ -127,6 +131,7 @@
                 num = stock;
             $(".productNumberSetting").val(num);
         });
+
         $(".decreaseNumber").click(function(){
             var num= $(".productNumberSetting").val();
             --num;
@@ -134,8 +139,8 @@
                 num=1;
             $(".productNumberSetting").val(num);
         });
-    }*/
-//初始化详情页图片
+    }
+  //初始化详情页图片
     initPictures();
     function initPictures() {
     }
@@ -162,7 +167,6 @@
 
         $.ajax({
             url : "/shoppingCar/add",
-
             type : "post",
             contentType: "application/json",
             data : JSON.stringify(shoppingCarItems),
@@ -178,7 +182,6 @@
     // 立即购买事件
     function buyEvent() {
         // checkUser();
-
         var cartItem = {};
         cartItem.productId = $("#productId").val();
         cartItem.productName = $(".productTitle").html();
@@ -215,16 +218,16 @@
     }
 
 
-   function addCollection(){
-           var productId=$("#productId").val();
-           console.log(productId);
+   function addCollection() {
+       var productId = $("#productId").val();
+       console.log(productId);
        $.ajax({
-           url : "/collection/add/"+productId,
-           type : "post",
-           success : function (data) {
+           url: "/collection/add/" + productId,
+           type: "post",
+           success: function (data) {
                alert(data.message);
            },
-           error : function (data) {
+           error: function (data) {
                alert(data.message);
            },
        });
