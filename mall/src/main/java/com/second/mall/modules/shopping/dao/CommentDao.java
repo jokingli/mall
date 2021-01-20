@@ -36,6 +36,8 @@ public interface CommentDao {
     //修改评论
     @Update("UPDATE `comment` SET comments = #{comments} WHERE comment_id = #{commentId}")
     void updateComment(Comment comment);
+    @Update("UPDATE `comment` SET state = #{state} WHERE comment_id = #{commentId}")
+    void updateCommentState(Comment comment);
 
     //查询评论通过id
     @Select("SELECT `comment`.*, product.product_name, shop.shop_name, `user`.user_name\n" +
@@ -53,9 +55,13 @@ public interface CommentDao {
     @Select("SELECT *FROM `comment` WHERE user_id = #{userId}")
     Comment selectCommentByUserId(int userId);
 
-    //通过userId查询
-    @Select("SELECT *FROM `comment` WHERE product_id = #{productId}")
-    Comment selectCommentByProductId(int productId);
+    //通过productId查询
+    @Select("SELECT `user`.user_name, `comment`.*\n" +
+            "FROM `comment`\n" +
+            "INNER JOIN `user`\n" +
+            "ON `comment`.user_id = `user`.user_id\n " +
+            "WHERE product_id = #{productId}")
+    List<Comment> selectCommentByProductId(int productId);
 
     @Select("<script>"
             +"SELECT `comment`.*, product.product_name, shop.shop_name, `user`.user_name\n" +

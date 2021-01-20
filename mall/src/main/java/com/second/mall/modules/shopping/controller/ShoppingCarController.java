@@ -49,6 +49,7 @@ public class ShoppingCarController {
      * {"userId":"1","productId":"2"}
      */
     @PostMapping(value = "/add",consumes = "application/json")
+    @ResponseBody
     public ResultEntity<ShoppingCar> userAddShoppingCar(@RequestBody ShoppingCarItems shoppingCarItems) {
 
         return  shoppingCarService.userAddShoppingCar(shoppingCarItems);
@@ -99,4 +100,19 @@ public class ShoppingCarController {
 
         return shoppingCarService.changeNum(shoppingCarItems.getProductId(),shoppingCarItems.getNumber());
     }
+
+
+    /**
+     * 添加商品到用户购物车
+     * 127.0.0.1/shoppingCar/add
+     * {"userId":"1","productId":"2"}
+     */
+    @PostMapping(value = "/shoppingCars",consumes = "application/json")
+    @ResponseBody
+    public ResultEntity<Object> userUpdateShoppingCar(@RequestBody List<ShoppingCarItems> shoppingCarItems) {
+
+        return  shoppingCarService.userUpdateShoppingCar(shoppingCarItems);
+    }
+
+
 }

@@ -6,8 +6,10 @@ import com.second.mall.modules.common.entity.ResultEntity;
 import com.second.mall.modules.common.entity.SearchBean;
 import com.second.mall.modules.shopping.dao.IndentDao;
 import com.second.mall.modules.shopping.dao.IndentItemDao;
+import com.second.mall.modules.shopping.dao.ProductDao;
 import com.second.mall.modules.shopping.entity.Indent;
 import com.second.mall.modules.shopping.entity.IndentItem;
+import com.second.mall.modules.shopping.entity.Product;
 import com.second.mall.modules.shopping.service.IndentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,8 @@ public class IndentServiceImpl implements IndentService {
     private IndentDao indentDao;
     @Autowired
     private IndentItemDao indentItemDao;
+    @Autowired
+    private ProductDao productDao;
 
 
     //订单新增
@@ -45,6 +49,15 @@ public class IndentServiceImpl implements IndentService {
         indent.setCreateTime(LocalDateTime.now());
         indent.setState(0);
         indentDao.insertIndex(indent);
+        List<IndentItem> indentItems = indent.getIndentItems();
+        for (IndentItem indentItem : indentItems) {
+            indentItem.setIndentId(indent.getIndentId());
+            indentItem.setUserId(indent.getUserId());
+            Product product = productDao.getProductById(indentItem.getProductId());
+            indentItem.setShopId(product.getShopId());
+            indentItem.setCreateTime(LocalDateTime.now());
+            indentItemDao.insertIndexItem(indentItem);
+        }
         return new ResultEntity<>(ResultEntity.ResultStatus.SUCCESS.status,
                 "Indent insert success", indent);
     }

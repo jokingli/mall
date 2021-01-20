@@ -1,17 +1,132 @@
-<div class="media">
-    <img src="..." class="mr-3" alt="...">
-    <div class="media-body">
-        <h5 class="mt-0">Media heading</h5>
-        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+<div  role="tabpanel" class="tab-pane productReviewDiv" id="productReviewDiv" aria-labelledby="home-tab">
+    <table class="productReviewContentPart" width="790px">
+        <tbody>
 
-        <div class="media mt-3">
-            <a class="mr-3" href="#">
-                <img src="..." class="mr-3" alt="...">
-            </a>
-            <div class="media-body">
-                <h5 class="mt-0">Media heading</h5>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-        </div>
-    </div>
+        </tbody>
+    </table>
 </div>
+<script>
+    $(function() {
+        initComment();
+
+    });
+
+    // 初始化页面信息
+    function initComment() {
+        var productId = $("#productId").val();
+
+        $.ajax({
+            url : "/api/comment/show/" + productId,
+            type : "get",
+            success : function (rs) {
+                console.log(rs)
+                var temp = "";
+                $.each(rs.comments, function(i, comment) {
+                    if (comment.parentId == 0){
+                        temp += "<tr><td>"
+                        temp += "<div>"
+                        temp += "<a href='/user/"+comment.userId+"'>"
+                        temp += "<img src=\"img/prod-2.jpg\" alt=\"...\" />"
+                        temp += comment.userName
+                        temp += "</a>"
+                        temp += "<button type='button' class='btn btn-secondary' onclick='hide("+comment.commentId+")'>回复</button>" +
+                            "<button type='button' class='btn btn-secondary' onclick='report("+comment.commentId+")'>举报</button>"
+                        temp += "<div class='comment-edit' id="+"comment"+comment.commentId+" style=' display: none;'>"
+                        temp += "<Textarea id='doubleComments"+comment.commentId+"' class='form-control edit' value=''/>"
+
+                        temp += " <button type='button' class='btn btn-secondary' onclick='reply("+comment.commentId+")'>回复</button>"
+
+                        temp += "</div>"
+                        temp += "</div>"
+                        temp += "<div>" + comment.comments + "</div>"
+                        temp += "<div>" + comment.createTime + "</div>"
+                        temp += "<hr />"
+                        $.each(rs.comments, function(j, commentItem) {
+                            if (commentItem.parentId == comment.commentId){
+                                temp += "<div>"
+                                temp += "<a href='/user/"+commentItem.userId+"'>"
+                                temp += "<img src=\"img/prod-2.jpg\" alt=\"...\" />"
+                                temp += commentItem.userName
+                                temp += "</a></div>"
+                                temp += "<div>" + commentItem.comments + "</div>"
+                                temp += "<div>" + commentItem.createTime + "</div>"
+                            }
+                        })
+                        temp += "<hr />";
+                        temp += "</td></tr>";
+                    }
+                });
+                $(".productReviewContentPart tbody").append(temp);
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        });
+
+    }
+
+    function report(commentId) {
+        var comment = {};
+        comment.commentId = commentId;
+        // comment.userId = $("#userId").val();
+        comment.userId = 1;
+        comment.state = 2;
+        $.ajax({
+            url: "/api/comment",
+            type: "put",
+            contentType: "application/json",
+            data : JSON.stringify(comment),
+            success: function (rs) {
+                if (rs.state == 200) {
+                    layer.msg("举报成功", {icon: 0});
+                } else {
+                    layer.msg(rs.message, {icon: 0});
+                }
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        })
+    }
+    function hide(id) {
+        var commentId = "comment"+id;
+        if (document.getElementById(commentId).style.display !== 'none')
+        {
+            document.getElementById(commentId).style.display = 'none';
+        }
+        else
+        {
+            document.getElementById(commentId).style.display = '';
+        }
+    }
+
+    function reply(commentId) {
+        var comment = {};
+        // comment.userId = $("#userId").val();
+        comment.userId = 1;
+        comment.productId = $("#productId").val();
+        comment.indentItemId = 0;
+        comment.shopId = 0;
+        comment.parentId = commentId;
+        comment.comments = document.getElementById("doubleComments"+commentId).value;
+        console.log(comment)
+        $.ajax({
+            url: "/api/comment/",
+            type: "post",
+            contentType: "application/json",
+            data : JSON.stringify(comment),
+            success: function (rs) {
+                if (rs.state == 200) {
+                    document.getElementById("comment"+commentId).style.display = 'none';
+                    layer.msg("回复成功", {icon: 0});
+                    initComment();
+                } else {
+                    layer.msg(rs.message, {icon: 0});
+                }
+            },
+            error : function (data) {
+                layer.msg(data.responseText, {icon: 0});
+            }
+        })
+    }
+</script>

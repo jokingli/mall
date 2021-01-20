@@ -31,4 +31,8 @@ public interface CollectionDao extends JpaRepository<Collection, Integer> {
     @Modifying(clearAutomatically = true)
     @Query(value = "delete from collention where user_id=:userId and product_id =:productId ", nativeQuery = true)
     int deletOneProduct(int userId,int productId);
+
+
+    //通过用户id和产品id查询藏品是否已经存在
+    Collection findByUserIdAndProductId(int userId,int produteId);
 }
