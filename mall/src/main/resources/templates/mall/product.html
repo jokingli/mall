@@ -42,7 +42,7 @@
     function initProductInfo() {
         var productId = $("#productId").val();
         $.ajax({
-            url : "/mall/product/" + productId,
+            url : "/mall/product/one/" + productId,
             type : "get",
             contentType: "application/json",
             //data : JSON.stringify(searchVo),
@@ -58,7 +58,7 @@
                 $("#discount").text(data.discount);
 
                 // 初始化 category 图片信息
-               initCategory();
+               // initCategory();
 
                // 初始化产品图片框和鼠标移动事件
                 var smallImages = "";

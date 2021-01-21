@@ -79,8 +79,6 @@ public class MallController {
 
 
 
-
-
     @RequestMapping(value = "/indents")
     public String indents(ModelMap modelMap){
         modelMap.put("template","mall/indents");

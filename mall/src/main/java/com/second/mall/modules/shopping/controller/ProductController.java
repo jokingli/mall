@@ -51,4 +51,15 @@ public class ProductController {
         return productService.getProductByProductId(productId);
     }
 
+
+    /**
+     * 商品详情页http://localhost:8080/mall/product/1
+     */
+    @GetMapping("/product/one/{productId}")
+    @ResponseBody
+    public Product getProductOne(@PathVariable int productId) {
+
+        return productService.getProductByProductId(productId);
+    }
+
 }
