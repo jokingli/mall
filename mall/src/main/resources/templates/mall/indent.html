@@ -106,7 +106,7 @@
                     temp += "</td>"
                     temp += "<td>" + formatMoney(item.productPrice) + "</td>"
                     temp += "<td>" + item.productNum + "</td>"
-                    temp += "<td><span class='conformPayProductPrice'>" + formatMoney(item.productPrice) + "</span></td>"
+                    temp += "<td><span class='conformPayProductPrice'>" + formatMoney(item.productPrice*item.productNum) + "</span></td>"
                     if (i == 0) {
                         temp += "<td rowspan='" + rs.object.indentItems.length +
                             "' class='orderItemOrderInfoPartTD'><span>" + item.delivery + ": " +

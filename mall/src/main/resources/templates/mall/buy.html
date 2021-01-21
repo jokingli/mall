@@ -90,7 +90,7 @@
                 var temp = "";
                 var SumSpan = 0;
                 $.each(data, function(i, item) {
-                    SumSpan += item.productPrice*item.discount*item.number
+                    SumSpan += item.productPrice*item.discount*item.number/10
                     temp += "<tr class='orderItemTR' productId='" + item.productId +
                         "' productName='" + item.productName +
                         "' productPrice='" + item.productPrice +
@@ -112,10 +112,10 @@
                     temp += "<img src='/img/site/promise.png' title='消费者保障服务,承诺如实描述'>";
                     temp += "</td>";
                     temp += "<td><span class='orderItemProductPrice'>" +
-                        formatMoney(item.productPrice*item.discount) + "</span></td>";
+                        formatMoney(item.productPrice) + "/" + item.discount + "折</span></td>";
                     temp += "<td><span class='orderItemProductNumber'>" + item.number + "</span></td>";
                     temp += "<td>";
-                    temp += "<span class='orderItemUnitSum'>" + formatMoney(item.productPrice*item.discount*item.number) + "</span>";
+                    temp += "<span class='orderItemUnitSum'>" + formatMoney(item.productPrice*item.discount*item.number/10) + "</span>";
                     temp += "</td>";
                     if (i == 0) {
                         temp += "<td rowspan='" + data.length +
